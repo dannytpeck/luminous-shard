@@ -1,0 +1,225 @@
+$brand-color: #d92c27;
+
+a {
+	cursor: pointer;
+}
+
+a:hover {
+  color: #ddd;
+}
+
+.close:focus,
+.close:hover {
+  color: #ddd;
+}
+
+#challenge-list {
+
+	border: 1px solid #000;
+	margin-bottom: 20px;
+
+	th {
+		border-bottom: 1px solid #000;
+	}
+
+	th,
+	td {
+		border-right: 1px solid #000;
+		vertical-align: middle;
+
+	}
+
+	input[type=date] {
+		width: 150px;
+		display: block;
+	}
+
+}
+
+.popup {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(176, 176, 176, 0.8);
+  z-index: 900;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+
+.dimenPreview {
+  width: 26%;
+  height: 200px;
+  border: 2px solid #FFF;
+  position: fixed;
+  top: 42%;
+  left: 37%;
+  background-color: grey;
+
+	a {
+		margin-left: 80%;
+		margin-top: 5px;
+		font-weight: bold;
+		color: lightblue;
+	}
+
+	button {
+		position: relative;
+		bottom: 40%;
+		left: 4%
+	}
+
+}
+
+.selectBf {
+  margin-left: 5%;
+  margin-top: 15px;
+  width: 35%;
+  height: 80%;
+}
+
+.selectAf {
+  margin-left: 8%;
+  margin-top: 15px;
+  width: 35%;
+  height: 80%;
+}
+
+.codePreview {
+  width: 70%;
+  height: 750px;
+  border: 2px solid #FFF;
+  position: fixed;
+  top: 5%;
+  left: 15%;
+  background-color: grey;
+  overflow-y: scroll;
+
+	h3 {
+		margin: 0.6em 0;
+		color: #fff;
+	}
+
+}
+
+.brandingBckgrndColor {
+  background-color: #d92c27;
+}
+
+.link-color {
+  color: #d92c27;
+}
+
+.codeEdit {
+  width: 38%;
+  height: 750px;
+  margin-left: 5%;
+}
+
+.shortDescription {
+  height: 90px;
+  width: 380px;
+}
+
+.moreInformation {
+  margin: 0px;
+  min-height: 450px;
+  min-width: 366px;
+  max-width: 366px;
+  max-height: 450px;
+  background-color: rgb(255, 255, 255);
+}
+
+.codeLive {
+  width: 440px;
+  max-height: 650px;
+  margin-left: 51%;
+  margin-top: -77%;
+}
+
+.codeLiveDisplay {
+  background-color: #F1F2F3;
+  border: 1px solid #888;
+  width: 440px;
+  position: absolute;
+  top: 25px;
+  left: 47.5%;
+  border-top-color: #999;
+  border-radius: 5px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, .2);
+  background-clip: padding-box;
+  color: #555;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 1em;
+  line-height: 1.4;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+}
+
+#shortCut {
+  background-color: #EEE;
+  font-size: 0.9em;
+	line-height: 1.2em;
+  color: blue;
+  position: absolute;
+  top: 65px;
+  right: 5px;
+  padding: 0 15px;
+
+	h3 {
+		margin-top: 10px;
+	}
+}
+
+.download {
+  margin-left: 10%;
+}
+
+.upload {
+  margin-left: 2.5%;
+}
+
+#remove-coaching {
+  margin-left: 16px;
+  position: relative;
+  top: 2px;
+  right: 2px;
+}
+
+#welcome {
+	#eid, #psk {
+		margin-left: 2%;
+	}
+
+	#eid {
+		width: 10%;
+	}
+
+	#psk {
+		width: 20%;
+	}
+}
+
+.button {
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 0 15px;
+	line-height: 32px;
+	height: auto;
+	display: inline-block;
+	text-align: center;
+	background-color: $brand-color;
+	color: #fff;
+	border-radius: 3px;
+	text-transform: uppercase;
+}
+
+.linkSpec {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	width: 32px;
+	padding: 0 8px;
+}

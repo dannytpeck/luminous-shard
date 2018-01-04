@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Fragment [0] Compiler</title>
+  <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon" />
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+  <link rel="stylesheet" type="text/css" href="../css/main.css" />
+
+  <script defer src="../js/bundle.js"></script>
+</head>
+
+<body>
+
+	<header class="navigation" role="banner">
+		<div class="navigation-wrapper">
+			<a href="/" class="logo">
+				<img src="../images/ADURO_White_Logos_2015_Horizontal_Mod.png" alt="Logo Image">
+			</a>
+		 	<ul id="js-navigation-menu" class="navigation-menu">
+				<nav role="navigation">
+					<li class="nav-link"><a href="/">The Library</a></li>
+				</nav>
+			</ul>
+		</div>
+  </header>
+
+  <div id="wrapper" style="margin-top: 14px;">
+
+    <div id="welcome">
+      <input id="fileName" type="text" style="display:none" />
+      <p>
+        <a href="../"><button class="btn btn-default">Start Over</button></a>
+        <span style="margin-left:48px;">How many programs?</span>
+        <input type="number" id="loadNumber" min="1" max="100" value="1" />
+      </p>
+      <p>
+      <div id="eidContainer">
+        <p>
+          <input type="text" id="eid0" placeholder="Limeade e=" />
+          <input type="text" id="psk0" placeholder="Limeade psk" />
+        </p>
+      </div>
+    </div>
+
+    <div id="shortCut">
+      <h3>Estimations</h3>
+      <p><strong style="color:black">This text area is meant to display semi-annual and quarterly date estimations.</strong></p>
+      <p><strong><span style="color:black">Semi-annual, first half end: </span></strong></p>
+      <p>
+        <strong><span style="color:black">Quarterly, first quarter end: </span></strong>
+        <br>
+        <strong><span style="color:black">Quarterly, second quarter end: </span></strong>
+        <br>
+        <strong><span style="color:black">Quarterly, third quarter end: </span></strong>
+      </p>
+    </div>
+
+    <div id="main">
+      <h4>Start & End Dates</h4>
+      <p>
+        <input type="date" id="begin" /> <span style="padding-left:25px; padding-right:25px">-</span>
+        <input type="date" id="end" />
+      </p>
+
+      <div class="row" style="margin: 2em 0;">
+        <div class="col-md-4">
+          <h4 id="challenges-header">Challenges
+            <input id="remove-coaching" type="checkbox" />
+            <label for="remove-coaching">Remove Coaching</label>
+          </h4>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+          <button class="download btn btn-default">Download CSV</button>
+          <button class="upload btn btn-primary">Upload to Limeade</button>
+        </div>
+      </div>
+
+      <table id="challenge-list" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Challenge ID</th>
+            <th>Challenge Name</th>
+            <th>Start/End Date</th>
+            <th>Dimensions</th>
+            <th>Challenge Content</th>
+            <th>Tracking Type</th>
+            <th>Points</th>
+            <th>Targeting</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Upload Log</h4>
+        </div>
+        <div class="modal-body" id="uploadModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="targetingModalContainer"></div>
+
+  <div class="row" style="margin: 2em 0;">
+    <div class="col-md-4 col-md-offset-8">
+      <button class="download btn btn-default">Download CSV</button>
+      <button class="upload btn btn-primary">Upload to Limeade</button>
+    </div>
+  </div>
+
+</body>
+
+</html>

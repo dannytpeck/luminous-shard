@@ -1,0 +1,85 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+	font-family: $font-stack;
+	font-size: $font-size;
+	color: #463e38;
+}
+
+hr {
+  margin: 25px 0;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#wrapper {
+  padding: 0 25px;
+}
+
+#progress {
+	margin-left: 5px;
+}
+
+#exclusive {
+	width: auto;
+	margin-left: 5px;
+}
+
+#file-name,
+#eid,
+#date-begin,
+#date-end,
+#search {
+  width: 200px;
+  margin-left: 15px;
+}
+
+#idList {
+	display: none;
+}
+
+#load-compiler {
+	margin-left: 240px;
+}
+
+#pretty-list {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+#dateError {
+  color: red;
+  font-weight: bold;
+  display: none;
+}
+
+#errmsg {
+  color: blue;
+}
+
+#date-begin {
+  margin-left: 8px;
+}
+
+#reset {
+	margin-left: 35px;
+}
+
+#build-table {
+	position: absolute;
+	right: 50px;
+}
+
+#loadNumber {
+  margin-left: 10px;
+}

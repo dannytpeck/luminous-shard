@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Fragment [0]</title>
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+
+  <script defer src="js/bundle.js"></script>
+</head>
+
+<body>
+
+	<header class="navigation" role="banner">
+		<div class="navigation-wrapper">
+			<a href="/" class="logo">
+				<img src="images/ADURO_White_Logos_2015_Horizontal_Mod.png" alt="Logo Image">
+			</a>
+		 	<ul id="js-navigation-menu" class="navigation-menu">
+				<nav role="navigation">
+					<li class="nav-link"><a href="http://thelibrary.adurolife.com/">The Library</a></li>
+				</nav>
+			</ul>
+		</div>
+  </header>
+
+  <div id="wrapper">
+
+		<div>
+			<h1>Fragment [0]</h1>
+      <h3>Self-Report Challenge Loader</h3>
+			<p><strong>Client: </strong>
+			  <input style="margin-left:40px;" type="text" id="eid" placeholder="Client e=" />
+				<!-- <span style="margin-left:15px;">-</span> -->
+        <span style="margin:0 23px 0 15px;">Phase:</span>
+				<input id="file-name" placeholder="Phase number">
+				<!-- <span>.csv</span> -->
+				<button id="reset" class="btn btn-default" disabled>Reset</button>
+			</p>
+			<p>Start Date:
+				<input type="date" id="date-begin" />
+				<!-- <span style="margin-left:15px;">-</span> -->
+        <span style="margin-left:15px;">End Date:</span>
+				<input type="date" id="date-end" />
+			</p>
+			<p id="dateError">
+				You have an invalid or missing date for the <span id="errmsg"></span>| field(s).
+			</p>
+		</div>
+		<hr>
+		<p>
+
+
+      <p id="load">Loading...<img src="images/progressbar.gif" alt="A spinning progress indicator" />
+  			<span id="progress">0</span>%
+  		</p>
+
+			<button id="build-table" class="btn btn-default" data-toggle="tooltip" title="Rebuilds the search table with new content from The Library.">Rebuild Table</button>
+
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" id="search"/>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="search-button">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+		</p>
+
+
+
+		<div id="table-container">
+			<table class="table table-striped">
+				<thead id="table-head">
+					<tr>
+						<th> </th>
+						<th>Challenge ID</th>
+						<th>Challenge Name<button id="sortName" class="asc btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button></th>
+						<th>Date Created<button id="sortCreated" class="asc btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button></th>
+						<th>Last Updated<button id="sortUpdated" class="asc btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button></th>
+					</tr>
+				</thead>
+				<tbody id="table-body">
+				</tbody>
+			</table>
+		</div>
+		<p>
+			<strong>Selected Challenges:</strong>
+			<input id="idList" placeholder="this hidden input stores selected challenge IDs" readonly />
+			<button id="load-compiler" class="btn btn-primary" disabled>Continue</button>
+      <ul id="pretty-list"></ul>
+		</p>
+
+	</div> <!-- end .wrapper -->
+
+</body>
+</html>
