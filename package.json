@@ -1,9 +1,9 @@
 {
-  "name": "fragment-0",
-  "version": "3.1.6",
-  "description": "Fragment[0]",
+  "name": "luminous-shard",
+  "version": "1.0",
+  "description": "Luminous Shard",
   "main": "index.js",
-  "repository": "https://github.com/adurolife/config-prototypes/fragment-0",
+  "repository": "https://github.com/dannytpeck/luminous-shard",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build": "./node_modules/.bin/webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
@@ -12,8 +12,8 @@
     "build-all": "npm run sass-watch|npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Dan Bailey, Josh Braun, Taylor Hoss, Danny Peck",
-  "license": "UNLICENSED",
+  "author": "Danny Peck, Josh Braun",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.5",

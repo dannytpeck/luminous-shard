@@ -1,21 +1,16 @@
-#Fragment[0]: Transporter Edition
+# Luminous Shard - a Danny Peck and Josh Braun joint
 
-**Staging**
+### Dependencies
+node
+npm
+gulp
 
-http://thelibrary.adurolife.com/thelibrary/fragment-0-staging/
-
-**Production**
-
-http://thelibrary.adurolife.com/thelibrary/fragment-0/
-
-###Getting Started
+### Getting Started
 ```
-    > git clone https://github.com/adurolife/config-prototypes.git
-    > cd config-prototypes/fragment-0
+    > git clone https://github.com/dannytpeck/luminous-shard.git
+    > cd luminous-shard
     > npm install
     > gulp
 ```
 
-###Current Issues
-
-* Main page never finishes loading if one or more of the ajax requests to the WP site fail
+### Known Issues
