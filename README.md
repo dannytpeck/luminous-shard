@@ -11,6 +11,8 @@ gulp
     > cd luminous-shard
     > npm install
     > gulp
+    > npm start
 ```
 
 ### Known Issues
+n/a
