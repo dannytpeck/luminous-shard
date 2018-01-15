@@ -68,7 +68,7 @@ const requestOnePage = (page, posts, totalPages, pagesReceived) => {
 			if (pagesReceived.length >= totalPages) {
 				drawTable(posts);
 
-				const url = 'http://thelibrary.adurolife.com/thelibrary/challenges/';
+				const url = 'https://mywellnessnumbers.com/thelibrary/challenges/';
 				$.post(url, { data: JSON.stringify(posts) }).done(() => console.log('Saved table.'));
 			}
 		});
@@ -76,9 +76,9 @@ const requestOnePage = (page, posts, totalPages, pagesReceived) => {
 
 // Loads table JSON file from api
 export function loadTable() {
-  $.getJSON('http://thelibrary.adurolife.com/challenges-redirect/')
+  $.getJSON('https://mywellnessnumbers.com/thelibrary/challenges/')
 	.done(response => drawTable(response))
-	.fail(() => window.location.href = 'http://thelibrary.adurolife.com/fragment-0-redirect/');
+	.fail((error) => console.error(error.responseText));
 }
 
 // Make ajax request to get the number of pages of posts in the Library, then request pages
