@@ -9,7 +9,7 @@
     "build": "./node_modules/.bin/webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
     "sass": "node-sass scss/main.scss -o css/",
     "sass-watch": "node-sass -w scss/main.scss -o css/",
-    "build-all": "npm run sass-watch|npm run build",
+    "build-all": "npm run sass|npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Danny Peck, Josh Braun",
