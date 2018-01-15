@@ -10,7 +10,7 @@ gulp
     > git clone https://github.com/dannytpeck/luminous-shard.git
     > cd luminous-shard
     > npm install
-    > gulp
+    > node-sass
     > npm start
 ```
 
