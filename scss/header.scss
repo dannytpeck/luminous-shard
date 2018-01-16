@@ -1,7 +1,7 @@
 header.navigation {
-	
-	background-color: #d92c27;
-	border-bottom: 1px solid #ae231f;
+
+	background-color: $main-color;
+	border-bottom: 1px solid $accent-color;
 	min-height: 60px;
 	width: 100%;
 	z-index: 999;
@@ -15,7 +15,7 @@ header.navigation {
 		content: "";
 		display: table;
 	}
-	
+
 	.logo {
 		float: left;
 		max-height: 60px;
@@ -23,7 +23,7 @@ header.navigation {
 		padding-right: 1em;
 
 		img {
-			max-height: 60px;	
+			max-height: 60px;
 		}
 
 	}
@@ -36,7 +36,7 @@ header.navigation {
 		overflow: visible;
 		width: 100%;
 	}
-	
+
 	nav {
 		float: left;
 		min-height: 60px;
@@ -65,6 +65,6 @@ header.navigation {
 			}
 		}
 
-	}	
-	
+	}
+
 }
