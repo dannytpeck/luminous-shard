@@ -3,34 +3,32 @@ import $ from 'jquery';
 
 // Displays dimensions or code popup - hides whichever one isn't being viewed
 window.chooseDimens = (row, origin) => {
-  'use strict';
-  var dimenPreview = $(`#popup${row} .dimenPreview`);
-	var codePreview = $(`#popup${row} .codePreview`);
+  const dimenPreview = $(`#popup${row} .dimenPreview`);
+	const codePreview = $(`#popup${row} .codePreview`);
 
   $(`#popup${row}`).show();
 
   switch (origin) {
-  case 'dimen':
-    dimenPreview.show();
-    codePreview.hide();
-    break;
-  case 'code':
-    dimenPreview.hide();
-    codePreview.show();
-    break;
-  default:
-    dimenPreview.hide();
-    codePreview.hide();
-    break;
+    case 'dimen':
+      dimenPreview.show();
+      codePreview.hide();
+      break;
+    case 'code':
+      dimenPreview.hide();
+      codePreview.show();
+      break;
+    default:
+      dimenPreview.hide();
+      codePreview.hide();
+      break;
   }
 };
 
 // Used to move dimensions from one box to the other
 window.move = (choose, drop) => {
-  'use strict';
-	var d = '';
-  var i;
-	for (i = 0; i < choose.options.length; i++) {
+	let d = '';
+
+	for (let i = 0; i < choose.options.length; i++) {
 		if (choose.options[i].selected) {
 			d = drop.appendChild(document.createElement('OPTION'));
 			d.value = choose.options[i].value;
@@ -42,14 +40,12 @@ window.move = (choose, drop) => {
 
 // Onkeyup function that replaces the code preview with the text area's contents
 window.edit = (a, b) => {
-  'use strict';
 	b.innerHTML = a.value;
 };
 
 // Replace trackingNO value with the value manually entered
 window.modifyTrackingNumber = (row) => {
-  'use strict';
-  var newValue = $('#required' + row).val();
+  const newValue = $('#required' + row).val();
   $('#sd' + row + ' .trackingNO').html(addCommasToNumber(newValue));
   $('#mi' + row + ' .trackingNO').html(addCommasToNumber(newValue));
 };
@@ -61,7 +57,6 @@ window.showTargetingModal = (row) => {
 
 // Adds commas to long numbers
 function addCommasToNumber(number) {
-  'use strict';
 	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
@@ -97,30 +92,30 @@ function remainingDefaults(defaults, row) {
 }
 
 // Populates one row of the table
-function drawTableRow(slug, row, data) {
-  'use strict';
+function drawTableRow(row, post) {
 
   // Remove 2017: and 2018: from titles
-  var title = data.post.title
+  const title = post.title.rendered
     .replace(/2017: /, '')
     .replace(/2018: /, '');
 
-  var allCode = data.post.content
+  // Only use straight quotes
+  const allCode = post.content.rendered
     .replace(/\u201C/g, '"')
     .replace(/\u201D/g, '"');
 
-  var begin = allCode.indexOf('{ "defaults"');
-	var end = allCode.indexOf(' </script> <!--end defaults-->');
-	var objectText = allCode.substring(begin, end);
+  const begin = allCode.indexOf('{ "defaults"');
+	const end = allCode.indexOf(' </script> <!--end defaults-->');
+	const objectText = allCode.substring(begin, end);
 
-  var defaults;
+  let defaults;
 	try {
 		defaults = JSON.parse(objectText).defaults;
 	} catch (e) {
-		throw new Error(`Invalid JSON object at http://thelibrary.adurolife.com/${slug}`);
+		throw new Error(`Invalid JSON object at http://thelibrary.adurolife.com/wp-json/wp/v2/posts?${post.slug}`);
 	}
 
-  var checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
+  const checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
   $(`#challenge-name${row}`).html(
     `<p>
       <input type="text" id="chalTitle${row}" value="${title}" />
@@ -257,183 +252,177 @@ function drawTableRow(slug, row, data) {
     </div>`
   );
 
-  function enablePopUp(defaults, allCode) {
+  function getDefaultDimens(dimensions) {
+    var platformDimens = [
+      'Appreciating Life',
+      'Back Health',
+      'Belief in Organization',
+      'Belief in Your Abilities',
+      'Concern for Others',
+      'Concern for the Environment',
+      'Dream Job',
+      'Drinking Moderately',
+      'Energy Level',
+      'Enjoying Work',
+      'Exercise &amp; Fitness',
+      'Feeling Energized',
+      'Financial Well-being',
+      'Fit with Culture',
+      'Growth',
+      'Healthy Blood Sugar',
+      'Healthy Weight',
+      'Heart Health',
+      'In the Flow',
+      'Job Satisfaction',
+      'Knowing Yourself',
+      'Life Meaning',
+      'Making &amp; Keeping Commitments',
+      'Managing Depression',
+      'Managing Stress &amp; Anxiety',
+      'Nutrition',
+      'Openness &amp; Optimism',
+      'Positive Living',
+      'Positive Relationships',
+      'Pregnancy',
+      'Resilience',
+      'Self-Acceptance',
+      'Self-Care',
+      'Self-Leadership',
+      'Sense of Team',
+      'Sleep',
+      'Smoke-Free Living',
+      'Square Deal',
+      'Work Growth',
+      'Work Meaning',
+      'Work-Life Balance',
+      'Vision'
+    ];
+    var selected = [];
+    var j = '';
+    var i;
 
-    function getDefaultDimens(dimensions) {
-      var platformDimens = [
-        'Appreciating Life',
-        'Back Health',
-        'Belief in Organization',
-        'Belief in Your Abilities',
-        'Concern for Others',
-        'Concern for the Environment',
-        'Dream Job',
-        'Drinking Moderately',
-        'Energy Level',
-        'Enjoying Work',
-        'Exercise &amp; Fitness',
-        'Feeling Energized',
-        'Financial Well-being',
-        'Fit with Culture',
-        'Growth',
-        'Healthy Blood Sugar',
-        'Healthy Weight',
-        'Heart Health',
-        'In the Flow',
-        'Job Satisfaction',
-        'Knowing Yourself',
-        'Life Meaning',
-        'Making &amp; Keeping Commitments',
-        'Managing Depression',
-        'Managing Stress &amp; Anxiety',
-        'Nutrition',
-        'Openness &amp; Optimism',
-        'Positive Living',
-        'Positive Relationships',
-        'Pregnancy',
-        'Resilience',
-        'Self-Acceptance',
-        'Self-Care',
-        'Self-Leadership',
-        'Sense of Team',
-        'Sleep',
-        'Smoke-Free Living',
-        'Square Deal',
-        'Work Growth',
-        'Work Meaning',
-        'Work-Life Balance',
-        'Vision'
-      ];
-      var selected = [];
-      var j = '';
+    for (i = 0; i < dimensions.length; i++) {
+      j = platformDimens.indexOf(dimensions[i]);
+      selected.push(platformDimens[j]);
+      platformDimens.splice(j, 1);
+    }
+
+    function finalSE(selected) {
+      var x = '';
       var i;
-
-      for (i = 0; i < dimensions.length; i++) {
-        j = platformDimens.indexOf(dimensions[i]);
-        selected.push(platformDimens[j]);
-        platformDimens.splice(j, 1);
+      for (i = 0; i < selected.length; i++) {
+        x += `<option value="${selected[i]}">${selected[i]}</option>`;
       }
-
-      function finalSE(selected) {
-        var x = '';
-        var i;
-        for (i = 0; i < selected.length; i++) {
-          x += `<option value="${selected[i]}">${selected[i]}</option>`;
-        }
-        return x;
-      }
-
-      function finalUN(leftover) {
-        var x = '';
-        var i;
-        for (i = 0; i < leftover.length; i++) {
-          x += `<option value="${leftover[i]}">${leftover[i]}</option>`;
-        }
-        return x;
-      }
-
-      return {
-        un: finalUN(platformDimens),
-        se: finalSE(selected)
-      };
+      return x;
     }
 
-    function gatherCode(allCode) {
-      var element = document.createElement('div');
-      document.body.appendChild(element);
-      element.setAttribute('style', 'display:none');
-      element.innerHTML = allCode;
-
-      var sd = document.getElementById('shD').innerHTML;
-      var mi = document.getElementById('lnD').innerHTML;
-
-      document.body.removeChild(element);
-
-      return {
-        shortDescription: sd,
-        moreInformation: mi
-      };
+    function finalUN(leftover) {
+      var x = '';
+      var i;
+      for (i = 0; i < leftover.length; i++) {
+        x += `<option value="${leftover[i]}">${leftover[i]}</option>`;
+      }
+      return x;
     }
 
-    var popUp = document.createElement('DIV');
-    document.body.appendChild(popUp);
-    popUp.setAttribute('style', 'display:none');
-    popUp.setAttribute('class', 'popup');
-    popUp.id = 'popup' + row;
-    var sec = getDefaultDimens(defaults.dimensions);
-    var completeCode = gatherCode(allCode);
-    popUp.innerHTML =
-      `<div class="dimenPreview">
-        <select id="selectBefore${row}" class="selectBf" multiple>${sec.un}</select>
-        <button id="add${row}" onclick="move(selectBefore${row}, selectAfter${row})">
-          -->
-        </button>
-        <button id="remove${row}" style="position:absolute; bottom:40%; left:44%"
-                onclick="move(selectAfter${row}, selectBefore${row})">
-          <--
-        </button>
-        <select id="selectAfter${row}" class="selectAf" multiple>${sec.se}</select>
-        <a onclick="$('#popup${row}').hide()">Submit</a>
-      </div>
-
-      <div class="codePreview">
-        <div class="codeEdit">
-          <h3>Short Description</h3>
-          <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${completeCode.shortDescription}</textarea>
-          <h3>More Information</h3>
-          <textarea class="moreInformation" id="txtAreaM${row}" onkeyup="edit(txtAreaM${row}, mi${row})">${completeCode.moreInformation}</textarea>
-          <a class="linkSpec button" onclick="$('#popup${row}').hide()">
-            <span class="glyphicon glyphicon-ok"></span>
-          </a>
-        </div>
-        <div class="codeLive">
-          <div class="codeLiveDisplay" id="codeCompile${row}">
-            <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${completeCode.shortDescription}</span></span>
-            <span id="mi${row}">${completeCode.moreInformation}</span>
-          </div>
-        </div>
-      </div>`;
+    return {
+      un: finalUN(platformDimens),
+      se: finalSE(selected)
+    };
   }
 
-  enablePopUp(defaults, allCode);
+  function gatherCode(allCode) {
+    var element = document.createElement('div');
+    document.body.appendChild(element);
+    element.setAttribute('style', 'display:none');
+    element.innerHTML = allCode;
+
+    var sd = document.getElementById('shD').innerHTML;
+    var mi = document.getElementById('lnD').innerHTML;
+
+    document.body.removeChild(element);
+
+    return {
+      shortDescription: sd,
+      moreInformation: mi
+    };
+  }
+
+  var popUp = document.createElement('DIV');
+  document.body.appendChild(popUp);
+  popUp.setAttribute('style', 'display:none');
+  popUp.setAttribute('class', 'popup');
+  popUp.id = 'popup' + row;
+  var sec = getDefaultDimens(defaults.dimensions);
+  var completeCode = gatherCode(allCode);
+  popUp.innerHTML =
+    `<div class="dimenPreview">
+      <select id="selectBefore${row}" class="selectBf" multiple>${sec.un}</select>
+      <button id="add${row}" onclick="move(selectBefore${row}, selectAfter${row})">
+        -->
+      </button>
+      <button id="remove${row}" style="position:absolute; bottom:40%; left:44%"
+              onclick="move(selectAfter${row}, selectBefore${row})">
+        <--
+      </button>
+      <select id="selectAfter${row}" class="selectAf" multiple>${sec.se}</select>
+      <a onclick="$('#popup${row}').hide()">Submit</a>
+    </div>
+
+    <div class="codePreview">
+      <div class="codeEdit">
+        <h3>Short Description</h3>
+        <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${completeCode.shortDescription}</textarea>
+        <h3>More Information</h3>
+        <textarea class="moreInformation" id="txtAreaM${row}" onkeyup="edit(txtAreaM${row}, mi${row})">${completeCode.moreInformation}</textarea>
+        <a class="linkSpec button" onclick="$('#popup${row}').hide()">
+          <span class="glyphicon glyphicon-ok"></span>
+        </a>
+      </div>
+      <div class="codeLive">
+        <div class="codeLiveDisplay" id="codeCompile${row}">
+          <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${completeCode.shortDescription}</span></span>
+          <span id="mi${row}">${completeCode.moreInformation}</span>
+        </div>
+      </div>
+    </div>`;
+
   remainingDefaults(defaults, row);
 
 }
 
 // Makes an ajax request to a specific challenge page (by slug)
 function requestOneChallenge(slug, row) {
-  'use strict';
-  var url = 'http://thelibrary.adurolife.com/api/get_post/?post_slug=' + slug;
-  $.getJSON(url + '&callback=?')
-    .done(function (data) {
-      drawTableRow(slug, row, data);
-    })
-    .fail(function (jqxhr, textStatus, error) {
-      var err = textStatus + ', ' + error;
-      console.error('Request Failed: ' + err);
-    });
+  const url = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=${slug}`;
+
+  $.getJSON(`${url}`).done(function (data) {
+    const post = data[0];
+    drawTableRow(row, post);
+  }).fail(function (jqxhr, textStatus, error) {
+    const err = `${textStatus}, ${error}`;
+    console.error(`Request Failed: ${err}`);
+  });
 }
 
 // Uses an array of library IDs and begins making ajax requests to populate the table
 function getContent(ids) {
-  'use strict';
+  const tableBody = $('#challenge-list tbody')[0];
 
-  var i, tableBody = $('#challenge-list tbody')[0];
-	for (i = 0; i < ids.length; i++) {
-		var slug = ids[i];
-    var challengeUrl = 'http://thelibrary.adurolife.com/' + slug;
+	for (let i = 0; i < ids.length; i++) {
+		const slug = ids[i];
+    const challengeUrl = `http://thelibrary.adurolife.com/${slug}`;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append('<tr><td>' + '<a href="' + challengeUrl + '" target="_blank">' + slug + '</a>' + '</td></tr>');
+    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${slug}</a></td></tr>`);
 
     // Build out the rest of the table
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'challenge-name' + i;
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'start-end-date' + i;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = 'dimensions-and-code' + i;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = 'team-challenge' + i;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = 'tracking-type' + i;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = 'point-value' + i;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = 'targeting' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = `challenge-name${i}`;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `dimensions-and-code${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `team-challenge${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
 
     requestOneChallenge(slug, i);
 	}
@@ -489,19 +478,18 @@ export function grabber() {
 		getContent(queryObject.ids);
 	}
 
-	var startDate = new Date( $('#begin').val() );
-	var endDate = new Date( $('#end').val() );
+	const startDate = new Date( $('#begin').val() );
+	const endDate = new Date( $('#end').val() );
 
-	var semi = (endDate - startDate) / 2;
-	var semiEnd = new Date(startDate.getTime() + semi);
-	//////////
+	const semi = (endDate - startDate) / 2;
+	const semiEnd = new Date(startDate.getTime() + semi);
 
-	var quart = (endDate - startDate) / 4;
-	var quartEnd1 = new Date(startDate.getTime() + quart);
-	var quartEnd2 = new Date(startDate.getTime() + quart + quart);
-	var quartEnd3 = new Date(startDate.getTime() + quart + quart + quart);
+	const quart = (endDate - startDate) / 4;
+	const quartEnd1 = new Date(startDate.getTime() + quart);
+	const quartEnd2 = new Date(startDate.getTime() + quart + quart);
+	const quartEnd3 = new Date(startDate.getTime() + quart + quart + quart);
 
-	var shortCutHTML =
+	const shortCutHTML =
     `<h3>Estimations</h3>
 		<p>
       <strong style="color:black">
