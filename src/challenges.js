@@ -46,14 +46,14 @@ const drawTable = (posts) => {
 
 // Make ajax request on a single WP page, pushing the contents into an array
 const requestOnePage = (page, posts, totalPages, pagesReceived) => {
-	const url = `http://thelibrary.adurolife.com/api/get_posts/?count=10&page=${page}&callback=?`;
+	const url = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?page=${page}`;
   $.getJSON(url)
 		.done(data => {
-			data.posts.map(post => {
+			data.map(post => {
 				posts.push({
 					slug: post.slug,
-					title: post.title,
-					url: post.url,
+					title: post.title.rendered,
+					url: post.link,
 					date: post.date,
 					modified: post.modified
 				});
@@ -92,12 +92,8 @@ export function buildTable() {
 	// Keeps track of how many WP page requests have received responses - used for the progress bar
 	let pagesReceived = [];
 
-  $.getJSON('http://thelibrary.adurolife.com/api/get_posts/?count=10&callback=?')
-    .done(function (data) {
-			const totalPages = data.pages;
-			// Loop through all the WP pages and make ajax request to each one
-			for (let page = 1; page <= totalPages; page++) {
-				requestOnePage(page, posts, totalPages, pagesReceived);
-			}
-    });
+	// Loop through 100 pages TODO: make this less brittle
+	for (let page = 1; page <= 100; page++) {
+		requestOnePage(page, posts, 100, pagesReceived);
+	}
 }
