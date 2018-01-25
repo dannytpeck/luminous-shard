@@ -4,7 +4,8 @@ header.navigation {
   border-bottom: 1px solid #3f5481;
   min-height: 60px;
   width: 100%;
-  z-index: 999; }
+  z-index: 999;
+  font-family: "Karla", "Open Sans", "Helvetica", "Arial", sans-serif; }
   header.navigation .navigation-wrapper {
     position: relative; }
   header.navigation .navigation-wrapper::after {
