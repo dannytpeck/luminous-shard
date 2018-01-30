@@ -1,26 +1,39 @@
+const path = require('path');
+
 module.exports = {
-	entry: [
-		'./src/index.js'
-	],
-	output: {
-		path: 'js/',
-		publicPath: 'js/',
-		filename: 'bundle.js'
-	},
-	module: {
-		loaders: [{
-			exclude: /node_modules/,
-			loader: 'babel',
-			query: {
-				presets: ['es2015']
-			}
-		}]
-	},
-	resolve: {
-		extensions: ['', '.js']
-	},
-	devServer: {
-		historyApiFallback: true,
-		contentBase: './'
-	}
+
+  context: path.resolve(__dirname, 'src'),
+
+  entry: './index.js',
+
+  output: {
+    path: path.resolve(__dirname, 'js'),
+    filename: 'bundle.js'
+  },
+
+  module: {
+   loaders: [
+     {
+       test: /\.js$/,
+       exclude: /node_modules/,
+       loader: 'babel-loader',
+       query: {
+         presets: ['env']
+       }
+     }
+   ]
+  },
+
+  stats: {
+    colors: true
+  },
+
+  devServer: {
+    contentBase: path.resolve(__dirname, './'),
+    compress: true,
+    port: 3000,
+    stats: 'errors-only',
+    open: true
+  }
+
 };
