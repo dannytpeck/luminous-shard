@@ -449,7 +449,6 @@ export function grabber() {
 
 		switch (pair[0]) {
       case 'file':
-        console.log(pair);
         queryObject.file = pair[1];
         break;
       case 'eid':

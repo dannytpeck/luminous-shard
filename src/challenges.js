@@ -84,7 +84,7 @@ export function loadTable() {
 // Make ajax request to get the number of pages of posts in the Library, then request pages
 export function buildTable() {
 	// Create Spinning Progress Indicator
-	$('#load').html('Loading...<img src="images/progressbar.gif" alt="An spinning progress indicator" /> <span style="margin-left:5px" id="progress">0</span>%');
+	$('#load').html('Loading...<img src="images/progressbar.gif" alt="A spinning progress indicator" /> <span style="margin-left:5px" id="progress">0</span>%');
 
 	// Array to store all the posts
 	let posts = [];
