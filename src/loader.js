@@ -448,23 +448,23 @@ export function grabber() {
 		var pair = vars[i].split('=');
 
 		switch (pair[0]) {
-    case 'file':
-      queryObject.file = pair[1];
-      break;
-    case 'eid':
-      queryObject.eid = pair[1].replace('%20', ' ');
-      break;
-    case 'start_date':
-      queryObject.start = pair[1];
-      break;
-    case 'end_date':
-      queryObject.end = pair[1];
-      break;
-    case 'id_arr':
-      queryObject.ids = pair[1].split(',');
-      break;
-		}
-
+      case 'file':
+        console.log(pair);
+        queryObject.file = pair[1];
+        break;
+      case 'eid':
+        queryObject.eid = pair[1].replace('%20', ' ');
+        break;
+      case 'start_date':
+        queryObject.start = pair[1];
+        break;
+      case 'end_date':
+        queryObject.end = pair[1];
+        break;
+      case 'id_arr':
+        queryObject.ids = pair[1].split(',');
+        break;
+    }
 	}
 
   // Populate the fields from the query object
