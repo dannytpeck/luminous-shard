@@ -6,7 +6,7 @@ const currentYear = new Date().getFullYear();
 const sanitize = (code) => {
   var sanitized = code
     .replace(/\r?\n|\r/g, ' ')     // Strip out carriage returns and newlines
-    .replace(/\,/g, '&#44;')       // Escape commas since we're using a csv
+    .replace(/,/g, '&#44;')       // Escape commas since we're using a csv
     .replace(/\u2018/g, '\'')      // Left single quote
     .replace(/\u2019/g, '\'')      // Right single quote
     .replace(/\u201C/g, '"')       // Left double quote
@@ -148,11 +148,11 @@ const createCSV = (employer) => {
       activity,
       '"' + $('#chalTitle' + row).val() + '"',
       '',
-			$('#startDate' + row).val().replace(/\-/g, '/'),
-			$('#endDate' + row).val().replace(/\-/g, '/'),
+			$('#startDate' + row).val().replace(/-/g, '/'),
+			$('#endDate' + row).val().replace(/-/g, '/'),
       sanitize($('#sd' + row).html()),
       sanitize($('#mi' + row).html()),
-      $('#imgLink' + row).attr('href').replace(/https\:\/\/mywellmetrics\.com/g, ''),
+      $('#imgLink' + row).attr('href').replace(/https:\/\/mywellmetrics\.com/g, ''),
       '0',
       rewardType,
       $('#points' + row).val(),
@@ -223,7 +223,7 @@ export function limeadeUpload() {
     }
 
     const json = JSON.parse(data);
-    const challengeName = challenge[7].replace(/\"/g, '');
+    const challengeName = challenge[7].replace(/"/g, '');
     try {
       if (json.status === 'error') {
         throw new Error();
