@@ -29,7 +29,7 @@ const drawTable = (posts) => {
 			`<tr>
 				<td><button id="${i}" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>
 				<td>${post.slug}</td>
-				<td><a href="${post.url}" target="_new">${post.title.replace(/Protected\: /g, '').replace(/Private\: /g, '')}</a></td>
+				<td><a href="${post.url}" target="_new">${post.title.replace(/Protected: /g, '').replace(/Private: /g, '')}</a></td>
 				<td><span style="display:none">${post.date}</span><span>${new Date(post.date).toDateString()}</span></td>
 				<td><span style="display:none">${post.modified}</span><span>${new Date(post.modified).toDateString()}</span></td>
 			</tr>`;
