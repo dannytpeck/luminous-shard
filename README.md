@@ -1,4 +1,4 @@
-# Luminous Shard - a Danny Peck and Josh Braun joint
+# Shiny Stone - a Danny Peck and Josh Braun joint
 
 ### Dependencies
 node
