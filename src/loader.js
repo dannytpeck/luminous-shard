@@ -133,6 +133,7 @@ function drawTableRow(row, post) {
       </select>
 
       <select id="teamMin${row}" style="display: none;">
+        <option>1</option>
         <option>2</option>
         <option>3</option>
         <option selected="selected">4</option>
