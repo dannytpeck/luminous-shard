@@ -115,7 +115,17 @@ const createCSV = (employer) => {
     'Field2',
     'Field2Value',
     'Field3',
-    'Field3Value'
+    'Field3Value',
+    'AppearanceInProgram',
+    'IntegrationPartnerId',
+    'ButtonText',
+    'TargetUrl',
+    'EventCode',
+    'ShowExtendedDescription',
+    'ActivityTemplateId',
+    'IsFeatured',
+    'FeaturedDescription',
+    'FeaturedImageUrl'
   ]];
 
   for (var row = 0; row < $('#challenge-list tbody')[0].rows.length; row++) {
@@ -140,24 +150,24 @@ const createCSV = (employer) => {
 
 		data.push([
       $(`#eid${employer}`).val(),
-      '',
+      '', // ChallengeId
       challengeType,
       isWeekly,
       winStrategy,
       $('#required' + row).val() === '0' ? '1' : $('#required' + row).val(),
       activity,
       '"' + $('#chalTitle' + row).val() + '"',
-      '',
+      '', // DisplayPriority
 			$('#startDate' + row).val().replace(/-/g, '/'),
 			$('#endDate' + row).val().replace(/-/g, '/'),
       sanitize($('#sd' + row).html()),
       sanitize($('#mi' + row).html()),
       $('#imgLink' + row).attr('href').replace(/https:\/\/mywellmetrics\.com/g, ''),
-      '0',
+      '0', // ShowInProgram
       rewardType,
       $('#points' + row).val(),
       dimensionsARR(row) === '"undefined"' ? '' : dimensionsARR(row),
-      '',
+      '', // LeaderboardTag
       enableDeviceTracking,
       allowSelfReporting,
       deviceTrackingUnits,
@@ -170,7 +180,17 @@ const createCSV = (employer) => {
       $(`#field-two${row}`).val(),
       $(`#field-two-value${row}`).val(),
       $(`#field-three${row}`).val(),
-      $(`#field-three-value${row}`).val()
+      $(`#field-three-value${row}`).val(),
+      'Default', // AppearanceInProgram
+      '', // IntegrationPartnerId
+      '', // ButtonText
+      '', // TargetUrl
+      '', // EventCode
+      '', // ShowExtendedDescription
+      '', // ActivityTemplateId
+      '0', // IsFeatured
+      '', // FeaturedDescription
+      '' // FeaturedImageUrl
     ]);
 
 	}
