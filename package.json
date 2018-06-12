@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Shiny Stone",
   "main": "index.js",
-  "repository": "https://github.com/dannytpeck/luminous-shard",
+  "repository": "https://github.com/dannytpeck/shiny-stone",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
