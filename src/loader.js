@@ -433,20 +433,19 @@ function getContent(ids) {
 export function grabber() {
 
 	// Get location and find the beginning of the query
-	var url = window.location.href;
-	var query = url.substr((url.indexOf('#?') + 2), url.length);
+	const url = window.location.href;
+	const query = url.substr((url.indexOf('#?') + 2), url.length);
 
 	// Create an array of query values
-	var vars = query.split('&');
+	const vars = query.split('&');
 
 	// Create an empty object to hold key/value pairs
-	var queryObject = {};
+	let queryObject = {};
 
 	// Read each value in vars, create pairs and add each pair to our object
-	var i;
-	for (i = 0; i < vars.length; i++) {
+	for (let i = 0; i < vars.length; i++) {
 
-		var pair = vars[i].split('=');
+		const pair = vars[i].split('=');
 
 		switch (pair[0]) {
       case 'file':
@@ -464,8 +463,25 @@ export function grabber() {
       case 'id_arr':
         queryObject.ids = pair[1].split(',');
         break;
+      case 'calendar':
+        queryObject.calendar = pair[1];
+        break;
     }
 	}
+
+  // TODO: Finish building this out
+  // Using airtable here, working to add a feature where we can load a calendar from a Hash
+  // Format will look something like:
+  // http://localhost:3000/compile/index.html#?file=123&eid=ABC&calendar=a9d1e8102ac4cb
+  if (queryObject.calendar) {
+    console.log('A calendar was provided, hash is: ' + queryObject.calendar);
+    const calendarHash = queryObject.calendar;
+    $.getJSON(`https://api.airtable.com/v0/appN1J6yscNwlzbzq/Challenges?api_key=keyCxnlep0bgotSrX&filterByFormula={Calendar}='${calendarHash}'`).done((data) => {
+      const filteredRecords = data.records.filter(record => record.fields.Slug);
+      console.log(filteredRecords);
+      // getContentWithDates(filteredRecords);
+    });
+  }
 
   // Populate the fields from the query object
   $('#fileName').val(queryObject.file);
