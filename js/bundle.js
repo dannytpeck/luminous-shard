@@ -38858,7 +38858,7 @@ function remainingDefaults(defaults, row) {
 }
 
 // Populates one row of the table
-function drawTableRow(row, post) {
+function drawTableRow(row, post, record) {
 
   // Remove 2017: and 2018: from titles
   var title = post.title.rendered.replace(/2017: /, '').replace(/2018: /, '');
@@ -38866,9 +38866,7 @@ function drawTableRow(row, post) {
   // Only use straight quotes
   var allCode = post.content.rendered.replace(/\u201C/g, '"').replace(/\u201D/g, '"');
 
-  var begin = allCode.indexOf('{ "defaults"');
-  var end = allCode.indexOf(' </script> <!--end defaults-->');
-  var objectText = allCode.substring(begin, end);
+  var objectText = allCode.substring(allCode.indexOf('{ "defaults"'), allCode.indexOf(' </script> <!--end defaults-->'));
 
   var defaults = void 0;
   try {
@@ -38878,9 +38876,13 @@ function drawTableRow(row, post) {
   }
 
   var checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
-  (0, _jquery2.default)('#challenge-name' + row).html('<p>\n      <input type="text" id="chalTitle' + row + '" value="' + title + '" />\n    </p>\n    <p>\n      <label for="deviceCheck' + row + '">Device Enabled</label>\n      <input id="deviceCheck' + row + '" type="checkbox" style="padding-left:10px" ' + checkChecked + ' /><br/>\n      <label for="deviceRequired' + row + '">Device Required</label>\n      <input id="deviceRequired' + row + '" type="checkbox" style="padding-left:10px" />\n    </p>\n    <p>\n      <select id="soloTeam' + row + '">\n        <option value="Individual">Individual</option>\n        <option value="Team">Team</option>\n      </select>\n\n      <select id="teamMin' + row + '" style="display: none;">\n        <option>1</option>\n        <option>2</option>\n        <option>3</option>\n        <option selected="selected">4</option>\n        <option>5</option>\n      </select>\n\n      <select id="teamMax' + row + '" style="display: none;">\n        <option>2</option>\n        <option>3</option>\n        <option>4</option>\n        <option>5</option>\n        <option>6</option>\n        <option>7</option>\n        <option>8</option>\n        <option>9</option>\n        <option>10</option>\n        <option>11</option>\n        <option selected="selected">12</option>\n        <option>13</option>\n        <option>14</option>\n        <option>15</option>\n        <option>16</option>\n        <option>17</option>\n        <option>18</option>\n        <option>19</option>\n        <option>20</option>\n      </select>\n    </p>');
+  (0, _jquery2.default)('#challenge-name' + row).html('<p>\n      <input type="text" id="chalTitle' + row + '" value="' + (record ? record.fields['Name'] : title) + '" />\n    </p>\n    <p>\n      <label for="deviceCheck' + row + '">Device Enabled</label>\n      <input id="deviceCheck' + row + '" type="checkbox" style="padding-left:10px" ' + checkChecked + ' /><br/>\n      <label for="deviceRequired' + row + '">Device Required</label>\n      <input id="deviceRequired' + row + '" type="checkbox" style="padding-left:10px" />\n    </p>\n    <p>\n      <select id="soloTeam' + row + '">\n        <option value="Individual">Individual</option>\n        <option value="Team">Team</option>\n      </select>\n\n      <select id="teamMin' + row + '" style="display: none;">\n        <option>1</option>\n        <option>2</option>\n        <option>3</option>\n        <option selected="selected">4</option>\n        <option>5</option>\n      </select>\n\n      <select id="teamMax' + row + '" style="display: none;">\n        <option>2</option>\n        <option>3</option>\n        <option>4</option>\n        <option>5</option>\n        <option>6</option>\n        <option>7</option>\n        <option>8</option>\n        <option>9</option>\n        <option>10</option>\n        <option>11</option>\n        <option selected="selected">12</option>\n        <option>13</option>\n        <option>14</option>\n        <option>15</option>\n        <option>16</option>\n        <option>17</option>\n        <option>18</option>\n        <option>19</option>\n        <option>20</option>\n      </select>\n    </p>');
 
-  (0, _jquery2.default)('#start-end-date' + row).html('<div>\n      Start Date\n      <input type="date" id="startDate' + row + '" value="' + (0, _jquery2.default)('#begin').val() + '" tabindex="' + (row + 101) + '" />\n      <br>\n      End Date\n      <input type="date" id="endDate' + row + '" value="' + (0, _jquery2.default)('#end').val() + '" tabindex="' + (row + 101) + '" />\n    </div>');
+  if (record) {
+    (0, _jquery2.default)('#start-end-date' + row).html('<div>\n        Start Date\n        <input type="date" id="startDate' + row + '" value="' + record.fields['Start date'] + '" tabindex="' + (row + 101) + '" />\n        <br>\n        End Date\n        <input type="date" id="endDate' + row + '" value="' + record.fields['End date'] + '" tabindex="' + (row + 101) + '" />\n      </div>');
+  } else {
+    (0, _jquery2.default)('#start-end-date' + row).html('<div>\n        Start Date\n        <input type="date" id="startDate' + row + '" value="' + (0, _jquery2.default)('#begin').val() + '" tabindex="' + (row + 101) + '" />\n        <br>\n        End Date\n        <input type="date" id="endDate' + row + '" value="' + (0, _jquery2.default)('#end').val() + '" tabindex="' + (row + 101) + '" />\n      </div>');
+  }
 
   (0, _jquery2.default)('#dimensions-and-code' + row).html('<p>\n      <a class="btn btn-default" onclick="chooseDimens(' + row + ',\'dimen\')">Dimensions</a>\n    </p>');
 
@@ -38891,7 +38893,7 @@ function drawTableRow(row, post) {
 
   (0, _jquery2.default)('#tracking-type' + row).html('<input type="text" id="devText' + row + '" onkeyup="this.removeAttribute(\'value\')" placeholder="activity" value="' + defaults.text + '" />\n    <br/><br/>\n    <input type="number" id="required' + row + '" onkeyup="modifyTrackingNumber(' + row + ')" placeholder="units" value="' + defaults.required + '" />\n    <br><br>\n    <select id="trackType' + row + '">\n\t\t\t <option value="One Time">One Time</option>\n\t\t\t <option value="One Time Units">Units - Challenge Period</option>\n\t\t\t <option value="One Time Days">Days - Challenge Period</option>\n\t\t\t <option value="Weekly Units">Units each week</option>\n\t\t\t <option value="Weekly Days">Days each Week</option>\n     </select>');
 
-  (0, _jquery2.default)('#point-value' + row).html('<input id="points' + row + '" type="text" style="width:50px" tabindex="' + (row + 1) + '" />\n    <p>\n      <label for="pointText' + row + '"><span class="glyphicon glyphicon-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></span></label>\n      <input id="pointText' + row + '" type="checkbox" />\n    </p>');
+  (0, _jquery2.default)('#point-value' + row).html('<input id="points' + row + '" type="text" value="' + (record ? record.fields['Points'] : '') + '" style="width:50px" tabindex="' + (row + 1) + '" />\n    <p>\n      <label for="pointText' + row + '"><span class="glyphicon glyphicon-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></span></label>\n      <input id="pointText' + row + '" type="checkbox" />\n    </p>');
 
   (0, _jquery2.default)('#targeting' + row).html('<p>\n      <a class="btn btn-default" onclick="showTargetingModal(' + row + ')">Targeting</a>\n    </p>');
 
@@ -38999,6 +39001,39 @@ function getContent(ids) {
   }
 }
 
+// Like getContent but it takes records w/ start and end dates
+function getContentWithDates(records) {
+  var tableBody = (0, _jquery2.default)('#challenge-list tbody')[0];
+
+  records.forEach(function (record, i) {
+    var slug = record.fields['Slug'];
+    var challengeUrl = 'http://thelibrary.adurolife.com/' + slug;
+
+    // Create a new row for each challenge
+    (0, _jquery2.default)('#challenge-list tbody').append('<tr><td><a href="' + challengeUrl + '" target="_blank">' + slug + '</a></td></tr>');
+
+    // Build out the rest of the table
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'challenge-name' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'start-end-date' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'dimensions-and-code' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'team-challenge' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'tracking-type' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'point-value' + i;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'targeting' + i;
+
+    // Make an ajax request to get the challenge content, then draw it to the table
+    var requestUrl = 'http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=' + slug;
+
+    _jquery2.default.getJSON('' + requestUrl).done(function (data) {
+      var post = data[0];
+      drawTableRow(i, post, record);
+    }).fail(function (jqxhr, textStatus, error) {
+      var err = textStatus + ', ' + error;
+      console.error('Request Failed: ' + err);
+    });
+  });
+}
+
 function grabber() {
 
   // Get location and find the beginning of the query
@@ -39038,19 +39073,25 @@ function grabber() {
     }
   }
 
-  // TODO: Finish building this out
   // Using airtable here, working to add a feature where we can load a calendar from a Hash
-  // Format will look something like:
-  // http://localhost:3000/compile/index.html#?file=123&eid=ABC&calendar=a9d1e8102ac4cb
+  // Format looks something like:
+  // http://localhost:3000/compile/index.html#?file=Yearlong&calendar=a9d1e8102ac4cb
   if (queryObject.calendar) {
-    console.log('A calendar was provided, hash is: ' + queryObject.calendar);
+    // Hide fields that don't make sense for importing a calendar from airtable
+    (0, _jquery2.default)('#start-and-end-dates').hide();
+    (0, _jquery2.default)('#shortCut').hide();
+
     var calendarHash = queryObject.calendar;
     _jquery2.default.getJSON('https://api.airtable.com/v0/appN1J6yscNwlzbzq/Challenges?api_key=keyCxnlep0bgotSrX&filterByFormula={Calendar}=\'' + calendarHash + '\'').done(function (data) {
+      // Populate first EID with EmployerName from results
+      if (data.records) {
+        (0, _jquery2.default)('#eid0').val(data.records[0].fields['EmployerName']);
+      }
+
       var filteredRecords = data.records.filter(function (record) {
         return record.fields.Slug;
       });
-      console.log(filteredRecords);
-      // getContentWithDates(filteredRecords);
+      getContentWithDates(filteredRecords);
     });
   }
 

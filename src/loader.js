@@ -92,10 +92,10 @@ function remainingDefaults(defaults, row) {
 }
 
 // Populates one row of the table
-function drawTableRow(row, post) {
+function drawTableRow(row, post, record) {
 
   // Remove 2017: and 2018: from titles
-  const title = post.title.rendered
+  let title= post.title.rendered
     .replace(/2017: /, '')
     .replace(/2018: /, '');
 
@@ -104,9 +104,10 @@ function drawTableRow(row, post) {
     .replace(/\u201C/g, '"')
     .replace(/\u201D/g, '"');
 
-  const begin = allCode.indexOf('{ "defaults"');
-	const end = allCode.indexOf(' </script> <!--end defaults-->');
-	const objectText = allCode.substring(begin, end);
+	const objectText = allCode.substring(
+    allCode.indexOf('{ "defaults"'),
+    allCode.indexOf(' </script> <!--end defaults-->')
+  );
 
   let defaults;
 	try {
@@ -118,7 +119,7 @@ function drawTableRow(row, post) {
   const checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
   $(`#challenge-name${row}`).html(
     `<p>
-      <input type="text" id="chalTitle${row}" value="${title}" />
+      <input type="text" id="chalTitle${row}" value="${record ? record.fields['Name'] : title}" />
     </p>
     <p>
       <label for="deviceCheck${row}">Device Enabled</label>
@@ -164,15 +165,28 @@ function drawTableRow(row, post) {
     </p>`
   );
 
-  $(`#start-end-date${row}`).html(
-    `<div>
-      Start Date
-      <input type="date" id="startDate${row}" value="${$('#begin').val()}" tabindex="${row + 101}" />
-      <br>
-      End Date
-      <input type="date" id="endDate${row}" value="${$('#end').val()}" tabindex="${row + 101}" />
-    </div>`
-  );
+  if (record) {
+    $(`#start-end-date${row}`).html(
+      `<div>
+        Start Date
+        <input type="date" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
+        <br>
+        End Date
+        <input type="date" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />
+      </div>`
+    );
+  } else {
+    $(`#start-end-date${row}`).html(
+      `<div>
+        Start Date
+        <input type="date" id="startDate${row}" value="${$('#begin').val()}" tabindex="${row + 101}" />
+        <br>
+        End Date
+        <input type="date" id="endDate${row}" value="${$('#end').val()}" tabindex="${row + 101}" />
+      </div>`
+    );
+  }
+
 
   $(`#dimensions-and-code${row}`).html(
     `<p>
@@ -209,7 +223,7 @@ function drawTableRow(row, post) {
   );
 
   $(`#point-value${row}`).html(
-    `<input id="points${row}" type="text" style="width:50px" tabindex="${row + 1}" />
+    `<input id="points${row}" type="text" value="${record ? record.fields['Points'] : ''}" style="width:50px" tabindex="${row + 1}" />
     <p>
       <label for="pointText${row}"><span class="glyphicon glyphicon-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></span></label>
       <input id="pointText${row}" type="checkbox" />
@@ -430,6 +444,41 @@ function getContent(ids) {
 
 }
 
+// Like getContent but it takes records w/ start and end dates
+function getContentWithDates(records) {
+  const tableBody = $('#challenge-list tbody')[0];
+
+  records.forEach((record, i) => {
+    const slug = record.fields['Slug'];
+    const challengeUrl = `http://thelibrary.adurolife.com/${slug}`;
+
+    // Create a new row for each challenge
+    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${slug}</a></td></tr>`);
+
+    // Build out the rest of the table
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = `challenge-name${i}`;
+    tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `dimensions-and-code${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `team-challenge${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
+
+    // Make an ajax request to get the challenge content, then draw it to the table
+    const requestUrl = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=${slug}`;
+
+    $.getJSON(`${requestUrl}`).done(data => {
+      const post = data[0];
+      drawTableRow(i, post, record);
+    }).fail((jqxhr, textStatus, error) => {
+      const err = `${textStatus}, ${error}`;
+      console.error(`Request Failed: ${err}`);
+    });
+
+  });
+
+}
+
 export function grabber() {
 
 	// Get location and find the beginning of the query
@@ -469,17 +518,23 @@ export function grabber() {
     }
 	}
 
-  // TODO: Finish building this out
   // Using airtable here, working to add a feature where we can load a calendar from a Hash
-  // Format will look something like:
-  // http://localhost:3000/compile/index.html#?file=123&eid=ABC&calendar=a9d1e8102ac4cb
+  // Format looks something like:
+  // http://localhost:3000/compile/index.html#?file=Yearlong&calendar=a9d1e8102ac4cb
   if (queryObject.calendar) {
-    console.log('A calendar was provided, hash is: ' + queryObject.calendar);
+    // Hide fields that don't make sense for importing a calendar from airtable
+    $('#start-and-end-dates').hide();
+    $('#shortCut').hide();
+
     const calendarHash = queryObject.calendar;
     $.getJSON(`https://api.airtable.com/v0/appN1J6yscNwlzbzq/Challenges?api_key=keyCxnlep0bgotSrX&filterByFormula={Calendar}='${calendarHash}'`).done((data) => {
+      // Populate first EID with EmployerName from results
+      if (data.records) {
+        $('#eid0').val(data.records[0].fields['EmployerName']);
+      }
+
       const filteredRecords = data.records.filter(record => record.fields.Slug);
-      console.log(filteredRecords);
-      // getContentWithDates(filteredRecords);
+      getContentWithDates(filteredRecords);
     });
   }
 
