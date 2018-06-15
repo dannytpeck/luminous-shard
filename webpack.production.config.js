@@ -1,5 +1,4 @@
 var path = require('path');
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -12,16 +11,7 @@ module.exports = {
     publicPath: './js/',
     filename: 'bundle.js'
   },
-  watch: true,
-  plugins: [
-    new BrowserSyncPlugin({
-      host: process.env.IP || 'localhost',
-      port: process.env.PORT || 3000,
-      server: {
-        baseDir: ['./', './build']
-      }
-    })
-  ],
+  plugins: [],
   module: {
     loaders: [
       {
