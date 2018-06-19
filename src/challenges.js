@@ -1,15 +1,17 @@
 /* This file is for making all the ajax requests to WP and populating the table's contents */
 import $ from 'jquery';
+import Airtable from 'airtable';
 import { addRemove, throwToArray } from './sort';
 
 // Draws the table
-const drawTable = (posts) => {
+function drawTable(records) {
+
 	// Default to sorting by reverse-date
-	posts.sort((a, b) => {
-		if (a.date < b.date) {
+	records.sort((a, b) => {
+		if (a._rawJson.createdTime < b._rawJson.createdTime) {
 			return 1;
 		}
-		if (a.date > b.date) {
+		if (a._rawJson.createdTime > b._rawJson.createdTime) {
 			return -1;
 		}
 		return 0;
@@ -24,25 +26,25 @@ const drawTable = (posts) => {
 
 	let tableHTML = '';
 
-	posts.map((post, i) => {
+	records.map((record, i) => {
 		tableHTML +=
 			`<tr>
 				<td><button id="${i}" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>
-				<td>${post.slug}</td>
-				<td><a href="${post.url}" target="_new">${post.title.replace(/Protected: /g, '').replace(/Private: /g, '')}</a></td>
-				<td><span style="display:none">${post.date}</span><span>${new Date(post.date).toDateString()}</span></td>
-				<td><span style="display:none">${post.modified}</span><span>${new Date(post.modified).toDateString()}</span></td>
+				<td>${record.id}</td>
+				<td><a href="${record.fields['Header Image']}" target="_blank">${record.fields['Title']}</a></td>
+				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
+				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
 			</tr>`;
 	});
 
-	$('#table-body').html(tableHTML);
+	$('#table-body').append(tableHTML);
 
 	// Add event listeners to all the buttons
 	$('.add-remove').click(addRemove);
 
 	// Creates an array used for sorting functionality
 	throwToArray();
-};
+}
 
 // Make ajax request on a single WP page, pushing the contents into an array
 const requestOnePage = (page, posts, totalPages, pagesReceived) => {
@@ -76,9 +78,25 @@ const requestOnePage = (page, posts, totalPages, pagesReceived) => {
 
 // Loads table JSON file from api
 export function loadTable() {
-  $.getJSON('https://mywellnessnumbers.com/thelibrary/challenges/')
-	.done(response => drawTable(response))
-	.fail((error) => console.error(error.responseText));
+
+	const base = new Airtable({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');
+	base('Challenges').select({
+		view: 'Grid view'
+	}).eachPage(function page(records, fetchNextPage) {
+
+		drawTable(records);
+
+		fetchNextPage();
+	}, function done(err) {
+		if (err) {
+			console.error(err);
+			return;
+		}
+	});
+
+  // $.getJSON('https://mywellnessnumbers.com/thelibrary/challenges/').done(response => {
+	// 	drawTable(response);
+	// }).fail((error) => console.error(error.responseText));
 }
 
 // Make ajax request to get the number of pages of posts in the Library, then request pages
