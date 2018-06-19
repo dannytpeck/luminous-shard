@@ -15043,7 +15043,7 @@ function loadCompiler() {
 		(0, _jquery2.default)('#errmsg').html(errorText);
 		a.setAttribute('href', '#dateError');
 	} else {
-		a.setAttribute('href', 'compile/index.html#?file=' + fileName + '&eid=' + eid + '&start_date=' + startDate + '&end_date=' + endDate + '&id_arr=' + idList);
+		a.setAttribute('href', 'compile/index.html#?file=' + fileName + '&eid=' + eid + '&start_date=' + startDate + '&end_date=' + endDate + '&id_list=' + idList);
 		a.setAttribute('target', '_blank');
 	}
 	a.click();
@@ -21446,7 +21446,7 @@ __webpack_require__(/*! bootstrap */ 336);
 
 if (window.location.pathname.includes('compile')) {
 
-	window.onload = _loader.grabber;
+	window.onload = _loader.loadSelectedChallenges;
 
 	// Event Listeners
 	(0, _jquery2.default)('.upload').click(_compiler.limeadeUpload);
@@ -38778,15 +38778,20 @@ function buildTable() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.grabber = grabber;
+exports.loadSelectedChallenges = loadSelectedChallenges;
 
 var _jquery = __webpack_require__(/*! jquery */ 49);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _airtable = __webpack_require__(/*! airtable */ 357);
+
+var _airtable2 = _interopRequireDefault(_airtable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Displays dimensions or code popup - hides whichever one isn't being viewed
+/* This file is for the initial loading of selected challenges table */
 window.chooseDimens = function (row, origin) {
   var dimenPreview = (0, _jquery2.default)('#popup' + row + ' .dimenPreview');
   var codePreview = (0, _jquery2.default)('#popup' + row + ' .codePreview');
@@ -38810,7 +38815,6 @@ window.chooseDimens = function (row, origin) {
 };
 
 // Used to move dimensions from one box to the other
-/* This file is for the initial loading of selected challenges table */
 window.move = function (choose, drop) {
   var d = '';
 
@@ -38847,28 +38851,37 @@ function addCommasToNumber(number) {
 }
 
 // Makes proper selection on Team Challenge and Tracking Type selectors
-function remainingDefaults(defaults, row) {
+function remainingDefaults(post, rowNumber) {
 
   // onChange handler for soloTeam selection
-  (0, _jquery2.default)('#soloTeam' + row).change(function () {
-    if ((0, _jquery2.default)('#soloTeam' + row).val() === 'Team') {
-      (0, _jquery2.default)('#teamMin' + row).show();
-      (0, _jquery2.default)('#teamMax' + row).show();
+  (0, _jquery2.default)('#soloTeam' + rowNumber).change(function () {
+    if ((0, _jquery2.default)('#soloTeam' + rowNumber).val() === 'Team') {
+      (0, _jquery2.default)('#teamMin' + rowNumber).show();
+      (0, _jquery2.default)('#teamMax' + rowNumber).show();
     } else {
-      (0, _jquery2.default)('#teamMin' + row).hide();
-      (0, _jquery2.default)('#teamMax' + row).hide();
+      (0, _jquery2.default)('#teamMin' + rowNumber).hide();
+      (0, _jquery2.default)('#teamMax' + rowNumber).hide();
     }
   });
 
   // Set team values based on defaults object
-  if (defaults.team === 'Team') {
-    (0, _jquery2.default)('#soloTeam' + row).val('Team');
-    (0, _jquery2.default)('#soloTeam' + row).change();
+  if (post.fields['Team Activity'] === 'yes') {
+    (0, _jquery2.default)('#soloTeam' + rowNumber).val('Team');
+    (0, _jquery2.default)('#soloTeam' + rowNumber).change();
   }
 
-  var trackType = document.getElementById('trackType' + row);
+  var tracking = 'One Time';
+  var rewardOccurrence = post.fields['Reward Occurrence'];
+  var activityTrackingType = post.fields['Activity Tracking Type'];
+  if (activityTrackingType === 'Days') {
+    tracking = rewardOccurrence === 'Weekly' ? 'Days each Week' : 'Days - Challenge Period';
+  } else if (activityTrackingType === 'Units') {
+    tracking = rewardOccurrence === 'Weekly' ? 'Units each Week' : 'Units - Challenge Period';
+  }
+
+  var trackType = document.getElementById('trackType' + rowNumber);
   for (var i = 0; i < trackType.options.length; i++) {
-    if (trackType.options[i].value === defaults.tracking) {
+    if (trackType.options[i].value === tracking) {
       trackType.options[i].selected = true;
     } else {
       trackType.options[i].selected = false;
@@ -38878,23 +38891,18 @@ function remainingDefaults(defaults, row) {
 
 // Populates one row of the table
 function drawTableRow(row, post, record) {
+  console.log(post);
 
   // Remove 2017: and 2018: from titles
-  var title = post.title.rendered.replace(/2017: /, '').replace(/2018: /, '');
+  var title = post.fields['Title'].replace(/2017: /, '').replace(/2018: /, '');
 
-  // Only use straight quotes
-  var allCode = post.content.rendered.replace(/\u201C/g, '"').replace(/\u201D/g, '"');
+  var checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
+  var activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
+  var activityGoalText = post.fields['Activity Goal Text'] ? post.fields['Activity Goal Text'] : '';
+  var instructions = post.fields['Instructions'];
+  var moreInformationHtml = post.fields['More Information Html'];
+  var limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
-  var objectText = allCode.substring(allCode.indexOf('{ "defaults"'), allCode.indexOf(' </script> <!--end defaults-->'));
-
-  var defaults = void 0;
-  try {
-    defaults = JSON.parse(objectText).defaults;
-  } catch (e) {
-    throw new Error('Invalid JSON object at http://thelibrary.adurolife.com/wp-json/wp/v2/posts?' + post.slug);
-  }
-
-  var checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
   (0, _jquery2.default)('#challenge-name' + row).html('<p>\n      <input type="text" id="chalTitle' + row + '" value="' + (record ? record.fields['Name'] : title) + '" />\n    </p>\n    <p>\n      <label for="deviceCheck' + row + '">Device Enabled</label>\n      <input id="deviceCheck' + row + '" type="checkbox" style="padding-left:10px" ' + checkChecked + ' /><br/>\n      <label for="deviceRequired' + row + '">Device Required</label>\n      <input id="deviceRequired' + row + '" type="checkbox" style="padding-left:10px" />\n    </p>\n    <p>\n      <select id="soloTeam' + row + '">\n        <option value="Individual">Individual</option>\n        <option value="Team">Team</option>\n      </select>\n\n      <select id="teamMin' + row + '" style="display: none;">\n        <option>1</option>\n        <option>2</option>\n        <option>3</option>\n        <option selected="selected">4</option>\n        <option>5</option>\n      </select>\n\n      <select id="teamMax' + row + '" style="display: none;">\n        <option>2</option>\n        <option>3</option>\n        <option>4</option>\n        <option>5</option>\n        <option>6</option>\n        <option>7</option>\n        <option>8</option>\n        <option>9</option>\n        <option>10</option>\n        <option>11</option>\n        <option selected="selected">12</option>\n        <option>13</option>\n        <option>14</option>\n        <option>15</option>\n        <option>16</option>\n        <option>17</option>\n        <option>18</option>\n        <option>19</option>\n        <option>20</option>\n      </select>\n    </p>');
 
   if (record) {
@@ -38905,12 +38913,9 @@ function drawTableRow(row, post, record) {
 
   (0, _jquery2.default)('#dimensions-and-code' + row).html('<p>\n      <a class="btn btn-default" onclick="chooseDimens(' + row + ',\'dimen\')">Dimensions</a>\n    </p>');
 
-  // Invisible element to hold the imgLink
-  (0, _jquery2.default)('body').append('<a id="imgLink' + row + '" class="btn btn-default" style="display:none"\n        href="https://mywellmetrics.com' + defaults.imgUrl + '" target="_new">\n      Preview Image\n    </a>');
-
   (0, _jquery2.default)('#team-challenge' + row).html('<p>\n      <a class="btn btn-default" onclick="chooseDimens(' + row + ',\'code\')">Edit Description</a>\n    </p>');
 
-  (0, _jquery2.default)('#tracking-type' + row).html('<input type="text" id="devText' + row + '" onkeyup="this.removeAttribute(\'value\')" placeholder="activity" value="' + defaults.text + '" />\n    <br/><br/>\n    <input type="number" id="required' + row + '" onkeyup="modifyTrackingNumber(' + row + ')" placeholder="units" value="' + defaults.required + '" />\n    <br><br>\n    <select id="trackType' + row + '">\n\t\t\t <option value="One Time">One Time</option>\n\t\t\t <option value="One Time Units">Units - Challenge Period</option>\n\t\t\t <option value="One Time Days">Days - Challenge Period</option>\n\t\t\t <option value="Weekly Units">Units each week</option>\n\t\t\t <option value="Weekly Days">Days each Week</option>\n     </select>');
+  (0, _jquery2.default)('#tracking-type' + row).html('<input type="text" id="devText' + row + '" onkeyup="this.removeAttribute(\'value\')" placeholder="activity" value="' + activityGoalText + '" />\n    <br/><br/>\n    <input type="number" id="required' + row + '" onkeyup="modifyTrackingNumber(' + row + ')" placeholder="units" value="' + activityGoal + '" />\n    <br><br>\n    <select id="trackType' + row + '">\n\t\t\t <option value="One Time">One Time</option>\n\t\t\t <option value="Units - Challenge Period">Units - Challenge Period</option>\n\t\t\t <option value="Days - Challenge Period">Days - Challenge Period</option>\n\t\t\t <option value="Units each Week">Units each Week</option>\n\t\t\t <option value="Days each Week">Days each Week</option>\n     </select>');
 
   (0, _jquery2.default)('#point-value' + row).html('<input id="points' + row + '" type="text" value="' + (record ? record.fields['Points'] : '') + '" style="width:50px" tabindex="' + (row + 1) + '" />\n    <p>\n      <label for="pointText' + row + '"><span class="glyphicon glyphicon-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></span></label>\n      <input id="pointText' + row + '" type="checkbox" />\n    </p>');
 
@@ -38918,81 +38923,54 @@ function drawTableRow(row, post, record) {
 
   (0, _jquery2.default)('#targetingModalContainer').append('<div class="modal fade" id="targetingModal' + row + '" tabindex="-1" role="dialog" aria-labelledby="targetingModalLabel">\n      <div class="modal-dialog" role="document">\n        <div class="modal-content">\n          <div class="modal-header">\n            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n            <h4 class="modal-title" id="targetingModalLabel">Targeting</h4>\n          </div>\n          <div class="modal-body" id="targetingModalBody' + row + '">\n            <input type="text" id="subgroup' + row + '" placeholder="Subgroup" />\n            <br><br>\n            <input type="text" id="field-one' + row + '" placeholder="Field1" />\n            <br><br>\n            <input type="text" id="field-one-value' + row + '" placeholder="Field1Value" />\n            <br><br>\n            <input type="text" id="field-two' + row + '" placeholder="Field2" />\n            <br><br>\n            <input type="text" id="field-two-value' + row + '" placeholder="Field2Value" />\n            <br><br>\n            <input type="text" id="field-three{row}" placeholder="Field3" />\n            <br><br>\n            <input type="text" id="field-three-value' + row + '" placeholder="Field3Value" />\n          </div>\n          <div class="modal-footer">\n            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n          </div>\n        </div>\n      </div>\n    </div>');
 
-  function getDefaultDimens(dimensions) {
-    var platformDimens = ['Appreciating Life', 'Back Health', 'Belief in Organization', 'Belief in Your Abilities', 'Concern for Others', 'Concern for the Environment', 'Dream Job', 'Drinking Moderately', 'Energy Level', 'Enjoying Work', 'Exercise &amp; Fitness', 'Feeling Energized', 'Financial Well-being', 'Fit with Culture', 'Growth', 'Healthy Blood Sugar', 'Healthy Weight', 'Heart Health', 'In the Flow', 'Job Satisfaction', 'Knowing Yourself', 'Life Meaning', 'Making &amp; Keeping Commitments', 'Managing Depression', 'Managing Stress &amp; Anxiety', 'Nutrition', 'Openness &amp; Optimism', 'Positive Living', 'Positive Relationships', 'Pregnancy', 'Resilience', 'Self-Acceptance', 'Self-Care', 'Self-Leadership', 'Sense of Team', 'Sleep', 'Smoke-Free Living', 'Square Deal', 'Work Growth', 'Work Meaning', 'Work-Life Balance', 'Vision'];
+  function getDefaultDimensions(dimensions) {
+    var allDimensions = ['Appreciating Life', 'Back Health', 'Belief in Organization', 'Belief in Your Abilities', 'Concern for Others', 'Concern for the Environment', 'Dream Job', 'Drinking Moderately', 'Energy Level', 'Enjoying Work', 'Exercise & Fitness', 'Feeling Energized', 'Financial Well-being', 'Fit with Culture', 'Growth', 'Healthy Blood Sugar', 'Healthy Weight', 'Heart Health', 'In the Flow', 'Job Satisfaction', 'Knowing Yourself', 'Life Meaning', 'Making & Keeping Commitments', 'Managing Depression', 'Managing Stress & Anxiety', 'Nutrition', 'Openness & Optimism', 'Positive Living', 'Positive Relationships', 'Pregnancy', 'Resilience', 'Self-Acceptance', 'Self-Care', 'Self-Leadership', 'Sense of Team', 'Sleep', 'Smoke-Free Living', 'Square Deal', 'Work Growth', 'Work Meaning', 'Work-Life Balance', 'Vision'];
+
     var selected = [];
     var j = '';
-    var i;
 
-    for (i = 0; i < dimensions.length; i++) {
-      j = platformDimens.indexOf(dimensions[i]);
-      selected.push(platformDimens[j]);
-      platformDimens.splice(j, 1);
+    for (var i = 0; i < dimensions.length; i++) {
+      j = allDimensions.indexOf(dimensions[i]);
+      selected.push(allDimensions[j]);
+      allDimensions.splice(j, 1);
     }
 
-    function finalSE(selected) {
+    function createOptionElements(dimensions) {
       var x = '';
-      var i;
-      for (i = 0; i < selected.length; i++) {
-        x += '<option value="' + selected[i] + '">' + selected[i] + '</option>';
-      }
-      return x;
-    }
-
-    function finalUN(leftover) {
-      var x = '';
-      var i;
-      for (i = 0; i < leftover.length; i++) {
-        x += '<option value="' + leftover[i] + '">' + leftover[i] + '</option>';
+      for (var _i = 0; _i < dimensions.length; _i++) {
+        x += '<option value="' + dimensions[_i] + '">' + dimensions[_i] + '</option>';
       }
       return x;
     }
 
     return {
-      un: finalUN(platformDimens),
-      se: finalSE(selected)
+      unselected: createOptionElements(allDimensions),
+      selected: createOptionElements(selected)
     };
   }
 
-  function gatherCode(allCode) {
-    var element = document.createElement('div');
-    document.body.appendChild(element);
-    element.setAttribute('style', 'display:none');
-    element.innerHTML = allCode;
-
-    var sd = document.getElementById('shD').innerHTML;
-    var mi = document.getElementById('lnD').innerHTML;
-
-    document.body.removeChild(element);
-
-    return {
-      shortDescription: sd,
-      moreInformation: mi
-    };
-  }
+  var dimensionElements = getDefaultDimensions(limeadeDimensions);
 
   var popUp = document.createElement('DIV');
   document.body.appendChild(popUp);
   popUp.setAttribute('style', 'display:none');
   popUp.setAttribute('class', 'popup');
   popUp.id = 'popup' + row;
-  var sec = getDefaultDimens(defaults.dimensions);
-  var completeCode = gatherCode(allCode);
-  popUp.innerHTML = '<div class="dimenPreview">\n      <select id="selectBefore' + row + '" class="selectBf" multiple>' + sec.un + '</select>\n      <button id="add' + row + '" onclick="move(selectBefore' + row + ', selectAfter' + row + ')">\n        -->\n      </button>\n      <button id="remove' + row + '" style="position:absolute; bottom:40%; left:44%"\n              onclick="move(selectAfter' + row + ', selectBefore' + row + ')">\n        <--\n      </button>\n      <select id="selectAfter' + row + '" class="selectAf" multiple>' + sec.se + '</select>\n      <a onclick="$(\'#popup' + row + '\').hide()">Submit</a>\n    </div>\n\n    <div class="codePreview">\n      <div class="codeEdit">\n        <h3>Short Description</h3>\n        <textarea class="shortDescription" id="txtAreaS' + row + '" onkeyup="edit(txtAreaS' + row + ', sd' + row + '.getElementsByTagName(\'SPAN\')[0])">' + completeCode.shortDescription + '</textarea>\n        <h3>More Information</h3>\n        <textarea class="moreInformation" id="txtAreaM' + row + '" onkeyup="edit(txtAreaM' + row + ', mi' + row + ')">' + completeCode.moreInformation + '</textarea>\n        <a class="linkSpec button" onclick="$(\'#popup' + row + '\').hide()">\n          <span class="glyphicon glyphicon-ok"></span>\n        </a>\n      </div>\n      <div class="codeLive">\n        <div class="codeLiveDisplay" id="codeCompile' + row + '">\n          <span id="sd' + row + '"><span style="font-size:14px; font-weight:bold">' + completeCode.shortDescription + '</span></span>\n          <span id="mi' + row + '">' + completeCode.moreInformation + '</span>\n        </div>\n      </div>\n    </div>';
+  popUp.innerHTML = '<div class="dimenPreview">\n      <select id="selectBefore' + row + '" class="selectBf" multiple>' + dimensionElements.unselected + '</select>\n      <button id="add' + row + '" onclick="move(selectBefore' + row + ', selectAfter' + row + ')">\n        -->\n      </button>\n      <button id="remove' + row + '" style="position:absolute; bottom:40%; left:44%"\n              onclick="move(selectAfter' + row + ', selectBefore' + row + ')">\n        <--\n      </button>\n      <select id="selectAfter' + row + '" class="selectAf" multiple>' + dimensionElements.selected + '</select>\n      <a onclick="$(\'#popup' + row + '\').hide()">Submit</a>\n    </div>\n\n    <div class="codePreview">\n      <div class="codeEdit">\n        <h3>Short Description</h3>\n        <textarea class="shortDescription" id="txtAreaS' + row + '" onkeyup="edit(txtAreaS' + row + ', sd' + row + '.getElementsByTagName(\'SPAN\')[0])">' + instructions + '</textarea>\n        <h3>More Information</h3>\n        <textarea class="moreInformation" id="txtAreaM' + row + '" onkeyup="edit(txtAreaM' + row + ', mi' + row + ')">' + moreInformationHtml + '</textarea>\n        <a class="linkSpec button" onclick="$(\'#popup' + row + '\').hide()">\n          <span class="glyphicon glyphicon-ok"></span>\n        </a>\n      </div>\n      <div class="codeLive">\n        <div class="codeLiveDisplay" id="codeCompile' + row + '">\n          <span id="sd' + row + '"><span style="font-size:14px; font-weight:bold">' + instructions + '</span></span>\n          <span id="mi' + row + '">' + moreInformationHtml + '</span>\n        </div>\n      </div>\n    </div>';
 
-  remainingDefaults(defaults, row);
+  remainingDefaults(post, row);
 }
 
 // Makes an ajax request to a specific challenge page (by slug)
-function requestOneChallenge(slug, row) {
-  var url = 'http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=' + slug;
+function requestOneChallenge(id, rowNumber) {
+  var base = new _airtable2.default({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');
 
-  _jquery2.default.getJSON('' + url).done(function (data) {
-    var post = data[0];
-    drawTableRow(row, post);
-  }).fail(function (jqxhr, textStatus, error) {
-    var err = textStatus + ', ' + error;
-    console.error('Request Failed: ' + err);
+  base('Challenges').find(id, function (err, record) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    drawTableRow(rowNumber, record);
   });
 }
 
@@ -39000,12 +38978,12 @@ function requestOneChallenge(slug, row) {
 function getContent(ids) {
   var tableBody = (0, _jquery2.default)('#challenge-list tbody')[0];
 
-  for (var i = 0; i < ids.length; i++) {
-    var slug = ids[i];
-    var challengeUrl = 'http://thelibrary.adurolife.com/' + slug;
+  ids.map(function (id, i) {
+    //TODO: update this to either an image link or a viewer link
+    var challengeUrl = 'http://thelibrary.adurolife.com/' + id;
 
     // Create a new row for each challenge
-    (0, _jquery2.default)('#challenge-list tbody').append('<tr><td><a href="' + challengeUrl + '" target="_blank">' + slug + '</a></td></tr>');
+    (0, _jquery2.default)('#challenge-list tbody').append('<tr><td><a href="' + challengeUrl + '" target="_blank">' + id + '</a></td></tr>');
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'challenge-name' + i;
@@ -39016,8 +38994,8 @@ function getContent(ids) {
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'point-value' + i;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'targeting' + i;
 
-    requestOneChallenge(slug, i);
-  }
+    requestOneChallenge(id, i);
+  });
 }
 
 // Like getContent but it takes records w/ start and end dates
@@ -39053,7 +39031,7 @@ function getContentWithDates(records) {
   });
 }
 
-function grabber() {
+function loadSelectedChallenges() {
 
   // Get location and find the beginning of the query
   var url = window.location.href;
@@ -39083,7 +39061,7 @@ function grabber() {
       case 'end_date':
         queryObject.end = pair[1];
         break;
-      case 'id_arr':
+      case 'id_list':
         queryObject.ids = pair[1].split(',');
         break;
       case 'calendar':

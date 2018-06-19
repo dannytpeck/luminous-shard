@@ -1,5 +1,6 @@
 /* This file is for the initial loading of selected challenges table */
 import $ from 'jquery';
+import Airtable from 'airtable';
 
 // Displays dimensions or code popup - hides whichever one isn't being viewed
 window.chooseDimens = (row, origin) => {
@@ -61,28 +62,37 @@ function addCommasToNumber(number) {
 }
 
 // Makes proper selection on Team Challenge and Tracking Type selectors
-function remainingDefaults(defaults, row) {
+function remainingDefaults(post, rowNumber) {
 
   // onChange handler for soloTeam selection
-  $(`#soloTeam${row}`).change(() => {
-    if ($(`#soloTeam${row}`).val() === 'Team') {
-      $(`#teamMin${row}`).show();
-      $(`#teamMax${row}`).show();
+  $(`#soloTeam${rowNumber}`).change(() => {
+    if ($(`#soloTeam${rowNumber}`).val() === 'Team') {
+      $(`#teamMin${rowNumber}`).show();
+      $(`#teamMax${rowNumber}`).show();
     } else {
-      $(`#teamMin${row}`).hide();
-      $(`#teamMax${row}`).hide();
+      $(`#teamMin${rowNumber}`).hide();
+      $(`#teamMax${rowNumber}`).hide();
     }
   });
 
   // Set team values based on defaults object
-  if (defaults.team === 'Team') {
-    $(`#soloTeam${row}`).val('Team');
-    $(`#soloTeam${row}`).change();
+  if (post.fields['Team Activity'] === 'yes') {
+    $(`#soloTeam${rowNumber}`).val('Team');
+    $(`#soloTeam${rowNumber}`).change();
   }
 
-  var trackType = document.getElementById(`trackType${row}`);
-  for (var i = 0; i < trackType.options.length; i++) {
-    if (trackType.options[i].value === defaults.tracking) {
+  let tracking = 'One Time';
+  const rewardOccurrence = post.fields['Reward Occurrence'];
+  const activityTrackingType = post.fields['Activity Tracking Type'];
+  if (activityTrackingType === 'Days') {
+    tracking = rewardOccurrence === 'Weekly' ? 'Days each Week' : 'Days - Challenge Period';
+  } else if (activityTrackingType === 'Units') {
+    tracking = rewardOccurrence === 'Weekly' ? 'Units each Week' : 'Units - Challenge Period';
+  }
+
+  let trackType = document.getElementById(`trackType${rowNumber}`);
+  for (let i = 0; i < trackType.options.length; i++) {
+    if (trackType.options[i].value === tracking) {
       trackType.options[i].selected = true;
     } else {
       trackType.options[i].selected = false;
@@ -93,30 +103,20 @@ function remainingDefaults(defaults, row) {
 
 // Populates one row of the table
 function drawTableRow(row, post, record) {
+  console.log(post);
 
   // Remove 2017: and 2018: from titles
-  let title= post.title.rendered
+  let title= post.fields['Title']
     .replace(/2017: /, '')
     .replace(/2018: /, '');
 
-  // Only use straight quotes
-  const allCode = post.content.rendered
-    .replace(/\u201C/g, '"')
-    .replace(/\u201D/g, '"');
+  const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
+  const activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
+  const activityGoalText = post.fields['Activity Goal Text'] ? post.fields['Activity Goal Text'] : '';
+  const instructions = post.fields['Instructions'];
+  const moreInformationHtml = post.fields['More Information Html'];
+  const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
-	const objectText = allCode.substring(
-    allCode.indexOf('{ "defaults"'),
-    allCode.indexOf(' </script> <!--end defaults-->')
-  );
-
-  let defaults;
-	try {
-		defaults = JSON.parse(objectText).defaults;
-	} catch (e) {
-		throw new Error(`Invalid JSON object at http://thelibrary.adurolife.com/wp-json/wp/v2/posts?${post.slug}`);
-	}
-
-  const checkChecked = defaults.device === 'yes' ? 'checked' : 'unchecked';
   $(`#challenge-name${row}`).html(
     `<p>
       <input type="text" id="chalTitle${row}" value="${record ? record.fields['Name'] : title}" />
@@ -194,14 +194,6 @@ function drawTableRow(row, post, record) {
     </p>`
   );
 
-  // Invisible element to hold the imgLink
-  $('body').append(
-    `<a id="imgLink${row}" class="btn btn-default" style="display:none"
-        href="https://mywellmetrics.com${defaults.imgUrl}" target="_new">
-      Preview Image
-    </a>`
-  );
-
   $('#team-challenge' + row).html(
     `<p>
       <a class="btn btn-default" onclick="chooseDimens(${row},'code')">Edit Description</a>
@@ -209,16 +201,16 @@ function drawTableRow(row, post, record) {
   );
 
   $(`#tracking-type${row}`).html(
-    `<input type="text" id="devText${row}" onkeyup="this.removeAttribute('value')" placeholder="activity" value="${defaults.text}" />
+    `<input type="text" id="devText${row}" onkeyup="this.removeAttribute('value')" placeholder="activity" value="${activityGoalText}" />
     <br/><br/>
-    <input type="number" id="required${row}" onkeyup="modifyTrackingNumber(${row})" placeholder="units" value="${defaults.required}" />
+    <input type="number" id="required${row}" onkeyup="modifyTrackingNumber(${row})" placeholder="units" value="${activityGoal}" />
     <br><br>
     <select id="trackType${row}">
 			 <option value="One Time">One Time</option>
-			 <option value="One Time Units">Units - Challenge Period</option>
-			 <option value="One Time Days">Days - Challenge Period</option>
-			 <option value="Weekly Units">Units each week</option>
-			 <option value="Weekly Days">Days each Week</option>
+			 <option value="Units - Challenge Period">Units - Challenge Period</option>
+			 <option value="Days - Challenge Period">Days - Challenge Period</option>
+			 <option value="Units each Week">Units each Week</option>
+			 <option value="Days each Week">Days each Week</option>
      </select>`
   );
 
@@ -267,8 +259,8 @@ function drawTableRow(row, post, record) {
     </div>`
   );
 
-  function getDefaultDimens(dimensions) {
-    var platformDimens = [
+  function getDefaultDimensions(dimensions) {
+    const allDimensions = [
       'Appreciating Life',
       'Back Health',
       'Belief in Organization',
@@ -279,7 +271,7 @@ function drawTableRow(row, post, record) {
       'Drinking Moderately',
       'Energy Level',
       'Enjoying Work',
-      'Exercise &amp; Fitness',
+      'Exercise & Fitness',
       'Feeling Energized',
       'Financial Well-being',
       'Fit with Culture',
@@ -291,11 +283,11 @@ function drawTableRow(row, post, record) {
       'Job Satisfaction',
       'Knowing Yourself',
       'Life Meaning',
-      'Making &amp; Keeping Commitments',
+      'Making & Keeping Commitments',
       'Managing Depression',
-      'Managing Stress &amp; Anxiety',
+      'Managing Stress & Anxiety',
       'Nutrition',
-      'Openness &amp; Optimism',
+      'Openness & Optimism',
       'Positive Living',
       'Positive Relationships',
       'Pregnancy',
@@ -312,67 +304,40 @@ function drawTableRow(row, post, record) {
       'Work-Life Balance',
       'Vision'
     ];
-    var selected = [];
-    var j = '';
-    var i;
 
-    for (i = 0; i < dimensions.length; i++) {
-      j = platformDimens.indexOf(dimensions[i]);
-      selected.push(platformDimens[j]);
-      platformDimens.splice(j, 1);
+    let selected = [];
+    let j = '';
+
+    for (let i = 0; i < dimensions.length; i++) {
+      j = allDimensions.indexOf(dimensions[i]);
+      selected.push(allDimensions[j]);
+      allDimensions.splice(j, 1);
     }
 
-    function finalSE(selected) {
-      var x = '';
-      var i;
-      for (i = 0; i < selected.length; i++) {
-        x += `<option value="${selected[i]}">${selected[i]}</option>`;
-      }
-      return x;
-    }
-
-    function finalUN(leftover) {
-      var x = '';
-      var i;
-      for (i = 0; i < leftover.length; i++) {
-        x += `<option value="${leftover[i]}">${leftover[i]}</option>`;
+    function createOptionElements(dimensions) {
+      let x = '';
+      for (let i = 0; i < dimensions.length; i++) {
+        x += `<option value="${dimensions[i]}">${dimensions[i]}</option>`;
       }
       return x;
     }
 
     return {
-      un: finalUN(platformDimens),
-      se: finalSE(selected)
+      unselected: createOptionElements(allDimensions),
+      selected: createOptionElements(selected)
     };
   }
 
-  function gatherCode(allCode) {
-    var element = document.createElement('div');
-    document.body.appendChild(element);
-    element.setAttribute('style', 'display:none');
-    element.innerHTML = allCode;
+  const dimensionElements = getDefaultDimensions(limeadeDimensions);
 
-    var sd = document.getElementById('shD').innerHTML;
-    var mi = document.getElementById('lnD').innerHTML;
-
-    document.body.removeChild(element);
-
-    return {
-      shortDescription: sd,
-      moreInformation: mi
-    };
-  }
-
-  var popUp = document.createElement('DIV');
+  let popUp = document.createElement('DIV');
   document.body.appendChild(popUp);
   popUp.setAttribute('style', 'display:none');
   popUp.setAttribute('class', 'popup');
   popUp.id = 'popup' + row;
-  var sec = getDefaultDimens(defaults.dimensions);
-  var completeCode = gatherCode(allCode);
   popUp.innerHTML =
     `<div class="dimenPreview">
-      <select id="selectBefore${row}" class="selectBf" multiple>${sec.un}</select>
+      <select id="selectBefore${row}" class="selectBf" multiple>${dimensionElements.unselected}</select>
       <button id="add${row}" onclick="move(selectBefore${row}, selectAfter${row})">
         -->
       </button>
@@ -380,42 +345,42 @@ function drawTableRow(row, post, record) {
               onclick="move(selectAfter${row}, selectBefore${row})">
         <--
       </button>
-      <select id="selectAfter${row}" class="selectAf" multiple>${sec.se}</select>
+      <select id="selectAfter${row}" class="selectAf" multiple>${dimensionElements.selected}</select>
       <a onclick="$('#popup${row}').hide()">Submit</a>
     </div>
 
     <div class="codePreview">
       <div class="codeEdit">
         <h3>Short Description</h3>
-        <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${completeCode.shortDescription}</textarea>
+        <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
         <h3>More Information</h3>
-        <textarea class="moreInformation" id="txtAreaM${row}" onkeyup="edit(txtAreaM${row}, mi${row})">${completeCode.moreInformation}</textarea>
+        <textarea class="moreInformation" id="txtAreaM${row}" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
         <a class="linkSpec button" onclick="$('#popup${row}').hide()">
           <span class="glyphicon glyphicon-ok"></span>
         </a>
       </div>
       <div class="codeLive">
         <div class="codeLiveDisplay" id="codeCompile${row}">
-          <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${completeCode.shortDescription}</span></span>
-          <span id="mi${row}">${completeCode.moreInformation}</span>
+          <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
+          <span id="mi${row}">${moreInformationHtml}</span>
         </div>
       </div>
     </div>`;
 
-  remainingDefaults(defaults, row);
+  remainingDefaults(post, row);
 
 }
 
 // Makes an ajax request to a specific challenge page (by slug)
-function requestOneChallenge(slug, row) {
-  const url = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=${slug}`;
+function requestOneChallenge(id, rowNumber) {
+  const base = new Airtable({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');
 
-  $.getJSON(`${url}`).done(function (data) {
-    const post = data[0];
-    drawTableRow(row, post);
-  }).fail(function (jqxhr, textStatus, error) {
-    const err = `${textStatus}, ${error}`;
-    console.error(`Request Failed: ${err}`);
+  base('Challenges').find(id, function(err, record) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    drawTableRow(rowNumber, record);
   });
 }
 
@@ -423,12 +388,12 @@ function requestOneChallenge(slug, row) {
 function getContent(ids) {
   const tableBody = $('#challenge-list tbody')[0];
 
-	for (let i = 0; i < ids.length; i++) {
-		const slug = ids[i];
-    const challengeUrl = `http://thelibrary.adurolife.com/${slug}`;
+  ids.map((id, i) => {
+    //TODO: update this to either an image link or a viewer link
+    const challengeUrl = `http://thelibrary.adurolife.com/${id}`;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${slug}</a></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${id}</a></td></tr>`);
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `challenge-name${i}`;
@@ -439,8 +404,8 @@ function getContent(ids) {
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
 
-    requestOneChallenge(slug, i);
-	}
+    requestOneChallenge(id, i);
+  });
 
 }
 
@@ -479,7 +444,7 @@ function getContentWithDates(records) {
 
 }
 
-export function grabber() {
+export function loadSelectedChallenges() {
 
 	// Get location and find the beginning of the query
 	const url = window.location.href;
@@ -509,7 +474,7 @@ export function grabber() {
       case 'end_date':
         queryObject.end = pair[1];
         break;
-      case 'id_arr':
+      case 'id_list':
         queryObject.ids = pair[1].split(',');
         break;
       case 'calendar':

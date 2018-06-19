@@ -5,12 +5,12 @@ require('bootstrap');
 
 import { loadTable, buildTable } from './challenges';
 import { findChallenges, resetPage, loadCompiler, sortName, sortCreated, sortUpdated } from './sort';
-import { grabber } from './loader';
+import { loadSelectedChallenges } from './loader';
 import { limeadeUpload, compileTransporter } from './compiler';
 
 if (window.location.pathname.includes('compile')) {
 
-	window.onload = grabber;
+	window.onload = loadSelectedChallenges;
 
 	// Event Listeners
 	$('.upload').click(limeadeUpload);
