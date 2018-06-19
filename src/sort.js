@@ -322,7 +322,7 @@ export function loadCompiler() {
     $('#errmsg').html(errorText);
     a.setAttribute('href', '#dateError');
   } else {
-    a.setAttribute('href', `compile/index.html#?file=${fileName}&eid=${eid}&start_date=${startDate}&end_date=${endDate}&id_arr=${idList}`);
+    a.setAttribute('href', `compile/index.html#?file=${fileName}&eid=${eid}&start_date=${startDate}&end_date=${endDate}&id_list=${idList}`);
     a.setAttribute('target', '_blank');
   }
   a.click();
