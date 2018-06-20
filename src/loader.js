@@ -103,7 +103,6 @@ function remainingDefaults(post, rowNumber) {
 
 // Populates one row of the table
 function drawTableRow(row, post, record) {
-  console.log(post);
 
   // Remove 2017: and 2018: from titles
   let title= post.fields['Title']
@@ -404,6 +403,7 @@ function getContent(ids) {
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
 
+    // Make an ajax request to get the challenge content, then draw it to the table
     requestOneChallenge(id, i);
   });
 
@@ -413,31 +413,33 @@ function getContent(ids) {
 function getContentWithDates(records) {
   const tableBody = $('#challenge-list tbody')[0];
 
-  records.forEach((record, i) => {
-    const slug = record.fields['Slug'];
-    const challengeUrl = `http://thelibrary.adurolife.com/${slug}`;
+  records.forEach((record, rowNumber) => {
+    const challengeId = record.fields['Challenge Id'];
+
+    // TODO: update this to either an image link or a viewer link
+    const challengeUrl = `http://thelibrary.adurolife.com/${challengeId}`;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${slug}</a></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${challengeId}</a></td></tr>`);
 
     // Build out the rest of the table
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = `challenge-name${i}`;
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `dimensions-and-code${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `team-challenge${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `challenge-name${rowNumber}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `dimensions-and-code${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `team-challenge${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `tracking-type${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
 
     // Make an ajax request to get the challenge content, then draw it to the table
-    const requestUrl = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?slug=${slug}`;
+    const base = new Airtable({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');
 
-    $.getJSON(`${requestUrl}`).done(data => {
-      const post = data[0];
-      drawTableRow(i, post, record);
-    }).fail((jqxhr, textStatus, error) => {
-      const err = `${textStatus}, ${error}`;
-      console.error(`Request Failed: ${err}`);
+    base('Challenges').find(challengeId, function(err, post) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      drawTableRow(rowNumber, post, record);
     });
 
   });
@@ -498,7 +500,7 @@ export function loadSelectedChallenges() {
         $('#eid0').val(data.records[0].fields['EmployerName']);
       }
 
-      const filteredRecords = data.records.filter(record => record.fields.Slug);
+      const filteredRecords = data.records.filter(record => record.fields['Challenge Id']);
       getContentWithDates(filteredRecords);
     });
   }
