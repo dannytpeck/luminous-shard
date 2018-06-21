@@ -3,7 +3,7 @@ import $ from 'jquery';
 window.$ = window.jQuery = $;
 require('bootstrap');
 
-import { loadTable, buildTable } from './challenges';
+import { loadTable } from './challenges';
 import { findChallenges, resetPage, loadCompiler, sortName, sortCreated, sortUpdated } from './sort';
 import { loadSelectedChallenges } from './loader';
 import { limeadeUpload, compileTransporter } from './compiler';
@@ -35,7 +35,6 @@ if (window.location.pathname.includes('compile')) {
 	window.onload = loadTable;
 
 	// Event listeners
-	$('#build-table').click(buildTable);
 	$('#reset').click(resetPage);
 	$('#load-compiler').click(loadCompiler);
 	$('#sortName').click(sortName);

@@ -94,24 +94,4 @@ export function loadTable() {
 		}
 	});
 
-  // $.getJSON('https://mywellnessnumbers.com/thelibrary/challenges/').done(response => {
-	// 	drawTable(response);
-	// }).fail((error) => console.error(error.responseText));
-}
-
-// Make ajax request to get the number of pages of posts in the Library, then request pages
-export function buildTable() {
-	// Create Spinning Progress Indicator
-	$('#load').html('Loading...<img src="images/progressbar.gif" alt="A spinning progress indicator" /> <span style="margin-left:5px" id="progress">0</span>%');
-
-	// Array to store all the posts
-	let posts = [];
-
-	// Keeps track of how many WP page requests have received responses - used for the progress bar
-	let pagesReceived = [];
-
-	// Loop through 100 pages TODO: make this less brittle
-	for (let page = 1; page <= 100; page++) {
-		requestOnePage(page, posts, 100, pagesReceived);
-	}
 }
