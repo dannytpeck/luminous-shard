@@ -39,9 +39,6 @@ function drawTable(records) {
 
 	$('#table-body').append(tableHTML);
 
-	// Add event listeners to all the buttons
-	$('.add-remove').click(addRemove);
-
 	// Creates an array used for sorting functionality
 	throwToArray();
 }
@@ -92,6 +89,9 @@ export function loadTable() {
 			console.error(err);
 			return;
 		}
+
+		// Add event listeners to all the buttons
+		$('.add-remove').click(addRemove);
 	});
 
 }
