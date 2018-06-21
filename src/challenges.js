@@ -31,7 +31,7 @@ function drawTable(records) {
 			`<tr>
 				<td><button id="${i}" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>
 				<td>${record.id}</td>
-				<td><a href="${record.fields['Header Image']}" target="_blank">${record.fields['Title']}</a></td>
+				<td><a href="http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/${record.id}" target="_blank">${record.fields['Title']}</a></td>
 				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
 				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
 			</tr>`;
