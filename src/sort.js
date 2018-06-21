@@ -245,8 +245,6 @@ export function throwToArray() {
 
 // Function for add/remove button
 export function addRemove(event) {
-	console.log(event);
-
 	const idList = document.getElementById('idList');
 	const count = event.target.parentNode.getElementsByTagName('input')[0];
   const libraryID = event.target.parentNode.parentNode.children[1].innerHTML;
