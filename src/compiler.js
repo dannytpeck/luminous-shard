@@ -67,12 +67,12 @@ const tracking = (trackType) => {
 		case 'One Time':
 			return 'OneTimeEvent';
 
-		case 'One Time Days':
-		case 'Weekly Days':
+		case 'Days - Challenge Period':
+		case 'Days each Week':
 			return 'YesNoDaily';
 
-		case 'One Time Units':
-		case 'Weekly Units':
+		case 'Units - Challenge Period':
+		case 'Units each Week':
 			return 'AddAllNumbers';
 
 		default:
