@@ -112,6 +112,7 @@ function drawTableRow(row, post, record) {
   const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
   const activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
   const activityGoalText = post.fields['Activity Goal Text'] ? post.fields['Activity Goal Text'] : '';
+  const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
   const instructions = post.fields['Instructions'];
   const moreInformationHtml = post.fields['More Information Html'];
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
@@ -207,8 +208,10 @@ function drawTableRow(row, post, record) {
     </p>`
   );
 
+  const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
+
   $(`#tracking-type${row}`).html(
-    `<input type="text" id="devText${row}" onkeyup="this.removeAttribute('value')" placeholder="activity" value="${activityGoalText}" />
+    `<input type="text" id="devText${row}" onkeyup="this.removeAttribute('value')" placeholder="activity" value="${activityText}" />
     <br/><br/>
     <input type="number" id="required${row}" onkeyup="modifyTrackingNumber(${row})" placeholder="units" value="${activityGoal}" />
     <br><br>
