@@ -43421,7 +43421,6 @@ function getContent(ids) {
   var tableBody = (0, _jquery2.default)('#challenge-list tbody')[0];
 
   ids.map(function (id, i) {
-    //TODO: update this to either an image link or a viewer link
     var challengeUrl = 'http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/' + id;
 
     // Create a new row for each challenge
