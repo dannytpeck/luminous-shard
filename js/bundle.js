@@ -43447,8 +43447,7 @@ function getContentWithDates(records) {
   records.forEach(function (record, rowNumber) {
     var challengeId = record.fields['Challenge Id'];
 
-    // TODO: update this to either an image link or a viewer link
-    var challengeUrl = 'http://thelibrary.adurolife.com/' + challengeId;
+    var challengeUrl = 'http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/' + challengeId;
 
     // Create a new row for each challenge
     (0, _jquery2.default)('#challenge-list tbody').append('<tr><td><a href="' + challengeUrl + '" target="_blank">' + challengeId + '</a></td></tr>');
