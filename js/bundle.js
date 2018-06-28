@@ -43422,7 +43422,7 @@ function getContent(ids) {
 
   ids.map(function (id, i) {
     //TODO: update this to either an image link or a viewer link
-    var challengeUrl = 'http://thelibrary.adurolife.com/' + id;
+    var challengeUrl = 'http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/' + id;
 
     // Create a new row for each challenge
     (0, _jquery2.default)('#challenge-list tbody').append('<tr><td><a href="' + challengeUrl + '" target="_blank">' + id + '</a></td></tr>');

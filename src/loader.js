@@ -400,7 +400,7 @@ function getContent(ids) {
 
   ids.map((id, i) => {
     //TODO: update this to either an image link or a viewer link
-    const challengeUrl = `http://thelibrary.adurolife.com/${id}`;
+    const challengeUrl = `http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/${id}`;
 
     // Create a new row for each challenge
     $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${id}</a></td></tr>`);
