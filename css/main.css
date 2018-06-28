@@ -69,10 +69,11 @@ header.navigation {
   #table-container table td:first-child {
     width: 128px; }
   #table-container table td:nth-child(2) {
+    width: 10%; }
+  #table-container table td:nth-child(5), #table-container td:nth-child(6) {
+    width: 15%; }
+  #table-container table td:nth-child(4) {
     width: 20%; }
-  #table-container table td:nth-child(4),
-  #table-container table td:nth-child(5) {
-    min-width: 150px; }
   #table-container th button {
     padding: 3px 5px;
     margin-left: 5px; }
