@@ -134,7 +134,7 @@ const createCSV = (employer) => {
 
     var trackType = $('#trackType' + row).val(),
     challengeType = tracking(trackType),
-    isWeekly = trackType.includes('Weekly') ? '1' : '0',
+    isWeekly = trackType.includes('Week') ? '1' : '0',
     winStrategy = trackType === 'One Time' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget',
 
     enableDeviceTracking = $('#deviceCheck' + row).prop('checked') ? 1 : 0,
