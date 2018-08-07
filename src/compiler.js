@@ -218,7 +218,7 @@ export function limeadeUpload() {
 
     const csv = createCSV(program);
     const headers = csv[0].join(',');
-    const url = 'http://mywellnessnumbers.sftp.adurolife.com/limeade-upload/';
+    const url = 'https://calendarbuilder.dev.adurolife.com/limeade-upload/';
 
     for (let row = 1; row < csv.length; row++) {
       const oneChallenge = csv[row].join(',');
