@@ -33420,7 +33420,7 @@ function resetPage() {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */138);
-module.exports = __webpack_require__(/*! /Users/joshbraun/Projects/shiny-stone/src/index.js */340);
+module.exports = __webpack_require__(/*! C:\Users\Danny Peck\Documents\projects\shiny-stone\src\index.js */340);
 
 
 /***/ }),
@@ -39902,7 +39902,7 @@ function drawTable(records) {
 	var tableHTML = '';
 
 	records.map(function (record, i) {
-		tableHTML += '<tr>\n\t\t\t\t<td><button id="' + i + '" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>\n\t\t\t\t<td>' + record.id + '</td>\n\t\t\t\t<td><a href="http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/' + record.id + '" target="_blank">' + record.fields['Title'] + '</a></td>\n\t\t\t\t<td><span>' + record.fields['Instructions'] + '</span></td>\n\t\t\t\t<td><img src="http://mywellmetrics.com' + record.fields['Limeade Image Url'] + '" width="100%"/></td>\n\t\t\t\t<td><span style="display:none">' + record._rawJson.createdTime + '</span><span>' + new Date(record._rawJson.createdTime).toDateString() + '</span></td>\n\t\t\t</tr>';
+		tableHTML += '<tr>\n\t\t\t\t<td><button id="' + i + '" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>\n\t\t\t\t<td>' + record.id + '</td>\n\t\t\t\t<td><a href="http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/' + record.id + '" target="_blank">' + record.fields['Title'] + '</a></td>\n\t\t\t\t<td><span>' + record.fields['Instructions'] + '</span></td>\n\t\t\t\t<td><img src="' + record.fields['Header Image'] + '" width="100%"/></td>\n\t\t\t\t<td><span style="display:none">' + record._rawJson.createdTime + '</span><span>' + new Date(record._rawJson.createdTime).toDateString() + '</span></td>\n\t\t\t</tr>';
 	});
 
 	(0, _jquery2.default)('#table-body').append(tableHTML);
