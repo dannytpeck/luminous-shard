@@ -43253,14 +43253,17 @@ window.chooseDimens = function (row, origin) {
 
 // Used to move dimensions from one box to the other
 window.move = function (choose, drop) {
+  var chooseSelect = document.getElementById(choose);
+  var dropSelect = document.getElementById(drop);
+
   var d = '';
 
-  for (var i = 0; i < choose.options.length; i++) {
-    if (choose.options[i].selected) {
-      d = drop.appendChild(document.createElement('OPTION'));
-      d.value = choose.options[i].value;
+  for (var i = 0; i < chooseSelect.options.length; i++) {
+    if (chooseSelect.options[i].selected) {
+      d = dropSelect.appendChild(document.createElement('OPTION'));
+      d.value = chooseSelect.options[i].value;
       d.innerHTML = d.value;
-      choose.removeChild(choose.options[i]);
+      chooseSelect.removeChild(chooseSelect.options[i]);
     }
   }
 };
@@ -43280,6 +43283,11 @@ window.modifyTrackingNumber = function (row) {
 // Show targeting modal by row (used as onclick)
 window.showTargetingModal = function (row) {
   (0, _jquery2.default)('#targetingModal' + row).modal('show');
+};
+
+// Show dimensions modal by row (used as onclick)
+window.showDimensionsModal = function (row) {
+  (0, _jquery2.default)('#dimensionsModal' + row).modal('show');
 };
 
 // Adds commas to long numbers
@@ -43348,7 +43356,7 @@ function drawTableRow(row, post, record) {
     (0, _jquery2.default)('#start-end-date' + row).html('<div>\n        Start Date\n        <input type="date" id="startDate' + row + '" value="' + (0, _jquery2.default)('#begin').val() + '" tabindex="' + (row + 101) + '" />\n        <br>\n        End Date\n        <input type="date" id="endDate' + row + '" value="' + (0, _jquery2.default)('#end').val() + '" tabindex="' + (row + 101) + '" />\n      </div>');
   }
 
-  (0, _jquery2.default)('#dimensions-and-code' + row).html('<p>\n      <a class="btn btn-default" onclick="chooseDimens(' + row + ',\'dimen\')">Dimensions</a>\n    </p>');
+  (0, _jquery2.default)('#dimensions-and-code' + row).html('<p>\n      <a class="btn btn-default" onclick="showDimensionsModal(' + row + ')">Dimensions</a>\n    </p>');
 
   // Invisible element to hold the imgLink
   (0, _jquery2.default)('body').append('<a id="imgLink' + row + '" class="btn btn-default" style="display:none"\n        href="https://mywellmetrics.com' + post.fields['Limeade Image Url'] + '" target="_new">\n      Preview Image\n    </a>');
@@ -43393,12 +43401,14 @@ function drawTableRow(row, post, record) {
 
   var dimensionElements = getDefaultDimensions(limeadeDimensions);
 
+  (0, _jquery2.default)('#dimensionsModalContainer').append('<div class="modal fade" id="dimensionsModal' + row + '" tabindex="-1" role="dialog" aria-labelledby="dimensionsModalLabel">\n      <div class="modal-dialog" role="document">\n        <div class="modal-content">\n          <div class="modal-header">\n            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n            <h4 class="modal-title" id="dimensionsModalLabel">Dimensions</h4>\n          </div>\n          <div class="modal-body" id="dimensionsModalBody' + row + '">\n            <div class="dimenPreview">\n              <select id="selectBefore' + row + '" class="selectBf form-control" multiple size="5">' + dimensionElements.unselected + '</select>\n              <button id="add' + row + '" class="addDimensions" onclick="move(\'selectBefore' + row + '\', \'selectAfter' + row + '\')">\n                -->\n              </button>\n              <button id="remove' + row + '" class="removeDimensions" onclick="move(\'selectAfter' + row + '\', \'selectBefore' + row + '\')">\n                <--\n              </button>\n              <select id="selectAfter' + row + '" class="selectAf form-control" multiple size="5">' + dimensionElements.selected + '</select>\n            </div>\n          </div>\n          <div class="modal-footer">\n            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n          </div>\n        </div>\n      </div>\n    </div>');
+
   var popUp = document.createElement('DIV');
   document.body.appendChild(popUp);
   popUp.setAttribute('style', 'display:none');
   popUp.setAttribute('class', 'popup');
   popUp.id = 'popup' + row;
-  popUp.innerHTML = '<div class="dimenPreview">\n      <select id="selectBefore' + row + '" class="selectBf" multiple>' + dimensionElements.unselected + '</select>\n      <button id="add' + row + '" onclick="move(selectBefore' + row + ', selectAfter' + row + ')">\n        -->\n      </button>\n      <button id="remove' + row + '" style="position:absolute; bottom:40%; left:44%"\n              onclick="move(selectAfter' + row + ', selectBefore' + row + ')">\n        <--\n      </button>\n      <select id="selectAfter' + row + '" class="selectAf" multiple>' + dimensionElements.selected + '</select>\n      <a onclick="$(\'#popup' + row + '\').hide()">Submit</a>\n    </div>\n\n    <div class="codePreview">\n      <div class="codeEdit">\n        <h3>Short Description</h3>\n        <textarea class="shortDescription" id="txtAreaS' + row + '" onkeyup="edit(txtAreaS' + row + ', sd' + row + '.getElementsByTagName(\'SPAN\')[0])">' + instructions + '</textarea>\n        <h3>More Information</h3>\n        <textarea class="moreInformation" id="txtAreaM' + row + '" onkeyup="edit(txtAreaM' + row + ', mi' + row + ')">' + moreInformationHtml + '</textarea>\n        <a class="linkSpec button" onclick="$(\'#popup' + row + '\').hide()">\n          <span class="glyphicon glyphicon-ok"></span>\n        </a>\n      </div>\n      <div class="codeLive">\n        <div class="codeLiveDisplay" id="codeCompile' + row + '">\n          <span id="sd' + row + '"><span style="font-size:14px; font-weight:bold">' + instructions + '</span></span>\n          <span id="mi' + row + '">' + moreInformationHtml + '</span>\n        </div>\n      </div>\n    </div>';
+  popUp.innerHTML = '<div class="codePreview">\n      <div class="codeEdit">\n        <h3>Short Description</h3>\n        <textarea class="shortDescription" id="txtAreaS' + row + '" onkeyup="edit(txtAreaS' + row + ', sd' + row + '.getElementsByTagName(\'SPAN\')[0])">' + instructions + '</textarea>\n        <h3>More Information</h3>\n        <textarea class="moreInformation" id="txtAreaM' + row + '" onkeyup="edit(txtAreaM' + row + ', mi' + row + ')">' + moreInformationHtml + '</textarea>\n        <a class="linkSpec button" onclick="$(\'#popup' + row + '\').hide()">\n          <span class="glyphicon glyphicon-ok"></span>\n        </a>\n      </div>\n      <div class="codeLive">\n        <div class="codeLiveDisplay" id="codeCompile' + row + '">\n          <span id="sd' + row + '"><span style="font-size:14px; font-weight:bold">' + instructions + '</span></span>\n          <span id="mi' + row + '">' + moreInformationHtml + '</span>\n        </div>\n      </div>\n    </div>';
 
   remainingDefaults(post, row);
 }

@@ -47,13 +47,6 @@ a:hover {
 }
 
 .dimenPreview {
-  width: 26%;
-  height: 200px;
-  border: 2px solid #FFF;
-  position: fixed;
-  top: 42%;
-  left: 37%;
-  background-color: grey;
 
 	a {
 		margin-left: 80%;
@@ -62,26 +55,29 @@ a:hover {
 		color: lightblue;
 	}
 
-	button {
-		position: relative;
-		bottom: 40%;
-		left: 4%
+	.addDimensions {
+		position: absolute;
+		left: 47%;
+		top: 25%;
+	}
+
+	.removeDimensions {
+		position: absolute;
+		left: 47%;
+		bottom: 25%;
 	}
 
 }
 
 .selectBf {
-  margin-left: 5%;
-  margin-top: 15px;
-  width: 35%;
-  height: 80%;
+  width: 45%;
+	display: inline-block;
 }
 
 .selectAf {
-  margin-left: 8%;
-  margin-top: 15px;
-  width: 35%;
-  height: 80%;
+  width: 45%;
+	float: right;
+	display: inline-block;
 }
 
 .codePreview {

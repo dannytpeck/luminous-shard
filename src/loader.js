@@ -27,14 +27,17 @@ window.chooseDimens = (row, origin) => {
 
 // Used to move dimensions from one box to the other
 window.move = (choose, drop) => {
+  const chooseSelect = document.getElementById(choose);
+  const dropSelect = document.getElementById(drop);
+
 	let d = '';
 
-	for (let i = 0; i < choose.options.length; i++) {
-		if (choose.options[i].selected) {
-			d = drop.appendChild(document.createElement('OPTION'));
-			d.value = choose.options[i].value;
+	for (let i = 0; i < chooseSelect.options.length; i++) {
+		if (chooseSelect.options[i].selected) {
+			d = dropSelect.appendChild(document.createElement('OPTION'));
+			d.value = chooseSelect.options[i].value;
 			d.innerHTML = d.value;
-			choose.removeChild(choose.options[i]);
+			chooseSelect.removeChild(chooseSelect.options[i]);
     }
 	}
 };
@@ -54,6 +57,11 @@ window.modifyTrackingNumber = (row) => {
 // Show targeting modal by row (used as onclick)
 window.showTargetingModal = (row) => {
   $(`#targetingModal${row}`).modal('show');
+};
+
+// Show dimensions modal by row (used as onclick)
+window.showDimensionsModal = (row) => {
+  $(`#dimensionsModal${row}`).modal('show');
 };
 
 // Adds commas to long numbers
@@ -187,10 +195,9 @@ function drawTableRow(row, post, record) {
     );
   }
 
-
   $(`#dimensions-and-code${row}`).html(
     `<p>
-      <a class="btn btn-default" onclick="chooseDimens(${row},'dimen')">Dimensions</a>
+      <a class="btn btn-default" onclick="showDimensionsModal(${row})">Dimensions</a>
     </p>`
   );
 
@@ -340,26 +347,41 @@ function drawTableRow(row, post, record) {
 
   const dimensionElements = getDefaultDimensions(limeadeDimensions);
 
+  $('#dimensionsModalContainer').append(
+    `<div class="modal fade" id="dimensionsModal${row}" tabindex="-1" role="dialog" aria-labelledby="dimensionsModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="dimensionsModalLabel">Dimensions</h4>
+          </div>
+          <div class="modal-body" id="dimensionsModalBody${row}">
+            <div class="dimenPreview">
+              <select id="selectBefore${row}" class="selectBf form-control" multiple size="5">${dimensionElements.unselected}</select>
+              <button id="add${row}" class="addDimensions" onclick="move('selectBefore${row}', 'selectAfter${row}')">
+                -->
+              </button>
+              <button id="remove${row}" class="removeDimensions" onclick="move('selectAfter${row}', 'selectBefore${row}')">
+                <--
+              </button>
+              <select id="selectAfter${row}" class="selectAf form-control" multiple size="5">${dimensionElements.selected}</select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>`
+  );
+
   let popUp = document.createElement('DIV');
   document.body.appendChild(popUp);
   popUp.setAttribute('style', 'display:none');
   popUp.setAttribute('class', 'popup');
   popUp.id = 'popup' + row;
   popUp.innerHTML =
-    `<div class="dimenPreview">
-      <select id="selectBefore${row}" class="selectBf" multiple>${dimensionElements.unselected}</select>
-      <button id="add${row}" onclick="move(selectBefore${row}, selectAfter${row})">
-        -->
-      </button>
-      <button id="remove${row}" style="position:absolute; bottom:40%; left:44%"
-              onclick="move(selectAfter${row}, selectBefore${row})">
-        <--
-      </button>
-      <select id="selectAfter${row}" class="selectAf" multiple>${dimensionElements.selected}</select>
-      <a onclick="$('#popup${row}').hide()">Submit</a>
-    </div>
-
-    <div class="codePreview">
+    `<div class="codePreview">
       <div class="codeEdit">
         <h3>Short Description</h3>
         <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>

@@ -205,35 +205,30 @@ a:hover {
   top: 0px;
   left: 0px; }
 
-.dimenPreview {
-  width: 26%;
-  height: 200px;
-  border: 2px solid #FFF;
-  position: fixed;
-  top: 42%;
-  left: 37%;
-  background-color: grey; }
-  .dimenPreview a {
-    margin-left: 80%;
-    margin-top: 5px;
-    font-weight: bold;
-    color: lightblue; }
-  .dimenPreview button {
-    position: relative;
-    bottom: 40%;
-    left: 4%; }
+.dimenPreview a {
+  margin-left: 80%;
+  margin-top: 5px;
+  font-weight: bold;
+  color: lightblue; }
+
+.dimenPreview .addDimensions {
+  position: absolute;
+  left: 47%;
+  top: 25%; }
+
+.dimenPreview .removeDimensions {
+  position: absolute;
+  left: 47%;
+  bottom: 25%; }
 
 .selectBf {
-  margin-left: 5%;
-  margin-top: 15px;
-  width: 35%;
-  height: 80%; }
+  width: 45%;
+  display: inline-block; }
 
 .selectAf {
-  margin-left: 8%;
-  margin-top: 15px;
-  width: 35%;
-  height: 80%; }
+  width: 45%;
+  float: right;
+  display: inline-block; }
 
 .codePreview {
   width: 70%;
