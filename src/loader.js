@@ -127,7 +127,7 @@ function drawTableRow(row, post, record) {
 
   $(`#challenge-name${row}`).html(
     `<p>
-      <input type="text" id="chalTitle${row}" value="${record ? record.fields['Name'] : title}" />
+      <input type="text" id="chalTitle${row}" value="${record ? record.fields['Title'] : title}" />
     </p>
     <p>
       <label for="deviceCheck${row}">Device Enabled</label>
