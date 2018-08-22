@@ -121,8 +121,8 @@ function drawTableRow(row, post, record) {
   const activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
   const activityGoalText = post.fields['Activity Goal Text'] ? post.fields['Activity Goal Text'] : '';
   const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
-  const instructions = post.fields['Instructions'];
-  const moreInformationHtml = post.fields['More Information Html'];
+  const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
+  const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
   $(`#challenge-name${row}`).html(
