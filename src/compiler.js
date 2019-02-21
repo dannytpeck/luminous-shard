@@ -26,7 +26,9 @@ function dimensionsARR(row) {
   var options = $('#selectAfter' + row + ' option');
   var i;
   for (i = 0; i < options.length; i++) {
-    d.push(options[i].value);
+    if (options[i].value !== 'undefined') {
+      d.push(options[i].value);
+    }
   }
   return '"' + d.join(',') + '"';
 }
@@ -272,29 +274,19 @@ export function compileTransporter() {
   // Download a CSV for each program
   for (var program = 0; program < $('#loadNumber').val(); program++) {
 
-    // var csvContent = '';
-    // data.forEach(function (infoArray, index) {
-    //   var dataString = infoArray.join(',');
-    //   csvContent += index < (data.length - 1) ? dataString + '\n' : dataString;
-    // });
-
     var data = createCSV(program);
-
-    var lineArray = [];
+    var csvContent = '';
     data.forEach(function (infoArray, index) {
-      var line = infoArray.join(',');
-      lineArray.push(index === 0 ? 'data:text/csv;charset=utf-8,' + line : line);
+      var dataString = infoArray.join(',');
+      csvContent += index < (data.length - 1) ? dataString + '\n' : dataString;
     });
-    var csvContent = lineArray.join('\n');
 
-    var encodedUri = encodeURI(csvContent);
-    console.log(encodedUri);
+    var file = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
     var filename = $(`#eid${program}`).val() + '-' + 'Phase' + '-' + $('#fileName').val() + '-' + currentYear + '.csv';
 
     var link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
     link.setAttribute('download', filename);
-    document.body.appendChild(link); // Required for FF
+    link.setAttribute('href', file);
     link.click();
 
   }
