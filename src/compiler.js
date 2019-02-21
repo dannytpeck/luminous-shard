@@ -6,7 +6,7 @@ const currentYear = new Date().getFullYear();
 const sanitize = (code) => {
   var sanitized = code
     .replace(/\r?\n|\r/g, ' ')     // Strip out carriage returns and newlines
-    .replace(/,/g, '&#44;')       // Escape commas since we're using a csv
+    .replace(/,/g, '&comma;')       // Escape commas since we're using a csv
     .replace(/\u2018/g, '\'')      // Left single quote
     .replace(/\u2019/g, '\'')      // Right single quote
     .replace(/\u201C/g, '"')       // Left double quote
@@ -15,6 +15,8 @@ const sanitize = (code) => {
     .replace(/\u2013/g, '&ndash;') // Long dash
     .replace(/\u2014/g, '&mdash;') // Longer dash
     .replace(/\u00A9/g, '&copy;')  // Copyright symbol
+    .replace(/#fff/gi, 'white')    // For hash issues in our URIs
+    .replace(/#cccccc/gi, 'silver')
     .replace(/copyright\s*\d+/gi, `Copyright ${currentYear}`);
   return sanitized;
 };
@@ -270,19 +272,29 @@ export function compileTransporter() {
   // Download a CSV for each program
   for (var program = 0; program < $('#loadNumber').val(); program++) {
 
-    var data = createCSV(program);
-    var csvContent = '';
-    data.forEach(function (infoArray, index) {
-      var dataString = infoArray.join(',');
-      csvContent += index < (data.length - 1) ? dataString + '\n' : dataString;
-    });
+    // var csvContent = '';
+    // data.forEach(function (infoArray, index) {
+    //   var dataString = infoArray.join(',');
+    //   csvContent += index < (data.length - 1) ? dataString + '\n' : dataString;
+    // });
 
-    var file = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+    var data = createCSV(program);
+
+    var lineArray = [];
+    data.forEach(function (infoArray, index) {
+      var line = infoArray.join(',');
+      lineArray.push(index === 0 ? 'data:text/csv;charset=utf-8,' + line : line);
+    });
+    var csvContent = lineArray.join('\n');
+
+    var encodedUri = encodeURI(csvContent);
+    console.log(encodedUri);
     var filename = $(`#eid${program}`).val() + '-' + 'Phase' + '-' + $('#fileName').val() + '-' + currentYear + '.csv';
 
     var link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
     link.setAttribute('download', filename);
-    link.setAttribute('href', file);
+    document.body.appendChild(link); // Required for FF
     link.click();
 
   }
