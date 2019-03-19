@@ -381,21 +381,22 @@ function drawTableRow(row, post, record) {
   popUp.setAttribute('class', 'popup');
   popUp.id = 'popup' + row;
   popUp.innerHTML =
-    `<div class="codePreview">
-      <div class="codeEdit">
-        <h3>Short Description</h3>
-        <textarea class="shortDescription" id="txtAreaS${row}" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
-        <h3>More Information</h3>
-        <textarea class="moreInformation" id="txtAreaM${row}" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
-        <a class="linkSpec button" onclick="$('#popup${row}').hide()">
-          <span class="glyphicon glyphicon-ok"></span>
-        </a>
-      </div>
-      <div class="codeLive">
-        <div class="codeLiveDisplay" id="codeCompile${row}">
+    `<div class="codePreview container">
+      <div class="row">
+        <div class="codeEdit col-md-6">
+          <h3>Short Description (HTML)</h3>
+          <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
+          <h3>More Information (HTML)</h3>
+          <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
+        </div>
+        <div class="codeLiveDisplay col-md-6" id="codeCompile${row}" onclick="$('#popup${row}').hide()">
+          <img id="image${row}" src="${post.fields['Limeade Image Url']}" width="100%" />
           <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
           <span id="mi${row}">${moreInformationHtml}</span>
         </div>
+        <a class="button" id="linkSpec" onclick="$('#popup${row}').hide()">
+          <span class="glyphicon glyphicon-ok"></span>
+        </a>
       </div>
     </div>`;
 

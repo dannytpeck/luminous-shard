@@ -80,79 +80,6 @@ a:hover {
 	display: inline-block;
 }
 
-.codePreview {
-  width: 70%;
-  height: 750px;
-  border: 2px solid #FFF;
-  position: fixed;
-  top: 5%;
-  left: 15%;
-  background-color: grey;
-  overflow-y: scroll;
-
-	h3 {
-		margin: 0.6em 0;
-		color: #fff;
-	}
-
-}
-
-.brandingBckgrndColor {
-  background-color: #d92c27;
-}
-
-.link-color {
-  color: #d92c27;
-}
-
-.codeEdit {
-  width: 38%;
-  height: 750px;
-  margin-left: 5%;
-}
-
-.shortDescription {
-  height: 90px;
-  width: 380px;
-}
-
-.moreInformation {
-  margin: 0px;
-  min-height: 450px;
-  min-width: 366px;
-  max-width: 366px;
-  max-height: 450px;
-  background-color: rgb(255, 255, 255);
-}
-
-.codeLive {
-  width: 440px;
-  max-height: 650px;
-  margin-left: 51%;
-  margin-top: -77%;
-}
-
-.codeLiveDisplay {
-  background-color: #F1F2F3;
-  border: 1px solid #888;
-  width: 440px;
-  position: absolute;
-  top: 25px;
-  left: 47.5%;
-  border-top-color: #999;
-  border-radius: 5px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, .2);
-  background-clip: padding-box;
-  color: #555;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 1em;
-  line-height: 1.4;
-  overflow: hidden;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 15px;
-}
-
 #shortCut {
   background-color: #EEE;
   font-size: 0.9em;
@@ -210,12 +137,4 @@ a:hover {
 	color: #fff;
 	border-radius: 3px;
 	text-transform: uppercase;
-}
-
-.linkSpec {
-	position: absolute;
-	top: 8px;
-	left: 8px;
-	width: 32px;
-	padding: 0 8px;
 }
