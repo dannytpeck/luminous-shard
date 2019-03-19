@@ -201,14 +201,6 @@ function drawTableRow(row, post, record) {
     </p>`
   );
 
-  // Invisible element to hold the imgLink
-  $('body').append(
-    `<a id="imgLink${row}" class="btn btn-default" style="display:none"
-        href="https://mywellmetrics.com${post.fields['Limeade Image Url']}" target="_new">
-      Preview Image
-    </a>`
-  );
-
   $('#team-challenge' + row).html(
     `<p>
       <a class="btn btn-default" onclick="chooseDimens(${row},'code')">Edit Description</a>

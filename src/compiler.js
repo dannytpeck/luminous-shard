@@ -166,7 +166,7 @@ const createCSV = (employer) => {
 			$('#endDate' + row).val().replace(/-/g, '/'),
       sanitize($('#sd' + row).html()),
       sanitize($('#mi' + row).html()),
-      $('#imgLink' + row).attr('href').replace(/https:\/\/mywellmetrics\.com/g, ''),
+      $('#image' + row).attr('src'),
       '0', // ShowInProgram
       rewardType,
       $('#points' + row).val(),
