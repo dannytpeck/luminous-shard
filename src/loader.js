@@ -64,6 +64,10 @@ window.showDimensionsModal = (row) => {
   $(`#dimensionsModal${row}`).modal('show');
 };
 
+window.showContentModal = (row) => {
+  $(`#contentModal${row}`).modal('show');
+};
+
 // Adds commas to long numbers
 function addCommasToNumber(number) {
 	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -203,7 +207,7 @@ function drawTableRow(row, post, record) {
 
   $('#team-challenge' + row).html(
     `<p>
-      <a class="btn btn-default" onclick="chooseDimens(${row},'code')">Edit Description</a>
+      <a class="btn btn-default" onclick="showContentModal(${row})">Edit Content</a>
     </p>`
   );
 
@@ -367,30 +371,36 @@ function drawTableRow(row, post, record) {
     </div>`
   );
 
-  let popUp = document.createElement('DIV');
-  document.body.appendChild(popUp);
-  popUp.setAttribute('style', 'display:none');
-  popUp.setAttribute('class', 'popup');
-  popUp.id = 'popup' + row;
-  popUp.innerHTML =
-    `<div class="codePreview container">
-      <div class="row">
-        <div class="codeEdit col-md-6">
-          <h3>Short Description (HTML)</h3>
-          <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
-          <h3>More Information (HTML)</h3>
-          <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
+  $('#contentModalContainer').append(
+    `<div class="modal fade" id="contentModal${row}" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content content-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="contentModalLabel">Content</h4>
+          </div>
+          <div class="modal-body" id="contentModalBody${row}">
+
+            <div class="codeEdit">
+              <h3>Short Description (HTML)</h3>
+              <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
+              <h3>More Information (HTML)</h3>
+              <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
+            </div>
+            <div class="codeDisplay" id="codeCompile${row}" onclick="$('#popup${row}').hide()">
+              <img id="image${row}" src="${post.fields['Limeade Image Url']}" width="100%" />
+              <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
+              <span id="mi${row}">${moreInformationHtml}</span>
+            </div>
+
+          </div>
+          <div class="modal-footer content-modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
         </div>
-        <div class="codeLiveDisplay col-md-6" id="codeCompile${row}" onclick="$('#popup${row}').hide()">
-          <img id="image${row}" src="${post.fields['Limeade Image Url']}" width="100%" />
-          <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
-          <span id="mi${row}">${moreInformationHtml}</span>
-        </div>
-        <a class="button" id="linkSpec" onclick="$('#popup${row}').hide()">
-          <span class="glyphicon glyphicon-ok"></span>
-        </a>
       </div>
-    </div>`;
+    </div>`
+  );
 
   remainingDefaults(post, row);
 

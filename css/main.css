@@ -173,20 +173,21 @@ input[type=number]::-webkit-outer-spin-button {
 #loadNumber {
   margin-left: 10px; }
 
-.codePreview {
-  width: 70%;
-  height: 100%;
-  border: 1px solid black;
-  position: fixed;
-  top: 5%;
-  left: 15%;
-  background-color: white;
-  overflow: auto; }
-  .codePreview h3 {
-    margin: 0.6em 0; }
+.codeEdit {
+  width: 48%;
+  display: inline-block; }
 
-.codeLiveDisplay {
-  top: 50px; }
+.codeDisplay {
+  width: 48%;
+  display: inline-block;
+  float: right; }
+
+.content-modal-content {
+  min-width: 900px;
+  left: -20%; }
+
+.content-modal-footer {
+  clear: both; }
 
 #linkSpec {
   position: absolute;
