@@ -414,7 +414,7 @@ function getContent(ids) {
   const tableBody = $('#challenge-list tbody')[0];
 
   ids.map((id, i) => {
-    const challengeUrl = `http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/${id}`;
+    const challengeUrl = `https://calendarbuilder.dev.adurolife.com/titancoil/#/${id}`;
 
     // Create a new row for each challenge
     $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${id}</a></td></tr>`);
@@ -441,7 +441,7 @@ function getContentWithDates(records) {
   records.forEach((record, rowNumber) => {
     const challengeId = record.fields['Challenge Id'];
 
-    const challengeUrl = `http://mywellnessnumbers.sftp.adurolife.com/titancoil/#/${challengeId}`;
+    const challengeUrl = `https://calendarbuilder.dev.adurolife.com/titancoil/#/${challengeId}`;
 
     // Create a new row for each challenge
     $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${challengeId}</a></td></tr>`);
