@@ -5,12 +5,12 @@ require('bootstrap');
 
 import { loadTable } from './challenges';
 import { findChallenges, resetPage, loadCompiler, sortName, sortCreated, sortUpdated } from './sort';
-import { loadSelectedChallenges } from './loader';
+import { getClientList, renderEmployerNames } from './loader';
 import { limeadeUpload, compileTransporter } from './compiler';
 
 if (window.location.pathname.includes('compile')) {
 
-	window.onload = loadSelectedChallenges;
+window.onload = getClientList;
 
 	// Event Listeners
 	$('.upload').click(limeadeUpload);
@@ -20,10 +20,13 @@ if (window.location.pathname.includes('compile')) {
 
 		for (let i = 0; i < $('#loadNumber').val(); i++) {
 			containerHTML += `
-				<p>
-					<input type="text" id="eid${i}" placeholder="Limeade e=" />
-					<input type="text" id="psk${i}" placeholder="Limeade psk" />
-				</p>
+				<div class="form-group">
+					<select id="eid${i}" class="form-control eid-select" onchange="fetchPsk(this.value, ${i})">
+						<option defaultValue>Select Limeade e=</option>
+						${renderEmployerNames()}
+					</select>
+					<input type="text" class="form-control psk-select" id="psk${i}" placeholder="Limeade psk" />
+				</div>
 			`;
 		}
 

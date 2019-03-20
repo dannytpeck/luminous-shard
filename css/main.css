@@ -89,13 +89,6 @@ header.navigation {
 input {
   border: 1px solid #ddd; }
 
-#eidContainer input:first-child {
-  width: 225px; }
-
-#eidContainer input:last-child {
-  width: 325px;
-  margin-left: 50px; }
-
 .modal-header {
   background-color: #5179b6;
   color: #fff; }
@@ -317,3 +310,14 @@ a:hover {
   color: #fff;
   border-radius: 3px;
   text-transform: uppercase; }
+
+.eid-select {
+  display: inline-block;
+  width: 23%;
+  max-width: 250px; }
+
+.psk-select {
+  display: inline-block;
+  width: 30%;
+  max-width: 350px;
+  margin-left: 10px; }

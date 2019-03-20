@@ -2,6 +2,9 @@
 import $ from 'jquery';
 import Airtable from 'airtable';
 
+// Used to store clients for Select(s)
+window.clients = [];
+
 // Displays dimensions or code popup - hides whichever one isn't being viewed
 window.chooseDimens = (row, origin) => {
   const dimenPreview = $(`#popup${row} .dimenPreview`);
@@ -480,7 +483,7 @@ function getContentWithDates(records) {
 
 }
 
-export function loadSelectedChallenges() {
+function loadSelectedChallenges() {
 
 	// Get location and find the beginning of the query
 	const url = window.location.href;
@@ -531,7 +534,9 @@ export function loadSelectedChallenges() {
     $.getJSON(`https://api.airtable.com/v0/appN1J6yscNwlzbzq/Challenges?api_key=keyCxnlep0bgotSrX&filterByFormula={Calendar}='${calendarHash}'`).done((data) => {
       // Populate first EID with EmployerName from results
       if (data.records) {
-        $('#eid0').val(data.records[0].fields['EmployerName']);
+        const employerName = data.records[0].fields['EmployerName'];
+        $('#eid0').val(employerName);
+        window.fetchPsk(employerName, 0);
       }
 
       const filteredRecords = data.records.filter(record => record.fields['Challenge Id']);
@@ -591,4 +596,51 @@ export function loadSelectedChallenges() {
       </strong>
     </p>`;
   $('#shortCut').html(shortCutHTML);
+}
+
+export function renderEmployerNames() {
+	let html = '';
+  window.clients.map((client) => {
+    html += `<option>${client.fields['Limeade e=']}</option>`;
+  });
+	return html;
+}
+
+window.fetchPsk = (value, i) => {
+	window.clients.map((client) => {
+		if (client.fields['Limeade e='] === value) {
+			$('#psk' + i).val(client.fields['Limeade PSK']);
+		}
+	});
+};
+
+function drawClientSelect() {
+	let containerHTML = '';
+	containerHTML +=
+	`<div>
+		<div class="form-group">
+			<select id="eid0" class="form-control custom-select" onchange="fetchPsk(this.value, 0)">
+				<option defaultValue>Select Limeade e=</option>
+				${renderEmployerNames()}
+			</select>
+		</div>
+
+		<div class="form-group" style="display: none;">
+			<input id="psk0" class="form-control" type="text" />
+		</div>
+	</div>`;
+	$('.eid-select').html(containerHTML);
+}
+
+export function getClientList() {
+  $.getJSON('https://api.airtable.com/v0/appHXXoVD1tn9QATh/Clients?api_key=keyCxnlep0bgotSrX&view=sorted').done(data => {
+    window.clients = data.records;
+    if (data.offset) {
+      $.getJSON(`https://api.airtable.com/v0/appHXXoVD1tn9QATh/Clients?api_key=keyCxnlep0bgotSrX&view=sorted&offset=${data.offset}`).done(data => {
+        window.clients = [...window.clients, ...data.records];
+        drawClientSelect();
+        loadSelectedChallenges();
+      });
+    }
+  });
 }
