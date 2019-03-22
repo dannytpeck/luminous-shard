@@ -6,29 +6,6 @@ import Airtable from 'airtable';
 // Used to store clients for Select(s)
 window.clients = [];
 
-// Displays dimensions or code popup - hides whichever one isn't being viewed
-window.chooseDimens = (row, origin) => {
-  const dimenPreview = $(`#popup${row} .dimenPreview`);
-	const codePreview = $(`#popup${row} .codePreview`);
-
-  $(`#popup${row}`).show();
-
-  switch (origin) {
-    case 'dimen':
-      dimenPreview.show();
-      codePreview.hide();
-      break;
-    case 'code':
-      dimenPreview.hide();
-      codePreview.show();
-      break;
-    default:
-      dimenPreview.hide();
-      codePreview.hide();
-      break;
-  }
-};
-
 // Used to move dimensions from one box to the other
 window.move = (choose, drop) => {
   const chooseSelect = document.getElementById(choose);
@@ -415,7 +392,7 @@ function drawTableRow(row, post, record) {
               <h3>More Information (HTML)</h3>
               <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
             </div>
-            <div class="codeDisplay" id="codeCompile${row}" onclick="$('#popup${row}').hide()">
+            <div class="codeDisplay" id="codeCompile${row}">
               <img id="image${row}" src="${post.fields['Limeade Image Url']}" width="100%" />
               <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
               <span id="mi${row}">${moreInformationHtml}</span>
