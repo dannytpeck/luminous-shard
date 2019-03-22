@@ -176,13 +176,13 @@ function drawTableRow(row, post, record) {
     );
   } else {
     $(`#start-end-date${row}`).html(
-      `<div>
-        Start Date
-        <input type="date" id="startDate${row}" value="${$('#begin').val()}" tabindex="${row + 101}" />
-        <br>
-        End Date
-        <input type="date" id="endDate${row}" value="${$('#end').val()}" tabindex="${row + 101}" />
-      </div>`
+      `<div class="form-group">
+        <label for="startDate${row}">Start Date</label>
+        <input type="date" class="form-control" id="startDate${row}" value="${$('#begin').val()}" tabindex="${row + 101}" />
+      </div>
+
+      <label for="endDate${row}">End Date</label>
+      <input type="date" class="form-control" id="endDate${row}" value="${$('#end').val()}" tabindex="${row + 101}" />`
     );
   }
 

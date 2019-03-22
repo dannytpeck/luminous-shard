@@ -5,12 +5,11 @@
   <title>Shiny Stone</title>
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Karla">
   <link rel="stylesheet" type="text/css" href="css/main.css" />
-
-  <script defer src="js/bundle.js"></script>
 </head>
 
 <body>
@@ -28,27 +27,46 @@
 		</div>
   </header>
 
-  <div id="wrapper">
+  <div class="container-fluid">
 
-		<div>
-			<p><strong>Client: </strong>
-			  <input style="margin-left:40px;" type="text" id="eid" placeholder="Client e=" />
-        <span style="margin:0 23px 0 15px;">Phase:</span>
-				<input id="file-name" placeholder="Phase number">
-				<button id="reset" class="btn btn-default" disabled>Reset</button>
-			</p>
-			<p>Start Date:
-				<input type="date" id="date-begin" />
-        <span style="margin-left:15px;">End Date:</span>
-				<input type="date" id="date-end" />
-			</p>
+		<div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="eid">Client:</label>
+          <input type="text" class="form-control" id="eid" placeholder="Client e=">
+        </div>
+        <div class="form-group">
+          <label for="date-begin">Start Date:</label>
+          <input type="date" class="form-control" id="date-begin">
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <label for="file-name">Phase:</label>
+          <input type="text" class="form-control" id="file-name" placeholder="Phase number">
+        </div>
+        <div class="form-group">
+          <label for="date-end">End Date:</label>
+          <input type="date" class="form-control" id="date-end">
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" id="reset" disabled>Reset</button>
+        </div>
+      </div>
+
 			<p id="dateError">
 				You have an invalid or missing date for the <span id="errmsg"></span>| field(s).
 			</p>
-		</div>
-		<hr>
-		<p>
 
+		</div>
+
+    <hr>
+
+		<p>
       <p id="load">Loading...<img src="images/progressbar.gif" alt="A spinning progress indicator" />
   			<span id="progress">0</span>%
   		</p>
@@ -56,21 +74,17 @@
       <div class="row">
         <div class="col-xs-6 col-md-4">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" id="search"/>
-            <button type="button" class="btn btn-default" aria-label="Left Align" id="search-button">
-              <span class="glyphicon glyphicon-search"></span>
+            <input type="text" class="form-control" placeholder="Search" id="search" />
+            <button type="button" class="btn btn-primary" id="search-button">
+              <i class="fas fa-search"></i>
             </button>
           </div>
         </div>
       </div>
-
-
 		</p>
 
-
-
 		<div id="table-container">
-			<table class="table table-striped">
+      <table class="table table-bordered table-striped">
 				<thead id="table-head">
 					<tr>
 						<th> </th>
@@ -87,12 +101,18 @@
 		</div>
 		<p>
 			<strong>Selected Challenges:</strong>
-			<input id="idList" placeholder="this hidden input stores selected challenge IDs" readonly />
-			<button id="load-compiler" class="btn btn-primary" disabled>Continue</button>
+			<button type="button" class="btn btn-primary" id="load-compiler" disabled>Continue</button>
       <ul id="pretty-list"></ul>
 		</p>
 
-	</div> <!-- end .wrapper -->
+	</div>
 
+  <!-- hidden elements that store useful things -->
+  <input id="idList" readonly style="display:none" />
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="js/bundle.js"></script>
 </body>
 </html>

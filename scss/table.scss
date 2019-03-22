@@ -2,33 +2,17 @@
 
   max-height: 390px;
   overflow: auto;
-	border-bottom: 1px solid #000;
-  margin-bottom: 0.5em;
-
-	.table {
-		border: 1px solid #000;
-		border-bottom: none;
-    margin-bottom: 0;
-	}
-
-	th {
-		border-bottom: 1px solid #000;
-	}
+  margin-bottom: 1em;
 
 	th,
 	td {
-		padding: 5px;
-		border-right: 1px solid #000;
 		vertical-align: middle;
 	}
 
-	th:last-child,
-	td:last-child {
-		border-right: none;
-	}
-
 	table td:first-child {
-    width: 128px;
+    width: 10em;
+    text-align: center;
+    padding: 0;
 	}
 
 	table td:nth-child(2) {
@@ -48,16 +32,11 @@
 		margin-left: 5px;
 	}
 
-  .countX {
-    margin: 4px;
-  }
-
-  .countBox {
-    border: 1px solid #DDD;
-    width: 20px;
-    padding: 0;
-    text-align: center;
+  .count-box {
+    display: inline-block;
+    width: 3.6em;
     vertical-align: middle;
+    text-align: center;
   }
 
 }

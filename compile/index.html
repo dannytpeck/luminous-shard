@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Karla">
   <link rel="stylesheet" type="text/css" href="../css/main.css" />
 </head>
 
@@ -35,11 +36,15 @@
         <input type="number" id="loadNumber" min="1" max="100" value="1" />
       </div>
 
-      <div class="form-group" id="eidContainer">
-        <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
-          <option defaultValue>Select Limeade e=</option>
-        </select>
-        <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group" id="eidContainer">
+            <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
+              <option defaultValue>Select Limeade e=</option>
+            </select>
+            <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
+          </div>
+        </div>
       </div>
 
     </div>
@@ -59,12 +64,19 @@
 
     <div id="main">
 
-      <div id="start-and-end-dates">
-        <h4>Start & End Dates</h4>
-        <p>
-          <input type="date" id="begin" /> <span style="padding-left:25px; padding-right:25px">-</span>
-          <input type="date" id="end" />
-        </p>
+      <div class="row" id="start-and-end-dates">
+        <div class="col-3">
+          <div class="form-group">
+            <label for="begin">Start Date</label>
+            <input type="date" class="form-control" id="begin" />
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-group">
+            <label for="end">End Date</label>
+            <input type="date" class="form-control" id="end" />
+          </div>
+        </div>
       </div>
 
       <div class="row form-group">

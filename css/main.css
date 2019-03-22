@@ -62,24 +62,14 @@ header.navigation {
 #table-container {
   max-height: 390px;
   overflow: auto;
-  border-bottom: 1px solid #000;
-  margin-bottom: 0.5em; }
-  #table-container .table {
-    border: 1px solid #000;
-    border-bottom: none;
-    margin-bottom: 0; }
-  #table-container th {
-    border-bottom: 1px solid #000; }
+  margin-bottom: 1em; }
   #table-container th,
   #table-container td {
-    padding: 5px;
-    border-right: 1px solid #000;
     vertical-align: middle; }
-  #table-container th:last-child,
-  #table-container td:last-child {
-    border-right: none; }
   #table-container table td:first-child {
-    width: 128px; }
+    width: 10em;
+    text-align: center;
+    padding: 0; }
   #table-container table td:nth-child(2) {
     width: 10%; }
   #table-container table td:nth-child(5), #table-container td:nth-child(6) {
@@ -89,14 +79,11 @@ header.navigation {
   #table-container th button {
     padding: 3px 5px;
     margin-left: 5px; }
-  #table-container .countX {
-    margin: 4px; }
-  #table-container .countBox {
-    border: 1px solid #DDD;
-    width: 20px;
-    padding: 0;
-    text-align: center;
-    vertical-align: middle; }
+  #table-container .count-box {
+    display: inline-block;
+    width: 3.6em;
+    vertical-align: middle;
+    text-align: center; }
 
 table#challenge-list {
   margin-bottom: 2em; }
@@ -115,6 +102,10 @@ table#challenge-list {
 input#loadNumber {
   margin-left: 1em; }
 
+#reset {
+  position: relative;
+  top: 2em; }
+
 /* Whole page styles - deprecated */
 #progress {
   margin-left: 5px; }
@@ -122,14 +113,6 @@ input#loadNumber {
 #exclusive {
   width: auto;
   margin-left: 5px; }
-
-#file-name,
-#eid,
-#date-begin,
-#date-end,
-#search {
-  width: 200px;
-  margin-left: 15px; }
 
 #idList {
   display: none; }
@@ -148,12 +131,6 @@ input#loadNumber {
 
 #errmsg {
   color: blue; }
-
-#date-begin {
-  margin-left: 8px; }
-
-#reset {
-  margin-left: 35px; }
 
 #build-table {
   position: absolute;
@@ -293,11 +270,9 @@ a:hover {
 
 .eid-select {
   display: inline-block;
-  width: 23%;
-  max-width: 250px; }
+  width: 40%; }
 
 .psk-select {
   display: inline-block;
-  width: 30%;
-  max-width: 350px;
-  margin-left: 10px; }
+  width: 58%;
+  margin-left: 1%; }

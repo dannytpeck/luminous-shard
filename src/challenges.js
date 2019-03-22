@@ -31,7 +31,10 @@ function drawTable(records) {
 	records.map((record, i) => {
 		tableHTML +=
 			`<tr>
-				<td><button id="${i}" class="btn btn-default add-remove">Add</button><span class="countX">x</span><input class="countBox" type="number" value="1" /></td>
+				<td>
+					<button id="${i}" class="btn btn-primary add-remove">Add</button>
+					<input class="form-control count-box" type="number" value="1" />
+				</td>
 				<td>${record.id}</td>
 				<td><a href="https://calendarbuilder.dev.adurolife.com/titancoil/#/${record.id}" target="_blank">${record.fields['Title']}</a></td>
 				<td><span>${record.fields['Instructions']}</span></td>
