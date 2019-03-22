@@ -35,13 +35,11 @@
         <input type="number" id="loadNumber" min="1" max="100" value="1" />
       </div>
 
-      <div id="eidContainer">
-        <div class="form-group">
-          <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
-            <option defaultValue>Select Limeade e=</option>
-          </select>
-          <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
-        </div>
+      <div class="form-group" id="eidContainer">
+        <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
+          <option defaultValue>Select Limeade e=</option>
+        </select>
+        <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
       </div>
 
     </div>
@@ -69,15 +67,17 @@
         </p>
       </div>
 
-      <div class="row">
-        <div class="col-md-4">
+      <div class="row form-group">
+        <div class="col-md-2">
           <h4 id="challenges-header">Challenges</h4>
+        </div>
+        <div class="col-md-6">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="removeCoaching">
             <label class="form-check-label" for="removeCoaching">Remove Coaching</label>
           </div>
         </div>
-        <div class="col-md-4 offset-md-4">
+        <div class="col-md-4">
           <button type="button" class="btn btn-primary download">Download CSV</button>
           <button type="button" class="btn btn-danger upload">Upload to Limeade</button>
         </div>

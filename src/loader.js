@@ -245,30 +245,42 @@ function drawTableRow(row, post, record) {
 	);
 
   $('#targetingModalContainer').append(
-    `<div class="modal fade" id="targetingModal${row}" tabindex="-1" role="dialog" aria-labelledby="targetingModalLabel">
+    `<div class="modal" tabindex="-1" role="dialog" id="targetingModal${row}">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="targetingModalLabel">Targeting</h4>
+            <h5 class="modal-title">Targeting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body" id="targetingModalBody${row}">
-            <input type="text" id="subgroup${row}" placeholder="Subgroup" />
-            <br><br>
-            <input type="text" id="field-one${row}" placeholder="Field1" />
-            <br><br>
-            <input type="text" id="field-one-value${row}" placeholder="Field1Value" />
-            <br><br>
-            <input type="text" id="field-two${row}" placeholder="Field2" />
-            <br><br>
-            <input type="text" id="field-two-value${row}" placeholder="Field2Value" />
-            <br><br>
-            <input type="text" id="field-three{row}" placeholder="Field3" />
-            <br><br>
-            <input type="text" id="field-three-value${row}" placeholder="Field3Value" />
+
+            <div class="form-group">
+              <input type="text" class="form-control" id="subgroup${row}" placeholder="Subgroup">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-one${row}" placeholder="Field1">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-one-value${row}" placeholder="Field1Value">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-two${row}" placeholder="Field2">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-two-value${row}" placeholder="Field2Value">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-three${row}" placeholder="Field3">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="field-three-value${row}" placeholder="Field3Value">
+            </div>
+
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -347,14 +359,17 @@ function drawTableRow(row, post, record) {
   const dimensionElements = getDefaultDimensions(limeadeDimensions);
 
   $('#dimensionsModalContainer').append(
-    `<div class="modal fade" id="dimensionsModal${row}" tabindex="-1" role="dialog" aria-labelledby="dimensionsModalLabel">
+    `<div class="modal" tabindex="-1" role="dialog" id="dimensionsModal${row}">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="dimensionsModalLabel">Dimensions</h4>
+            <h5 class="modal-title">Dimensions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body" id="dimensionsModalBody${row}">
+
             <div class="dimenPreview">
               <select id="selectBefore${row}" class="selectBf form-control" multiple size="5">${dimensionElements.unselected}</select>
               <button id="add${row}" class="addDimensions" onclick="move('selectBefore${row}', 'selectAfter${row}')">
@@ -365,9 +380,10 @@ function drawTableRow(row, post, record) {
               </button>
               <select id="selectAfter${row}" class="selectAf form-control" multiple size="5">${dimensionElements.selected}</select>
             </div>
+
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -375,12 +391,14 @@ function drawTableRow(row, post, record) {
   );
 
   $('#contentModalContainer').append(
-    `<div class="modal fade" id="contentModal${row}" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel">
+    `<div class="modal" tabindex="-1" role="dialog" id="contentModal${row}">
       <div class="modal-dialog" role="document">
         <div class="modal-content content-modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="contentModalLabel">Content</h4>
+            <h5 class="modal-title">Content</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body" id="contentModalBody${row}">
 
@@ -398,7 +416,7 @@ function drawTableRow(row, post, record) {
 
           </div>
           <div class="modal-footer content-modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
