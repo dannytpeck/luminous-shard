@@ -39787,7 +39787,7 @@ if (window.location.pathname.includes('compile')) {
 	// Event Listeners
 	$('.upload').click(_compiler.limeadeUpload);
 	$('.download').click(_compiler.compileTransporter);
-	$('#loadNumber').keyup(function () {
+	$('#loadNumber').change(function () {
 		var containerHTML = '';
 
 		for (var i = 0; i < $('#loadNumber').val(); i++) {

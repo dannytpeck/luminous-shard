@@ -13,7 +13,7 @@ window.onload = getClientList;
 	// Event Listeners
 	$('.upload').click(limeadeUpload);
 	$('.download').click(compileTransporter);
-	$('#loadNumber').keyup(() => {
+	$('#loadNumber').change(() => {
 		let containerHTML = '';
 
 		for (let i = 0; i < $('#loadNumber').val(); i++) {
