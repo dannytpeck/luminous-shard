@@ -1,7 +1,5 @@
+/* globals $ */
 import _ from 'lodash';
-import $ from 'jquery';
-window.$ = window.jQuery = $;
-require('bootstrap');
 
 import { loadTable } from './challenges';
 import { findChallenges, resetPage, loadCompiler, sortName, sortCreated, sortUpdated } from './sort';

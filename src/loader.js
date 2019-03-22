@@ -1,5 +1,6 @@
+/* globals $ */
+
 /* This file is for the initial loading of selected challenges table */
-import $ from 'jquery';
 import Airtable from 'airtable';
 
 // Used to store clients for Select(s)
@@ -132,63 +133,66 @@ function drawTableRow(row, post, record) {
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
-  $(`#challenge-name${row}`).html(
+  $(`#device-and-team${row}`).html(
     `<p>
-      <input type="text" id="chalTitle${row}" value="${record ? record.fields['Title'] : title}" />
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="deviceCheck${row}" ${checkChecked} />
+        <label class="form-check-label" for="deviceCheck${row}">Device Enabled</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="deviceRequired${row}" />
+        <label class="form-check-label" for="deviceRequired${row}">Device Required</label>
+      </div>
     </p>
     <p>
-      <label for="deviceCheck${row}">Device Enabled</label>
-      <input id="deviceCheck${row}" type="checkbox" style="padding-left:10px" ${checkChecked} /><br/>
-      <label for="deviceRequired${row}">Device Required</label>
-      <input id="deviceRequired${row}" type="checkbox" style="padding-left:10px" />
-    </p>
-    <p>
-      <select id="soloTeam${row}">
+      <select class="form-control" id="soloTeam${row}">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
 
-      <select id="teamMin${row}" style="display: none;">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option selected="selected">4</option>
-        <option>5</option>
-      </select>
-
-      <select id="teamMax${row}" style="display: none;">
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10</option>
-        <option>11</option>
-        <option selected="selected">12</option>
-        <option>13</option>
-        <option>14</option>
-        <option>15</option>
-        <option>16</option>
-        <option>17</option>
-        <option>18</option>
-        <option>19</option>
-        <option>20</option>
-      </select>
+      <div class="form-row">
+        <div class="col">
+          <select class="form-control" id="teamMin${row}" style="display: none;">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option selected="selected">4</option>
+            <option>5</option>
+          </select>
+        </div>
+        <div class="col">
+          <select class="form-control" id="teamMax${row}" style="display: none;">
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option selected="selected">12</option>
+            <option>13</option>
+            <option>14</option>
+            <option>15</option>
+            <option>16</option>
+            <option>17</option>
+            <option>18</option>
+            <option>19</option>
+            <option>20</option>
+          </select>
+        </div>
+      </div>
     </p>`
   );
 
   if (record) {
     $(`#start-end-date${row}`).html(
-      `<div>
-        Start Date
-        <input type="date" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
-        <br>
-        End Date
-        <input type="date" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />
-      </div>`
+      `<label for="startDate${row}">Start Date</label>
+       <input type="date" class="form-control" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
+       <label for="endDate${row}">End Date</label>
+       <input type="date" class="form-control" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />`
     );
   } else {
     $(`#start-end-date${row}`).html(
@@ -203,15 +207,11 @@ function drawTableRow(row, post, record) {
   }
 
   $(`#dimensions-and-code${row}`).html(
-    `<p>
-      <a class="btn btn-default" onclick="showDimensionsModal(${row})">Dimensions</a>
-    </p>`
+    `<button type="button" class="btn btn-info" onclick="showDimensionsModal(${row})">Dimensions</button>`
   );
 
   $('#team-challenge' + row).html(
-    `<p>
-      <a class="btn btn-default" onclick="showContentModal(${row})">Edit Content</a>
-    </p>`
+    `<button type="button" class="btn btn-info" onclick="showContentModal(${row})">Edit Content</button>`
   );
 
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
@@ -233,15 +233,15 @@ function drawTableRow(row, post, record) {
   $(`#point-value${row}`).html(
     `<input id="points${row}" type="text" value="${record ? record.fields['Points'] : ''}" style="width:50px" tabindex="${row + 1}" />
     <p>
-      <label for="pointText${row}"><span class="glyphicon glyphicon-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></span></label>
+      <label for="pointText${row}">
+        <i class="fas fa-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></i>
+      </label>
       <input id="pointText${row}" type="checkbox" />
     </p>`
   );
 
   $(`#targeting${row}`).html(
-    `<p>
-      <a class="btn btn-default" onclick="showTargetingModal(${row})">Targeting</a>
-    </p>`
+    `<button type="button" class="btn btn-info" onclick="showTargetingModal(${row})">Targeting</button>`
 	);
 
   $('#targetingModalContainer').append(
@@ -433,7 +433,7 @@ function getContent(ids) {
     $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${id}</a></td></tr>`);
 
     // Build out the rest of the table
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = `challenge-name${i}`;
+    tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `dimensions-and-code${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `team-challenge${i}`;
@@ -453,14 +453,14 @@ function getContentWithDates(records) {
 
   records.forEach((record, rowNumber) => {
     const challengeId = record.fields['Challenge Id'];
-
-    const challengeUrl = `https://calendarbuilder.dev.adurolife.com/titancoil/#/${challengeId}`;
+    const challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${challengeId}</a></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /></td></tr>`);
+
 
     // Build out the rest of the table
-    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `challenge-name${rowNumber}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `device-and-team${rowNumber}`;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `dimensions-and-code${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `team-challenge${rowNumber}`;

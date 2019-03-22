@@ -5,11 +5,10 @@
   <title>Shiny Stone</title>
   <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon" />
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
   <link rel="stylesheet" type="text/css" href="../css/main.css" />
-
-  <script defer src="../js/bundle.js"></script>
 </head>
 
 <body>
@@ -27,26 +26,24 @@
 		</div>
   </header>
 
-  <div id="wrapper">
+  <div class="container-fluid">
 
     <div id="welcome">
-      <input id="fileName" type="text" style="display:none" />
-      <p>
-        <a href="../"><button class="btn btn-default">Start Over</button></a>
-        <span style="margin-left:48px;">How many programs?</span>
-        <input type="number" id="loadNumber" min="1" max="100" value="1" />
-      </p>
-      <p>
-      <div id="eidContainer">
 
+      <div class="form-group">
+        <span>How many programs?</span>
+        <input type="number" id="loadNumber" min="1" max="100" value="1" />
+      </div>
+
+      <div id="eidContainer">
         <div class="form-group">
           <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
             <option defaultValue>Select Limeade e=</option>
           </select>
           <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
         </div>
-
       </div>
+
     </div>
 
     <div id="shortCut">
@@ -72,24 +69,25 @@
         </p>
       </div>
 
-      <div class="row" style="margin: 2em 0;">
+      <div class="row">
         <div class="col-md-4">
-          <h4 id="challenges-header">Challenges
-            <input id="remove-coaching" type="checkbox" />
-            <label for="remove-coaching">Remove Coaching</label>
-          </h4>
+          <h4 id="challenges-header">Challenges</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="removeCoaching">
+            <label class="form-check-label" for="removeCoaching">Remove Coaching</label>
+          </div>
         </div>
-        <div class="col-md-4 col-md-offset-4">
-          <button class="download btn btn-default">Download CSV</button>
-          <button class="upload btn btn-primary">Upload to Limeade</button>
+        <div class="col-md-4 offset-md-4">
+          <button type="button" class="btn btn-primary download">Download CSV</button>
+          <button type="button" class="btn btn-danger upload">Upload to Limeade</button>
         </div>
       </div>
 
-      <table id="challenge-list" class="table table-striped">
+      <table class="table table-bordered table-striped" id="challenge-list">
         <thead>
           <tr>
-            <th>Challenge ID</th>
             <th>Challenge Name</th>
+            <th>Device/Team Settings</th>
             <th>Start/End Date</th>
             <th>Dimensions</th>
             <th>Challenge Content</th>
@@ -100,6 +98,13 @@
         </thead>
         <tbody></tbody>
       </table>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 offset-md-8">
+        <button type="button" class="btn btn-primary download">Download CSV</button>
+        <button type="button" class="btn btn-danger upload">Upload to Limeade</button>
+      </div>
     </div>
 
   </div>
@@ -125,13 +130,13 @@
 
   <div id="targetingModalContainer"></div>
 
-  <div class="row" style="margin: 2em 0;">
-    <div class="col-md-4 col-md-offset-8">
-      <button class="download btn btn-default">Download CSV</button>
-      <button class="upload btn btn-primary">Upload to Limeade</button>
-    </div>
-  </div>
+  <!-- hidden elements that store useful things -->
+  <input id="fileName" type="text" style="display:none" />
 
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="../js/bundle.js"></script>
 </body>
 
 </html>

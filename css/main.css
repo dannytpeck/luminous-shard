@@ -1,3 +1,14 @@
+html {
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+body {
+  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+  font-size: 16px;
+  color: #463e38; }
+
 /* Element styles */
 header.navigation {
   background-color: #5179b6;
@@ -5,7 +16,8 @@ header.navigation {
   min-height: 60px;
   width: 100%;
   z-index: 999;
-  font-family: "Karla", "Open Sans", "Helvetica", "Arial", sans-serif; }
+  font-family: "Karla", "Open Sans", "Helvetica", "Arial", sans-serif;
+  margin-bottom: 1em; }
   header.navigation .navigation-wrapper {
     position: relative; }
   header.navigation .navigation-wrapper::after {
@@ -86,8 +98,11 @@ header.navigation {
     text-align: center;
     vertical-align: middle; }
 
-input {
-  border: 1px solid #ddd; }
+table#challenge-list {
+  margin-bottom: 20px; }
+  table#challenge-list th,
+  table#challenge-list td {
+    vertical-align: middle; }
 
 .modal-header {
   background-color: #5179b6;
@@ -97,29 +112,10 @@ input {
   color: #fff;
   opacity: .8; }
 
+input#loadNumber {
+  margin-left: 1em; }
+
 /* Whole page styles - deprecated */
-html {
-  box-sizing: border-box; }
-
-*, *:before, *:after {
-  box-sizing: inherit; }
-
-body {
-  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
-  font-size: 16px;
-  color: #463e38; }
-
-hr {
-  margin: 25px 0; }
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0; }
-
-#wrapper {
-  padding: 20px 25px; }
-
 #progress {
   margin-left: 5px; }
 
@@ -162,9 +158,6 @@ input[type=number]::-webkit-outer-spin-button {
 #build-table {
   position: absolute;
   right: 50px; }
-
-#loadNumber {
-  margin-left: 10px; }
 
 .codeEdit {
   width: 48%;
@@ -217,19 +210,6 @@ a:hover {
 .close:hover {
   color: #ddd; }
 
-#challenge-list {
-  border: 1px solid #000;
-  margin-bottom: 20px; }
-  #challenge-list th {
-    border-bottom: 1px solid #000; }
-  #challenge-list th,
-  #challenge-list td {
-    border-right: 1px solid #000;
-    vertical-align: middle; }
-  #challenge-list input[type=date] {
-    width: 150px;
-    display: block; }
-
 .popup {
   width: 100%;
   height: 100%;
@@ -276,17 +256,8 @@ a:hover {
   #shortCut h3 {
     margin-top: 10px; }
 
-.download {
-  margin-left: 10%; }
-
-.upload {
-  margin-left: 2.5%; }
-
 #remove-coaching {
-  margin-left: 16px;
-  position: relative;
-  top: 2px;
-  right: 2px; }
+  margin-left: 1em; }
 
 #welcome #eid, #welcome #psk {
   margin-left: 2%; }
