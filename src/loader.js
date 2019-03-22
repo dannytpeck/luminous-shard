@@ -355,14 +355,19 @@ function drawTableRow(row, post, record) {
           <div class="modal-body" id="dimensionsModalBody${row}">
 
             <div class="dimenPreview">
-              <select id="selectBefore${row}" class="selectBf form-control" multiple size="5">${dimensionElements.unselected}</select>
-              <button id="add${row}" class="addDimensions" onclick="move('selectBefore${row}', 'selectAfter${row}')">
+              <div class="labels">
+                <h5>Unselected</h5>
+                <h5 class="selected-label">Selected</h5>
+              </div>
+
+              <select multiple class="form-control select-before" id="selectBefore${row}" size="5">${dimensionElements.unselected}</select>
+              <button type="button" class="btn btn-primary add-dimensions" id="add${row}" onclick="move('selectBefore${row}', 'selectAfter${row}')">
                 -->
               </button>
-              <button id="remove${row}" class="removeDimensions" onclick="move('selectAfter${row}', 'selectBefore${row}')">
+              <button type="button" class="btn btn-primary remove-dimensions" id="remove${row}" onclick="move('selectAfter${row}', 'selectBefore${row}')">
                 <--
               </button>
-              <select id="selectAfter${row}" class="selectAf form-control" multiple size="5">${dimensionElements.selected}</select>
+              <select multiple class="form-control select-after" id="selectAfter${row}" size="5">${dimensionElements.selected}</select>
             </div>
 
           </div>

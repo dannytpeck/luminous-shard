@@ -32,29 +32,39 @@ a:hover {
 		color: lightblue;
 	}
 
-	.addDimensions {
+	.add-dimensions {
 		position: absolute;
-		left: 47%;
-		top: 25%;
+		left: 45%;
+		top: 35%;
 	}
 
-	.removeDimensions {
+	.remove-dimensions {
 		position: absolute;
-		left: 47%;
-		bottom: 25%;
+		left: 45%;
+		bottom: 20%;
 	}
 
-}
+	.select-before {
+	  width: 44%;
+		display: inline-block;
+	}
 
-.selectBf {
-  width: 45%;
-	display: inline-block;
-}
+	.select-after {
+	  width: 45%;
+		float: right;
+		display: inline-block;
+	}
 
-.selectAf {
-  width: 45%;
-	float: right;
-	display: inline-block;
+	.labels {
+		h4, h5, h6 {
+			display: inline-block;
+		}
+
+		.selected-label {
+			float: right;
+		}
+	}
+
 }
 
 #shortCut {

@@ -228,24 +228,30 @@ a:hover {
   font-weight: bold;
   color: lightblue; }
 
-.dimenPreview .addDimensions {
+.dimenPreview .add-dimensions {
   position: absolute;
-  left: 47%;
-  top: 25%; }
+  left: 45%;
+  top: 35%; }
 
-.dimenPreview .removeDimensions {
+.dimenPreview .remove-dimensions {
   position: absolute;
-  left: 47%;
-  bottom: 25%; }
+  left: 45%;
+  bottom: 20%; }
 
-.selectBf {
-  width: 45%;
+.dimenPreview .select-before {
+  width: 44%;
   display: inline-block; }
 
-.selectAf {
+.dimenPreview .select-after {
   width: 45%;
   float: right;
   display: inline-block; }
+
+.dimenPreview .labels h4, .dimenPreview .labels h5, .dimenPreview .labels h6 {
+  display: inline-block; }
+
+.dimenPreview .labels .selected-label {
+  float: right; }
 
 #shortCut {
   background-color: #EEE;
