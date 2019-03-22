@@ -1,5 +1,6 @@
+/* globals $ */
+
 /* This file is for Transporter CSV Compiler functionality */
-import $ from 'jquery';
 
 const currentYear = new Date().getFullYear();
 

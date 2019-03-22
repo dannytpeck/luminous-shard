@@ -1,5 +1,7 @@
+/* globals $ */
+
 /* This file is for making all the ajax requests to WP and populating the table's contents */
-import $ from 'jquery';
+
 import Airtable from 'airtable';
 import { addRemove, throwToArray } from './sort';
 

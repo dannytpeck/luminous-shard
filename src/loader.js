@@ -189,10 +189,13 @@ function drawTableRow(row, post, record) {
 
   if (record) {
     $(`#start-end-date${row}`).html(
-      `<label for="startDate${row}">Start Date</label>
-       <input type="date" class="form-control" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
-       <label for="endDate${row}">End Date</label>
-       <input type="date" class="form-control" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />`
+      `<div class="form-group">
+        <label for="startDate${row}">Start Date</label>
+        <input type="date" class="form-control" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
+      </div>
+
+      <label for="endDate${row}">End Date</label>
+      <input type="date" class="form-control" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />`
     );
   } else {
     $(`#start-end-date${row}`).html(
@@ -206,42 +209,46 @@ function drawTableRow(row, post, record) {
     );
   }
 
-  $(`#dimensions-and-code${row}`).html(
-    `<button type="button" class="btn btn-info" onclick="showDimensionsModal(${row})">Dimensions</button>`
-  );
-
-  $('#team-challenge' + row).html(
-    `<button type="button" class="btn btn-info" onclick="showContentModal(${row})">Edit Content</button>`
+  $(`#content-and-dimensions${row}`).html(
+    `<button type="button" class="btn btn-info btn-block" onclick="showContentModal(${row})">Content</button>
+    <button type="button" class="btn btn-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
   );
 
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
 
   $(`#tracking-type${row}`).html(
-    `<input type="text" id="devText${row}" onkeyup="this.removeAttribute('value')" placeholder="activity" value="${activityText}" />
-    <br/><br/>
-    <input type="number" id="required${row}" onkeyup="modifyTrackingNumber(${row})" placeholder="units" value="${activityGoal}" />
-    <br><br>
-    <select id="trackType${row}">
-			 <option value="One Time">One Time</option>
-			 <option value="Units - Challenge Period">Units - Challenge Period</option>
-			 <option value="Days - Challenge Period">Days - Challenge Period</option>
-			 <option value="Units each Week">Units each Week</option>
-			 <option value="Days each Week">Days each Week</option>
-     </select>`
+    `<div class="form-group">
+      <input type="text" class="form-control" id="devText${row}" value="${activityText}" placeholder="activity" onkeyup="this.removeAttribute('value')" />
+    </div>
+
+    <div class="form-group">
+      <input type="number" class="form-control" id="required${row}" value="${activityGoal}" placeholder="units" onkeyup="modifyTrackingNumber(${row})" />
+    </div>
+
+    <select class="form-control" id="trackType${row}">
+      <option value="One Time">One Time</option>
+      <option value="Units - Challenge Period">Units - Challenge Period</option>
+      <option value="Days - Challenge Period">Days - Challenge Period</option>
+      <option value="Units each Week">Units each Week</option>
+      <option value="Days each Week">Days each Week</option>
+    </select>`
   );
 
   $(`#point-value${row}`).html(
-    `<input id="points${row}" type="text" value="${record ? record.fields['Points'] : ''}" style="width:50px" tabindex="${row + 1}" />
-    <p>
-      <label for="pointText${row}">
+    `<div class="form-group">
+      <input type="text" class="form-control" id="points${row}" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="pointText${row}" />
+      <label class="form-check-label" for="pointText${row}">
         <i class="fas fa-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></i>
       </label>
-      <input id="pointText${row}" type="checkbox" />
-    </p>`
+    </div>`
   );
 
   $(`#targeting${row}`).html(
-    `<button type="button" class="btn btn-info" onclick="showTargetingModal(${row})">Targeting</button>`
+    `<button type="button" class="btn btn-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>`
 	);
 
   $('#targetingModalContainer').append(
@@ -453,8 +460,7 @@ function getContent(ids) {
     // Build out the rest of the table
     tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `dimensions-and-code${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `team-challenge${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `content-and-dimensions${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
@@ -480,8 +486,7 @@ function getContentWithDates(records) {
     // Build out the rest of the table
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `device-and-team${rowNumber}`;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
-		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `dimensions-and-code${rowNumber}`;
-		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `team-challenge${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `content-and-dimensions${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `tracking-type${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;

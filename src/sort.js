@@ -1,5 +1,6 @@
+/* globals $ */
+
 /* This file is for manipulation of the table - sorting, clearing, and sending table's results to the compiler */
-import $ from 'jquery';
 
 var buttons = [],
 	ids = [],

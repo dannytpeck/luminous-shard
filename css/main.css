@@ -200,6 +200,9 @@ input#loadNumber {
   max-height: 450px;
   background-color: white; }
 
+.download-upload-buttons {
+  float: right; }
+
 a {
   cursor: pointer; }
 
