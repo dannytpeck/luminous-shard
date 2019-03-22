@@ -551,7 +551,10 @@ function loadSelectedChallenges() {
 
   // Populate the fields from the query object
   $('#fileName').val(queryObject.file);
+
   $('#eid0').val(queryObject.eid);
+  window.fetchPsk(queryObject.eid, 0);
+
   $('#begin').val(queryObject.start);
   $('#end').val(queryObject.end);
 
