@@ -32053,7 +32053,14 @@ function drawTable(records) {
 	var tableHTML = '';
 
 	records.map(function (record, i) {
-		tableHTML += '<tr>\n\t\t\t\t<td>\n\t\t\t\t\t<button id="' + i + '" class="btn btn-primary add-remove">Add</button>\n\t\t\t\t\t<input class="form-control count-box" type="number" value="1" />\n\t\t\t\t</td>\n\t\t\t\t<td>' + record.id + '</td>\n\t\t\t\t<td><a href="https://calendarbuilder.dev.adurolife.com/titancoil/#/' + record.id + '" target="_blank">' + record.fields['Title'] + '</a></td>\n\t\t\t\t<td><span>' + record.fields['Instructions'] + '</span></td>\n\t\t\t\t<td><img src="' + record.fields['Header Image'] + '" width="100%"/></td>\n\t\t\t\t<td><span style="display:none">' + record._rawJson.createdTime + '</span><span>' + new Date(record._rawJson.createdTime).toDateString() + '</span></td>\n\t\t\t</tr>';
+		var headerImage = record.fields['Header Image'];
+
+		// Use a placeholder image if no header image is available
+		if (!headerImage) {
+			headerImage = 'http://via.placeholder.com/1000x500';
+		}
+
+		tableHTML += '<tr>\n\t\t\t\t<td>\n\t\t\t\t\t<button id="' + i + '" class="btn btn-primary add-remove">Add</button>\n\t\t\t\t\t<input class="form-control count-box" type="number" value="1" />\n\t\t\t\t</td>\n\t\t\t\t<td>' + record.id + '</td>\n\t\t\t\t<td><a href="https://calendarbuilder.dev.adurolife.com/titancoil/#/' + record.id + '" target="_blank">' + record.fields['Title'] + '</a></td>\n\t\t\t\t<td><span>' + record.fields['Instructions'] + '</span></td>\n\t\t\t\t<td><img src="' + headerImage + '" width="100%"/></td>\n\t\t\t\t<td><span style="display:none">' + record._rawJson.createdTime + '</span><span>' + new Date(record._rawJson.createdTime).toDateString() + '</span></td>\n\t\t\t</tr>';
 	});
 
 	$('#table-body').append(tableHTML);

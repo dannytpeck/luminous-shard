@@ -29,6 +29,13 @@ function drawTable(records) {
 	let tableHTML = '';
 
 	records.map((record, i) => {
+		let headerImage = record.fields['Header Image'];
+
+		// Use a placeholder image if no header image is available
+		if (!headerImage) {
+			headerImage = 'http://via.placeholder.com/1000x500';
+		}
+
 		tableHTML +=
 			`<tr>
 				<td>
@@ -38,7 +45,7 @@ function drawTable(records) {
 				<td>${record.id}</td>
 				<td><a href="https://calendarbuilder.dev.adurolife.com/titancoil/#/${record.id}" target="_blank">${record.fields['Title']}</a></td>
 				<td><span>${record.fields['Instructions']}</span></td>
-				<td><img src="${record.fields['Header Image']}" width="100%"/></td>
+				<td><img src="${headerImage}" width="100%"/></td>
 				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
 			</tr>`;
 	});
