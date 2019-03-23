@@ -2,7 +2,7 @@
 
 /* This file is for manipulation of the table - sorting, clearing, and sending table's results to the compiler */
 
-var buttons = [],
+let buttons = [],
 	ids = [],
 	names = [],
 	links = [],
@@ -295,38 +295,6 @@ export function findChallenges() {
 		}
 	});
 
-}
-
-// Function for 'Continue' button - Saves values then uses them in GET request to compiler page
-export function loadCompiler() {
-	'use strict';
-  var eid = $('#eid').val();
-  var fileName = $('#file-name').val();
-  var startDate = $('#date-begin').val();
-  var endDate = $('#date-end').val();
-  var idList = $('#idList').val().replace(/,\s*$/, '');
-
-  $('#dateError').hide();
-  $('#errmsg').html('');
-
-  var errorText = '';
-  if (!startDate) {
-    errorText += '|Start Date';
-  }
-  if (!endDate) {
-    errorText += '|End Date';
-  }
-
-  var a = document.createElement('a');
-  if (errorText) {
-    $('#dateError').show();
-    $('#errmsg').html(errorText);
-    a.setAttribute('href', '#dateError');
-  } else {
-    a.setAttribute('href', `compile/index.html#?file=${fileName}&eid=${eid}&start_date=${startDate}&end_date=${endDate}&id_list=${idList}`);
-    a.setAttribute('target', '_blank');
-  }
-  a.click();
 }
 
 // Resets the page's buttons and fields

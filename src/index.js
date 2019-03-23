@@ -1,8 +1,8 @@
 /* globals $ */
 import _ from 'lodash';
 
-import { loadTable } from './challenges';
-import { findChallenges, resetPage, loadCompiler, sortName, sortCreated, sortUpdated } from './sort';
+import { loadTable, loadCompiler } from './challenges';
+import { findChallenges, resetPage } from './search';
 import { getClientList, renderEmployerNames } from './loader';
 import { limeadeUpload, compileTransporter } from './compiler';
 
@@ -38,9 +38,6 @@ window.onload = getClientList;
 	// Event listeners
 	$('#reset').click(resetPage);
 	$('#load-compiler').click(loadCompiler);
-	$('#sortName').click(sortName);
-	$('#sortCreated').click(sortCreated);
-	$('#sortUpdated').click(sortUpdated);
 	$('#search').keyup(_.debounce(findChallenges, 175));
 
 }

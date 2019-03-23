@@ -3,7 +3,7 @@
 /* This file is for making all the ajax requests to WP and populating the table's contents */
 
 import Airtable from 'airtable';
-import { addRemove, throwToArray } from './sort';
+import { addRemove, throwToArray } from './search';
 
 // Draws the table
 function drawTable(records) {
@@ -100,4 +100,35 @@ export function loadTable() {
 		$('.add-remove').click(addRemove);
 	});
 
+}
+
+// Function for 'Continue' button - Saves values then uses them in GET request to compiler page
+export function loadCompiler() {
+  const eid = $('#eid').val();
+  const fileName = $('#file-name').val();
+  const startDate = $('#date-begin').val();
+  const endDate = $('#date-end').val();
+  const idList = $('#idList').val().replace(/,\s*$/, '');
+
+  $('#dateError').hide();
+  $('#errmsg').html('');
+
+  var errorText = '';
+  if (!startDate) {
+    errorText += '|Start Date';
+  }
+  if (!endDate) {
+    errorText += '|End Date';
+  }
+
+  var a = document.createElement('a');
+  if (errorText) {
+    $('#dateError').show();
+    $('#errmsg').html(errorText);
+    a.setAttribute('href', '#dateError');
+  } else {
+    a.setAttribute('href', `compile/index.html#?file=${fileName}&eid=${eid}&start_date=${startDate}&end_date=${endDate}&id_list=${idList}`);
+    a.setAttribute('target', '_blank');
+  }
+  a.click();
 }
