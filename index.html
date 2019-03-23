@@ -33,22 +33,22 @@
       <div class="col">
         <div class="form-group">
           <label for="eid">Client:</label>
-          <input type="text" class="form-control" id="eid" placeholder="Client e=">
+          <input type="text" class="form-control" id="eid" placeholder="Client e=" tabindex="1">
         </div>
         <div class="form-group">
           <label for="date-begin">Start Date:</label>
-          <input type="date" class="form-control" id="date-begin">
+          <input type="date" class="form-control" id="date-begin" tabindex="3">
         </div>
       </div>
 
       <div class="col">
         <div class="form-group">
           <label for="file-name">Phase:</label>
-          <input type="text" class="form-control" id="file-name" placeholder="Phase number">
+          <input type="text" class="form-control" id="file-name" placeholder="Phase number" tabindex="2">
         </div>
         <div class="form-group">
           <label for="date-end">End Date:</label>
-          <input type="date" class="form-control" id="date-end">
+          <input type="date" class="form-control" id="date-end" tabindex="4">
         </div>
       </div>
 
@@ -57,53 +57,53 @@
           <button type="button" class="btn btn-primary" id="reset" disabled>Reset</button>
         </div>
       </div>
-
-			<p id="dateError">
-				You have an invalid or missing date for the <span id="errmsg"></span>| field(s).
-			</p>
-
 		</div>
 
-    <hr>
+    <p id="dateError">You have an invalid or missing date for the <span id="errmsg"></span>| field(s).</p>
 
-		<p>
-      <p id="load">Loading...<img src="images/progressbar.gif" alt="A spinning progress indicator" />
-  			<span id="progress">0</span>%
-  		</p>
+    <p id="load">
+      <span>Loading...</span>
+      <img src="images/progressbar.gif" alt="A spinning progress indicator" />
+			<span id="progress">0</span><span>%</span>
+		</p>
 
-      <div class="row">
-        <div class="col-xs-6 col-md-4">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" id="search" />
-            <button type="button" class="btn btn-primary" id="search-button">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
+    <div class="row">
+      <div class="col-4">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" id="search" />
+          <button type="button" class="btn btn-primary" id="search-button">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
       </div>
-		</p>
+    </div>
 
 		<div id="table-container">
       <table class="table table-bordered table-striped">
 				<thead id="table-head">
 					<tr>
-						<th> </th>
+						<th>Add/Remove</th>
 						<th>Challenge ID</th>
-						<th>Challenge Name<button id="sortName" class="asc btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button></th>
+						<th>Challenge Name</th>
 						<th>Short Description</th>
 						<th>Image</th>
-						<th>Date Created<button id="sortCreated" class="asc btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button></th>
+						<th>Date Created</th>
 					</tr>
 				</thead>
 				<tbody id="table-body">
 				</tbody>
 			</table>
 		</div>
-		<p>
-			<strong>Selected Challenges:</strong>
-			<button type="button" class="btn btn-primary" id="load-compiler" disabled>Continue</button>
-      <ul id="pretty-list"></ul>
-		</p>
+
+    <div class="row">
+      <div class="col-8">
+        <p><strong>Selected Challenges:</strong></p>
+        <ul id="pretty-list"></ul>
+      </div>
+      <div class="col-4">
+    		<button type="button" class="btn btn-primary" id="load-compiler" disabled>Continue</button>
+      </div>
+    </div>
 
 	</div>
 

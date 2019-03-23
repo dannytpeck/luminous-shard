@@ -7,3 +7,87 @@
   color: #fff;
   opacity: .8;
 }
+
+.close:focus,
+.close:hover {
+  color: #ddd;
+}
+
+.dimensions-preview {
+
+	.add-dimensions {
+		position: absolute;
+		left: 45%;
+		top: 35%;
+	}
+
+	.remove-dimensions {
+		position: absolute;
+		left: 45%;
+		bottom: 20%;
+	}
+
+	.select-before {
+	  width: 44%;
+		display: inline-block;
+	}
+
+	.select-after {
+	  width: 45%;
+		float: right;
+		display: inline-block;
+	}
+
+	.labels {
+		h5 {
+			display: inline-block;
+		}
+
+		.selected-label {
+			float: right;
+		}
+	}
+
+}
+
+.codeEdit {
+  width: 48%;
+  display: inline-block;
+}
+
+.codeDisplay {
+  width: 48%;
+  display: inline-block;
+  float: right;
+}
+
+.content-modal-content {
+  min-width: 900px;
+  left: -20%;
+}
+
+.content-modal-footer {
+  clear: both;
+}
+
+.brandingBckgrndColor {
+  background-color: #d92c27;
+}
+
+.link-color {
+  color: #d92c27;
+}
+
+.shortDescription {
+  height: 90px;
+  width: 380px;
+}
+
+.moreInformation {
+  margin: 0px;
+  min-height: 450px;
+  min-width: 366px;
+  max-width: 366px;
+  max-height: 450px;
+  background-color: rgb(255, 255, 255);
+}

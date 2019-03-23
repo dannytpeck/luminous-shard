@@ -1,3 +1,4 @@
+/* Site-wide styles */
 html {
   box-sizing: border-box; }
 
@@ -5,11 +6,27 @@ html {
   box-sizing: inherit; }
 
 body {
-  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
-  font-size: 16px;
-  color: #463e38; }
+  font-family: "Open Sans", "Helvetica", "Arial", sans-serif; }
+
+a {
+  cursor: pointer; }
 
 /* Element styles */
+#reset {
+  position: relative;
+  top: 2em; }
+
+.download-upload-buttons {
+  float: right; }
+
+p#dateError {
+  color: red;
+  font-weight: bold;
+  display: none; }
+
+span#errmsg {
+  color: blue; }
+
 header.navigation {
   background-color: #5179b6;
   border-bottom: 1px solid #3f5481;
@@ -59,37 +76,30 @@ header.navigation {
       header.navigation ul li.nav-link a:focus, header.navigation ul li.nav-link a:hover {
         color: rgba(255, 255, 255, 0.7); }
 
-#table-container {
-  max-height: 390px;
-  overflow: auto;
-  margin-bottom: 1em; }
-  #table-container th,
-  #table-container td {
-    vertical-align: middle; }
-  #table-container table td:first-child {
-    width: 10em;
-    text-align: center;
-    padding: 0; }
-  #table-container table td:nth-child(2) {
-    width: 10%; }
-  #table-container table td:nth-child(5), #table-container td:nth-child(6) {
-    width: 15%; }
-  #table-container table td:nth-child(4) {
-    width: 20%; }
-  #table-container th button {
-    padding: 3px 5px;
-    margin-left: 5px; }
-  #table-container .count-box {
-    display: inline-block;
-    width: 3.6em;
-    vertical-align: middle;
-    text-align: center; }
+#load img {
+  margin-left: 1em; }
 
-table#challenge-list {
-  margin-bottom: 2em; }
-  table#challenge-list th,
-  table#challenge-list td {
-    vertical-align: middle; }
+input#loadNumber {
+  margin-left: 1em;
+  display: inline-block;
+  width: 4em; }
+
+input.psk-select {
+  display: inline-block;
+  width: 58%;
+  margin-left: 1%; }
+
+ul#pretty-list {
+  list-style-type: none;
+  padding-left: 1em; }
+
+#dateEstimations {
+  float: right;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0 1em;
+  line-height: 1.2em; }
+  #dateEstimations h3 {
+    color: blue; }
 
 .modal-header {
   background-color: #5179b6;
@@ -99,42 +109,34 @@ table#challenge-list {
   color: #fff;
   opacity: .8; }
 
-input#loadNumber {
-  margin-left: 1em; }
+.close:focus,
+.close:hover {
+  color: #ddd; }
 
-#reset {
-  position: relative;
-  top: 2em; }
-
-/* Whole page styles - deprecated */
-#progress {
-  margin-left: 5px; }
-
-#exclusive {
-  width: auto;
-  margin-left: 5px; }
-
-#idList {
-  display: none; }
-
-#load-compiler {
-  margin-left: 240px; }
-
-#pretty-list {
-  list-style-type: none;
-  padding-left: 20px; }
-
-#dateError {
-  color: red;
-  font-weight: bold;
-  display: none; }
-
-#errmsg {
-  color: blue; }
-
-#build-table {
+.dimensions-preview .add-dimensions {
   position: absolute;
-  right: 50px; }
+  left: 45%;
+  top: 35%; }
+
+.dimensions-preview .remove-dimensions {
+  position: absolute;
+  left: 45%;
+  bottom: 20%; }
+
+.dimensions-preview .select-before {
+  width: 44%;
+  display: inline-block; }
+
+.dimensions-preview .select-after {
+  width: 45%;
+  float: right;
+  display: inline-block; }
+
+.dimensions-preview .labels h5 {
+  display: inline-block; }
+
+.dimensions-preview .labels .selected-label {
+  float: right; }
 
 .codeEdit {
   width: 48%;
@@ -151,13 +153,6 @@ input#loadNumber {
 
 .content-modal-footer {
   clear: both; }
-
-#linkSpec {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  padding: 0 8px; }
 
 .brandingBckgrndColor {
   background-color: #d92c27; }
@@ -177,102 +172,34 @@ input#loadNumber {
   max-height: 450px;
   background-color: white; }
 
-.download-upload-buttons {
-  float: right; }
-
-a {
-  cursor: pointer; }
-
-a:hover {
-  color: #ddd; }
-
-.close:focus,
-.close:hover {
-  color: #ddd; }
-
-.popup {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(176, 176, 176, 0.8);
-  z-index: 900;
-  position: fixed;
-  top: 0px;
-  left: 0px; }
-
-.dimenPreview a {
-  margin-left: 80%;
-  margin-top: 5px;
-  font-weight: bold;
-  color: lightblue; }
-
-.dimenPreview .add-dimensions {
-  position: absolute;
-  left: 45%;
-  top: 35%; }
-
-.dimenPreview .remove-dimensions {
-  position: absolute;
-  left: 45%;
-  bottom: 20%; }
-
-.dimenPreview .select-before {
-  width: 44%;
-  display: inline-block; }
-
-.dimenPreview .select-after {
-  width: 45%;
-  float: right;
-  display: inline-block; }
-
-.dimenPreview .labels h4, .dimenPreview .labels h5, .dimenPreview .labels h6 {
-  display: inline-block; }
-
-.dimenPreview .labels .selected-label {
-  float: right; }
-
-#shortCut {
-  background-color: #EEE;
-  font-size: 0.9em;
-  line-height: 1.2em;
-  color: blue;
-  position: absolute;
-  top: 65px;
-  right: 5px;
-  padding: 0 15px; }
-  #shortCut h3 {
-    margin-top: 10px; }
-
-#remove-coaching {
-  margin-left: 1em; }
-
-#welcome #eid, #welcome #psk {
-  margin-left: 2%; }
-
-#welcome #eid {
-  width: 10%; }
-
-#welcome #psk {
-  width: 20%; }
-
-.button {
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 0 15px;
-  line-height: 32px;
-  height: auto;
-  display: inline-block;
-  text-align: center;
-  background-color: #d92c27;
-  color: #fff;
-  border-radius: 3px;
-  text-transform: uppercase; }
-
-.eid-select {
+select.eid-select {
   display: inline-block;
   width: 40%; }
 
-.psk-select {
-  display: inline-block;
-  width: 58%;
-  margin-left: 1%; }
+span#progress {
+  margin-left: 1em; }
+
+.table th,
+.table td {
+  vertical-align: middle; }
+
+#table-container {
+  max-height: 24em;
+  overflow: auto;
+  margin: 1em 0; }
+  #table-container table td:first-child {
+    width: 10em;
+    text-align: center;
+    padding: 0; }
+  #table-container table td:nth-child(5), #table-container td:nth-child(6) {
+    width: 15%; }
+  #table-container table td:nth-child(4) {
+    width: 20%; }
+  #table-container .count-box {
+    display: inline-block;
+    width: 3.6em;
+    vertical-align: middle;
+    text-align: center; }
+
+table#challenge-list {
+  margin-bottom: 2em; }

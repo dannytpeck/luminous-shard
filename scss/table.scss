@@ -1,22 +1,17 @@
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
 #table-container {
-
-  max-height: 390px;
+  max-height: 24em;
   overflow: auto;
-  margin-bottom: 1em;
-
-	th,
-	td {
-		vertical-align: middle;
-	}
+  margin: 1em 0;
 
 	table td:first-child {
     width: 10em;
     text-align: center;
     padding: 0;
-	}
-
-	table td:nth-child(2) {
-		width: 10%;
 	}
 
 	table td:nth-child(5), td:nth-child(6) {
@@ -27,27 +22,14 @@
 		width: 20%;
 	}
 
-	th button {
-		padding: 3px 5px;
-		margin-left: 5px;
-	}
-
   .count-box {
     display: inline-block;
     width: 3.6em;
     vertical-align: middle;
     text-align: center;
   }
-
 }
 
 table#challenge-list {
-
 	margin-bottom: 2em;
-
-	th,
-	td {
-		vertical-align: middle;
-	}
-
 }

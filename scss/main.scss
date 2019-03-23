@@ -1,5 +1,6 @@
 @import 'variables';
 
+/* Site-wide styles */
 html {
   box-sizing: border-box;
 }
@@ -10,17 +11,21 @@ html {
 
 body {
 	font-family: $font-stack;
-	font-size: $font-size;
-	color: #463e38;
+}
+
+a {
+	cursor: pointer;
 }
 
 /* Element styles */
-@import 'header';
-@import 'table';
-@import 'modal';
-@import 'input';
 @import 'button';
-
-/* Whole page styles - deprecated */
-@import 'loader';
-@import 'compiler';
+@import 'error';
+@import 'header';
+@import 'image';
+@import 'input';
+@import 'list';
+@import 'misc';
+@import 'modal';
+@import 'select';
+@import 'span';
+@import 'table';

@@ -29,74 +29,75 @@
 
   <div class="container-fluid">
 
-    <div id="welcome">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <span>How many programs?</span>
+          <input type="number" class="form-control" min="1" max="100" value="1" id="loadNumber" />
+        </div>
 
-      <div class="form-group">
-        <span>How many programs?</span>
-        <input type="number" id="loadNumber" min="1" max="100" value="1" />
-      </div>
-
-      <div class="row">
-        <div class="col-6">
-          <div class="form-group" id="eidContainer">
-            <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
-              <option defaultValue>Select Limeade e=</option>
-            </select>
-            <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
+        <div class="row">
+          <div class="col">
+            <div class="form-group" id="eidContainer">
+              <select id="eid0" class="form-control eid-select" onchange="fetchPsk(this.value, 0)">
+                <option defaultValue>Select Limeade e=</option>
+              </select>
+              <input id="psk0" type="text" class="form-control psk-select" placeholder="Limeade psk" />
+            </div>
           </div>
         </div>
-      </div>
 
+        <div class="row" id="start-and-end-dates">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="begin">Start Date</label>
+              <input type="date" class="form-control" id="begin" />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="end">End Date</label>
+              <input type="date" class="form-control" id="end" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col">
+        <div id="dateEstimations">
+          <h3>Date Estimations</h3>
+          <p><strong>Helpful guidelines for picking challenge dates.</strong></p>
+          <p><strong>Semi-annual, first half end: </strong></p>
+          <p>
+            <strong>Quarterly, first quarter end: </strong>
+            <br />
+            <strong>Quarterly, second quarter end: </strong>
+            <br />
+            <strong>Quarterly, third quarter end: </strong>
+          </p>
+        </div>
+      </div>
     </div>
 
-    <div id="shortCut">
-      <h3>Estimations</h3>
-      <p><strong style="color:black">This text area is meant to display semi-annual and quarterly date estimations.</strong></p>
-      <p><strong><span style="color:black">Semi-annual, first half end: </span></strong></p>
-      <p>
-        <strong><span style="color:black">Quarterly, first quarter end: </span></strong>
-        <br>
-        <strong><span style="color:black">Quarterly, second quarter end: </span></strong>
-        <br>
-        <strong><span style="color:black">Quarterly, third quarter end: </span></strong>
-      </p>
+    <div class="row form-group">
+      <div class="col-2">
+        <h4 id="challenges-header">Challenges</h4>
+      </div>
+      <div class="col">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="removeCoaching">
+          <label class="form-check-label" for="removeCoaching">Remove Coaching</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="download-upload-buttons">
+          <button type="button" class="btn btn-primary download">Download CSV</button>
+          <button type="button" class="btn btn-danger upload">Upload to Limeade</button>
+        </div>
+      </div>
     </div>
 
     <div id="main">
-
-      <div class="row" id="start-and-end-dates">
-        <div class="col-3">
-          <div class="form-group">
-            <label for="begin">Start Date</label>
-            <input type="date" class="form-control" id="begin" />
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="form-group">
-            <label for="end">End Date</label>
-            <input type="date" class="form-control" id="end" />
-          </div>
-        </div>
-      </div>
-
-      <div class="row form-group">
-        <div class="col-md-2">
-          <h4 id="challenges-header">Challenges</h4>
-        </div>
-        <div class="col-md-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="removeCoaching">
-            <label class="form-check-label" for="removeCoaching">Remove Coaching</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="download-upload-buttons">
-            <button type="button" class="btn btn-primary download">Download CSV</button>
-            <button type="button" class="btn btn-danger upload">Upload to Limeade</button>
-          </div>
-        </div>
-      </div>
-
       <table class="table table-bordered table-striped" id="challenge-list">
         <thead>
           <tr>
@@ -114,7 +115,7 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-4 offset-md-8">
+      <div class="col">
         <div class="download-upload-buttons">
           <button type="button" class="btn btn-primary download">Download CSV</button>
           <button type="button" class="btn btn-danger upload">Upload to Limeade</button>

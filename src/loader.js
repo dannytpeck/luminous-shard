@@ -354,7 +354,7 @@ function drawTableRow(row, post, record) {
           </div>
           <div class="modal-body" id="dimensionsModalBody${row}">
 
-            <div class="dimenPreview">
+            <div class="dimensions-preview">
               <div class="labels">
                 <h5>Unselected</h5>
                 <h5 class="selected-label">Selected</h5>
@@ -533,7 +533,7 @@ function loadSelectedChallenges() {
   if (queryObject.calendar) {
     // Hide fields that don't make sense for importing a calendar from airtable
     $('#start-and-end-dates').hide();
-    $('#shortCut').hide();
+    $('#dateEstimations').hide();
 
     const calendarHash = queryObject.calendar;
     $.getJSON(`https://api.airtable.com/v0/appN1J6yscNwlzbzq/Challenges?api_key=keyCxnlep0bgotSrX&filterByFormula={Calendar}='${calendarHash}'`).done((data) => {
@@ -574,36 +574,20 @@ function loadSelectedChallenges() {
 	const quartEnd2 = new Date(startDate.getTime() + quart + quart);
 	const quartEnd3 = new Date(startDate.getTime() + quart + quart + quart);
 
-	const shortCutHTML =
-    `<h3>Estimations</h3>
+	const dateEstimationsHTML =
+    `<h3>Date Estimations</h3>
+		<p><strong>Helpful guidelines for picking challenge dates.</strong></p>
 		<p>
-      <strong style="color:black">
-        This text area is meant to display semi-annual and quarterly date estimations.
-      </strong>
+      <strong>Semi-annual, first half end: <span style="color: blue;">${semiEnd.getMonth() + 1}-${semiEnd.getDate()}-${semiEnd.getFullYear()}</span></strong>
     </p>
 		<p>
-      <strong>
-        <span style="color:black">Semi-annual, first half end: </span>
-        ${semiEnd.getMonth() + 1}-${semiEnd.getDate()}-${semiEnd.getFullYear()}
-      </strong>
-    </p>
-		<p>
-		  <strong>
-        <span style="color:black">Quarterly, first quarter end: </span>
-        ${quartEnd1.getMonth() + 1}-${quartEnd1.getDate()}-${quartEnd1.getFullYear()}
-      </strong>
-		  <br>
-      <strong>
-        <span style="color:black">Quarterly, second quarter end: </span>
-        ${quartEnd2.getMonth() + 1}-${quartEnd2.getDate()}-${quartEnd2.getFullYear()}
-      </strong>
-		  <br>
-      <strong>
-        <span style="color:black">Quarterly, third quarter end: </span>
-        ${quartEnd3.getMonth() + 1}-${quartEnd3.getDate()}-${quartEnd3.getFullYear()}
-      </strong>
+		  <strong>Quarterly, first quarter end: <span style="color: blue;">${quartEnd1.getMonth() + 1}-${quartEnd1.getDate()}-${quartEnd1.getFullYear()}</span></strong>
+		  <br />
+      <strong>Quarterly, second quarter end: <span style="color: blue;">${quartEnd2.getMonth() + 1}-${quartEnd2.getDate()}-${quartEnd2.getFullYear()}</span></strong>
+		  <br />
+      <strong>Quarterly, third quarter end: <span style="color: blue;">${quartEnd3.getMonth() + 1}-${quartEnd3.getDate()}-${quartEnd3.getFullYear()}</span></strong>
     </p>`;
-  $('#shortCut').html(shortCutHTML);
+  $('#dateEstimations').html(dateEstimationsHTML);
 }
 
 export function renderEmployerNames() {
