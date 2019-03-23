@@ -379,6 +379,11 @@ function drawTableRow(row, post, record) {
     </div>`
   );
 
+  let imageUrl = post.fields['Limeade Image Url'];
+  if (imageUrl.includes('cfs-file')) {
+    imageUrl = `https://mywellmetrics.com${imageUrl}`;
+  }
+
   $('#contentModalContainer').append(
     `<div class="modal" tabindex="-1" role="dialog" id="contentModal${row}">
       <div class="modal-dialog" role="document">
@@ -398,7 +403,7 @@ function drawTableRow(row, post, record) {
               <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
             </div>
             <div class="codeDisplay" id="codeCompile${row}">
-              <img id="image${row}" src="${post.fields['Limeade Image Url']}" width="100%" />
+              <img id="image${row}" src="${imageUrl}" width="100%" />
               <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
               <span id="mi${row}">${moreInformationHtml}</span>
             </div>
