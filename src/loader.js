@@ -97,10 +97,8 @@ function remainingDefaults(post, rowNumber) {
 // Populates one row of the table
 function drawTableRow(row, post, record) {
 
-  // Remove 2017: and 2018: from titles
-  let title= post.fields['Title']
-    .replace(/2017: /, '')
-    .replace(/2018: /, '');
+  // Remove years from Title
+  let title= post.fields['Title'].replace(/20\d\d: /, '');
 
   const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
   const activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
@@ -109,6 +107,8 @@ function drawTableRow(row, post, record) {
   const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
+
+  $(`#chalTitle${row}`).val(title);
 
   $(`#device-and-team${row}`).html(
     `<p>
@@ -440,9 +440,11 @@ function getContent(ids) {
 
   ids.map((id, i) => {
     const challengeUrl = `https://calendarbuilder.dev.adurolife.com/titancoil/#/${id}`;
+    const rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td><a href="${challengeUrl}" target="_blank">${id}</a></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /></td></tr>`);
+
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
