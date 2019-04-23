@@ -19,7 +19,7 @@ function drawTable(records) {
 		return 0;
 	});
 
-	$('#load').html('<strong style="color:blue"> </strong>');
+	$('#load').html('<span>&nbsp;</span>');
 
 	$('#search').attr('readonly', false);
 	$('#exclusive').attr('disabled', false);
@@ -46,7 +46,7 @@ function drawTable(records) {
 				<td><a href="https://calendarbuilder.dev.adurolife.com/titancoil/#/${record.id}" target="_blank">${record.fields['Title']}</a></td>
 				<td><span>${record.fields['Instructions']}</span></td>
 				<td><img src="${headerImage}" width="100%"/></td>
-				<td><span style="display:none">${record._rawJson.createdTime}</span><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
+				<td><span>${new Date(record._rawJson.createdTime).toDateString()}</span></td>
 			</tr>`;
 	});
 
@@ -56,45 +56,19 @@ function drawTable(records) {
 	throwToArray();
 }
 
-// Make ajax request on a single WP page, pushing the contents into an array
-const requestOnePage = (page, posts, totalPages, pagesReceived) => {
-	const url = `http://thelibrary.adurolife.com/wp-json/wp/v2/posts?page=${page}`;
-  $.getJSON(url)
-		.done(data => {
-			data.map(post => {
-				posts.push({
-					slug: post.slug,
-					title: post.title.rendered,
-					url: post.link,
-					date: post.date,
-					modified: post.modified
-				});
-			});
-    })
-    .fail((jqxhr, textStatus, error) => console.error(`Request Failed: ${textStatus}, ${error}`))
-		.always(() => {
-      pagesReceived.push(page);
-
-			$('#progress').html(Math.round((pagesReceived.length / totalPages) * 100));
-
-			if (pagesReceived.length >= totalPages) {
-				drawTable(posts);
-
-				const url = 'https://mywellnessnumbers.com/thelibrary/challenges/';
-				$.post(url, { data: JSON.stringify(posts) }).done(() => console.log('Saved table.'));
-			}
-		});
-};
-
 // Loads table JSON file from api
 export function loadTable() {
+
+	let allRecords = [];
+	let loaded = 0;
 
 	const base = new Airtable({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');
 	base('Challenges').select({
 		view: 'Grid view'
 	}).eachPage(function page(records, fetchNextPage) {
 
-		drawTable(records);
+		allRecords = [...allRecords, ...records];
+		$('#progress').html(loaded += 20);
 
 		fetchNextPage();
 	}, function done(err) {
@@ -102,6 +76,8 @@ export function loadTable() {
 			console.error(err);
 			return;
 		}
+
+		drawTable(allRecords);
 
 		// Add event listeners to all the buttons
 		$('.add-remove').click(addRemove);
