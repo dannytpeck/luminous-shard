@@ -187,8 +187,7 @@ function drawTableRow(row, post, record) {
   }
 
   $(`#content-and-dimensions${row}`).html(
-    `<button type="button" class="btn btn-info btn-block" onclick="showContentModal(${row})">Content</button>
-    <button type="button" class="btn btn-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
+    `<button type="button" class="btn btn-info btn-block" onclick="showContentModal(${row})">Content</button>`
   );
 
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
@@ -225,7 +224,8 @@ function drawTableRow(row, post, record) {
   );
 
   $(`#targeting${row}`).html(
-    `<button type="button" class="btn btn-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>`
+    `<button type="button" class="btn btn-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
+     <button type="button" class="btn btn-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
 	);
 
   $('#targetingModalContainer').append(
