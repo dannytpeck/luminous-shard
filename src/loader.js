@@ -116,10 +116,6 @@ function drawTableRow(row, post, record) {
         <input class="form-check-input" type="checkbox" id="deviceCheck${row}" ${checkChecked} />
         <label class="form-check-label" for="deviceCheck${row}">Device Enabled</label>
       </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="deviceRequired${row}" />
-        <label class="form-check-label" for="deviceRequired${row}">Device Required</label>
-      </div>
     </p>
     <p>
       <select class="form-control" id="soloTeam${row}">
@@ -213,13 +209,6 @@ function drawTableRow(row, post, record) {
   $(`#point-value${row}`).html(
     `<div class="form-group">
       <input type="text" class="form-control" id="points${row}" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
-    </div>
-
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="pointText${row}" />
-      <label class="form-check-label" for="pointText${row}">
-        <i class="fas fa-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></i>
-      </label>
     </div>`
   );
 
