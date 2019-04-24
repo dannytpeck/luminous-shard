@@ -39387,8 +39387,6 @@ function drawTableRow(row, post, record) {
     $('#start-end-date' + row).html('<div class="form-group">\n        <label for="startDate' + row + '">Start Date</label>\n        <input type="date" class="form-control" id="startDate' + row + '" value="' + $('#begin').val() + '" tabindex="' + (row + 101) + '" />\n      </div>\n\n      <label for="endDate' + row + '">End Date</label>\n      <input type="date" class="form-control" id="endDate' + row + '" value="' + $('#end').val() + '" tabindex="' + (row + 101) + '" />');
   }
 
-  $('#content-and-dimensions' + row).html('<button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(' + row + ')">Content</button>');
-
   var activityText = post.fields['Device Enabled'] === 'yes' ? deviceUnits + ' | ' + activityGoalText : activityGoalText;
 
   $('#tracking-type' + row).html('<div class="form-group">\n      <input type="text" class="form-control" id="devText' + row + '" value="' + activityText + '" placeholder="activity" onkeyup="this.removeAttribute(\'value\')" />\n    </div>\n\n    <div class="form-group">\n      <input type="number" class="form-control" id="required' + row + '" value="' + activityGoal + '" placeholder="units" onkeyup="modifyTrackingNumber(' + row + ')" />\n    </div>\n\n    <select class="form-control" id="trackType' + row + '">\n      <option value="One Time">One Time</option>\n      <option value="Units - Challenge Period">Units - Challenge Period</option>\n      <option value="Days - Challenge Period">Days - Challenge Period</option>\n      <option value="Units each Week">Units each Week</option>\n      <option value="Days each Week">Days each Week</option>\n    </select>');
@@ -39461,12 +39459,11 @@ function getContent(ids) {
     var rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append('<tr><td id="challenge-name' + rowNumber + '"><input type="text" class="form-control" id="chalTitle' + rowNumber + '" /></td></tr>');
+    $('#challenge-list tbody').append('<tr><td id="challenge-name' + rowNumber + '"><input type="text" class="form-control" id="chalTitle' + rowNumber + '" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(' + rowNumber + ')">Content</button></td></tr>');
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'device-and-team' + i;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'start-end-date' + i;
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = 'content-and-dimensions' + i;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'tracking-type' + i;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'point-value' + i;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = 'targeting' + i;
@@ -39485,12 +39482,11 @@ function getContentWithDates(records) {
     var challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append('<tr><td id="challenge-name' + rowNumber + '"><input type="text" class="form-control" id="chalTitle' + rowNumber + '" value="' + challengeTitle + '" /></td></tr>');
+    $('#challenge-list tbody').append('<tr><td id="challenge-name' + rowNumber + '"><input type="text" class="form-control" id="chalTitle' + rowNumber + '" value="' + challengeTitle + '" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(' + rowNumber + ')">Content</button></td></tr>');
 
     // Build out the rest of the table
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'device-and-team' + rowNumber;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'start-end-date' + rowNumber;
-    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'content-and-dimensions' + rowNumber;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'tracking-type' + rowNumber;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'point-value' + rowNumber;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = 'targeting' + rowNumber;

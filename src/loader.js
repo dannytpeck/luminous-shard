@@ -182,10 +182,6 @@ function drawTableRow(row, post, record) {
     );
   }
 
-  $(`#content-and-dimensions${row}`).html(
-    `<button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${row})">Content</button>`
-  );
-
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
 
   $(`#tracking-type${row}`).html(
@@ -432,13 +428,12 @@ function getContent(ids) {
     const rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `content-and-dimensions${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
@@ -458,13 +453,12 @@ function getContentWithDates(records) {
     const challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `device-and-team${rowNumber}`;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
-		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `content-and-dimensions${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `tracking-type${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
