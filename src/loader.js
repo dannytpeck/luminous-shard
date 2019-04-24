@@ -116,10 +116,6 @@ function drawTableRow(row, post, record) {
         <input class="form-check-input" type="checkbox" id="deviceCheck${row}" ${checkChecked} />
         <label class="form-check-label" for="deviceCheck${row}">Device Enabled</label>
       </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="deviceRequired${row}" />
-        <label class="form-check-label" for="deviceRequired${row}">Device Required</label>
-      </div>
     </p>
     <p>
       <select class="form-control" id="soloTeam${row}">
@@ -186,11 +182,6 @@ function drawTableRow(row, post, record) {
     );
   }
 
-  $(`#content-and-dimensions${row}`).html(
-    `<button type="button" class="btn btn-info btn-block" onclick="showContentModal(${row})">Content</button>
-    <button type="button" class="btn btn-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
-  );
-
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
 
   $(`#tracking-type${row}`).html(
@@ -214,18 +205,12 @@ function drawTableRow(row, post, record) {
   $(`#point-value${row}`).html(
     `<div class="form-group">
       <input type="text" class="form-control" id="points${row}" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
-    </div>
-
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="pointText${row}" />
-      <label class="form-check-label" for="pointText${row}">
-        <i class="fas fa-gift" data-toggle="tooltip" title="For 0 points challenges. Allows displaying flavor text when icon is hovered over in Limeade."></i>
-      </label>
     </div>`
   );
 
   $(`#targeting${row}`).html(
-    `<button type="button" class="btn btn-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>`
+    `<button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
+     <button type="button" class="btn btn-outline-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
 	);
 
   $('#targetingModalContainer').append(
@@ -443,13 +428,12 @@ function getContent(ids) {
     const rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
     tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `content-and-dimensions${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
@@ -469,13 +453,12 @@ function getContentWithDates(records) {
     const challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `device-and-team${rowNumber}`;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
-		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `content-and-dimensions${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `tracking-type${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
