@@ -36,13 +36,30 @@ window.modifyTrackingNumber = (row) => {
 };
 
 // Toggles the device units select
-window.toggleDeviceUnits = (row) => {
+window.toggleDeviceUnits = row => {
   $('#deviceUnits' + row).toggle();
 };
 
+window.deleteRow = row => {
+  const lastIndex = $('#row' + row).siblings().length - 1;
+
+  $('#challenge-list tbody tr').each((i, item) => {
+    const index = item.id.search(/\d+/);
+    const rowNumber = item.id.substring(index);
+
+    if (rowNumber > row) {
+      $(`#row${rowNumber} > .delete-row`).html(`<i class="fas fa-times" onclick="deleteRow(${rowNumber - 1})"></i>`);
+
+      item.id = 'row' + (rowNumber - 1);
+    }
+  });
+
+  $('#row' + row).remove();
+};
+
 // Occurs when you change the tracking Type
-window.changeTrackingType = (row) => {
-  if ($('#trackingType' + row).val() === 'Event') {
+window.changeTrackingType = row => {
+  if ($(`#row${row} .tracking-type`).val() === 'Event') {
     $('#activityGoal' + row).hide();
   } else {
     $('#activityGoal' + row).show();
@@ -85,27 +102,27 @@ function drawTableRow(row, post, record) {
   const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
-  $(`#challengeTitle${row}`).val(title);
+  $(`#row${row} .challenge-title`).val(title);
 
   if (record) {
     $(`#start-end-date${row}`).html(
       `<div class="form-group">
-        <label for="startDate${row}">Start Date</label>
-        <input type="date" class="form-control" id="startDate${row}" value="${record.fields['Start date']}" tabindex="${row + 101}" />
+        <label>Start Date</label>
+        <input type="date" class="form-control start-date" value="${record.fields['Start date']}" tabindex="${row + 101}" />
       </div>
 
-      <label for="endDate${row}">End Date</label>
-      <input type="date" class="form-control" id="endDate${row}" value="${record.fields['End date']}" tabindex="${row + 101}" />`
+      <label>End Date</label>
+      <input type="date" class="form-control end-date" value="${record.fields['End date']}" tabindex="${row + 101}" />`
     );
   } else {
     $(`#start-end-date${row}`).html(
       `<div class="form-group">
-        <label for="startDate${row}">Start Date</label>
-        <input type="date" class="form-control" id="startDate${row}" value="${$('#begin').val()}" tabindex="${row + 101}" />
+        <label>Start Date</label>
+        <input type="date" class="form-control start-date" value="${$('#begin').val()}" tabindex="${row + 101}" />
       </div>
 
-      <label for="endDate${row}">End Date</label>
-      <input type="date" class="form-control" id="endDate${row}" value="${$('#end').val()}" tabindex="${row + 101}" />`
+      <label>End Date</label>
+      <input type="date" class="form-control end-date" value="${$('#end').val()}" tabindex="${row + 101}" />`
     );
   }
 
@@ -122,7 +139,7 @@ function drawTableRow(row, post, record) {
     </div>
 
     <div class="form-group" style="width: 52%; display: inline-block;">
-      <select class="form-control" id="trackingType${row}" onchange="changeTrackingType(${row})">
+      <select class="form-control tracking-type" onchange="changeTrackingType(${row})">
         <option>Event</option>
         <option>Days</option>
         <option>Units</option>
@@ -134,12 +151,12 @@ function drawTableRow(row, post, record) {
     </div>
   `);
 
-  // Select proper choice from the trackingType <select>
+  // Select proper choice from the team <select>
   $('#isTeam' + row).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
 
   // Select proper choice from the trackingType <select>
-  $('#trackingType' + row).val(record.fields['Activity Tracking Type']);
-  if ($('#trackingType' + row).val() === 'Event') {
+  $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
+  if ($(`#row${row} .tracking-type`).val() === 'Event') {
     $('#activityGoal' + row).hide();
   }
 
@@ -177,10 +194,16 @@ function drawTableRow(row, post, record) {
     $('#deviceUnits' + row).hide();
   }
 
-  $(`#targeting${row}`).html(
-    `<button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
-     <button type="button" class="btn btn-outline-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>`
-	);
+  $(`#targeting${row}`).html(`
+    <button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
+    <button type="button" class="btn btn-outline-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>
+  `);
+
+  $(`#row${row} > .delete-row`).html(`
+    <i class="fas fa-times" onclick="deleteRow(${row})"></i>
+  `);
+
+
 
   $('#targetingModalContainer').append(
     `<div class="modal" tabindex="-1" role="dialog" id="targetingModal${row}">
@@ -390,23 +413,29 @@ function requestOneChallenge(id, rowNumber) {
 function getContent(ids) {
   const tableBody = $('#challenge-list tbody')[0];
 
-  ids.map((id, i) => {
+  ids.forEach((id, rowNumber) => {
     const challengeUrl = `https://calendarbuilder.dev.adurolife.com/titancoil/#/${id}`;
-    const rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="challengeTitle${rowNumber}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
-
+    $('#challenge-list tbody').append(`
+      <tr id="row${rowNumber}">
+        <td id="challenge-name${rowNumber}">
+          <input type="text" class="form-control challenge-title" />
+          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(${rowNumber})">Content</button>
+        </td>
+      </tr>
+    `);
 
     // Build out the rest of the table
-    tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `trackingDetails${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `deviceSettings${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `trackingDetails${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `deviceSettings${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).classList.add('delete-row');
 
     // Make an ajax request to get the challenge content, then draw it to the table
-    requestOneChallenge(id, i);
+    requestOneChallenge(id, rowNumber);
   });
 
 }
@@ -417,11 +446,16 @@ function getContentWithDates(records) {
 
   records.forEach((record, rowNumber) => {
     const challengeId = record.fields['Challenge Id'];
-    const challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="challengeTitle${rowNumber}" value="${challengeTitle}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
-
+    $('#challenge-list tbody').append(`
+      <tr id="row${rowNumber}">
+        <td id="challenge-name${rowNumber}">
+          <input type="text" class="form-control challenge-title" value="${record.fields['Title']}" />
+          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(${rowNumber})">Content</button>
+        </td>
+      </tr>
+    `);
 
     // Build out the rest of the table
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
@@ -429,6 +463,7 @@ function getContentWithDates(records) {
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `deviceSettings${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).classList.add('delete-row');
 
     // Make an ajax request to get the challenge content, then draw it to the table
     const base = new Airtable({ apiKey: 'keyCxnlep0bgotSrX' }).base('appa7mnDuYdgwx2zP');

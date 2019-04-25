@@ -103,7 +103,7 @@ const createCSV = (employer) => {
 
     $('#remove-coaching').prop('checked') ? $(`#mi${row} .coachinginfo`).remove() : null;
 
-    const trackingType = $('#trackingType' + row).val();
+    const trackingType = $(`#row${row} .tracking-type`).val();
     const challengeType = tracking(trackingType);
     const winStrategy = trackingType === 'Event' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget';
     const target = $('#activityGoal' + row).val();
@@ -121,10 +121,10 @@ const createCSV = (employer) => {
       winStrategy,
       target,
       activity,
-      '"' + $('#challengeTitle' + row).val() + '"',
+      '"' + $(`#row${row} .challenge-title`).val() + '"',
       '', // DisplayPriority
-			$('#startDate' + row).val().replace(/-/g, '/'),
-			$('#endDate' + row).val().replace(/-/g, '/'),
+			$(`#row${row} .start-date`).val().replace(/-/g, '/'),
+			$(`#row${row} .end-date`).val().replace(/-/g, '/'),
       sanitize($('#sd' + row).html()),
       sanitize($('#mi' + row).html()),
       $('#image' + row).attr('src'),
