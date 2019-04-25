@@ -110,14 +110,14 @@ function drawTableRow(row, post, record) {
 
   $(`#trackingDetails${row}`).html(`
     <div class="form-group">
-      <select class="form-control" id="soloTeam${row}">
+      <select class="form-control" id="isTeam${row}">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" id="devText${row}" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
+      <input type="text" class="form-control" id="activityGoalText${row}" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
     <div class="form-group" style="width: 52%; display: inline-block;">
@@ -132,6 +132,9 @@ function drawTableRow(row, post, record) {
       <input type="number" class="form-control" id="activityGoal${row}" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);
+
+  // Select proper choice from the trackingType <select>
+  $('#isTeam' + row).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
 
   // Select proper choice from the trackingType <select>
   $('#trackingType' + row).val(record.fields['Activity Tracking Type']);

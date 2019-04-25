@@ -22,6 +22,7 @@ const sanitize = (code) => {
   return sanitized;
 };
 
+// Creates a string from the dimensions in the select on the modal
 function dimensionsARR(row) {
   var d = [];
   var options = $('#selectAfter' + row + ' option');
@@ -31,57 +32,22 @@ function dimensionsARR(row) {
       d.push(options[i].value);
     }
   }
-  return '"' + d.join(',') + '"';
-}
-
-function trackingText1(id, tf) {
-  var use = tf.toString();
-  var pipe = ' | ';
-  if (use === '1') {
-    var a = id.indexOf(pipe);
-    var b = 0;
-    var c = id.substring(b, a);
-    c.replace(/ /g, '');
-    return c;
-  } else if (use === '0') {
-    return id;
-  } else {
-    return null;
-  }
-}
-
-function trackingText2(id, tf) {
-  var use = tf.toString();
-  var pipe = ' | ';
-  if (use === '1') {
-    var a = id.indexOf(pipe) + pipe.length;
-    var b = (id.length + pipe.length) - 1;
-    var c = id.substring(a, b);
-    c.replace(/ /g, '');
-    return c;
-  } else if (use === '0') {
-    return 0;
-  } else {
-    return null;
-  }
+  return '"' + d.toString() + '"';
+  // return '"' + d.join(',') + '"';
 }
 
 const tracking = (trackType) => {
 
   switch (trackType) {
-		case 'One Time':
+		case 'Event':
 			return 'OneTimeEvent';
-
-		case 'Days - Challenge Period':
-		case 'Days each Week':
+		case 'Days':
 			return 'YesNoDaily';
-
-		case 'Units - Challenge Period':
-		case 'Units each Week':
+		case 'Units':
 			return 'AddAllNumbers';
 
 		default:
-			throw new Error('Tracking type in the json object is not one of the 5 valid values.');
+			throw new Error('Tracking type is not one of the 3 valid values. (event/days/units)');
   }
 
 };
@@ -137,21 +103,15 @@ const createCSV = (employer) => {
 
     $('#remove-coaching').prop('checked') ? $(`#mi${row} .coachinginfo`).remove() : null;
 
-    var trackType = $('#trackType' + row).val(),
-    challengeType = tracking(trackType),
-    isWeekly = trackType.includes('Week') ? '1' : '0',
-    winStrategy = trackType === 'One Time' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget',
-
-    enableDeviceTracking = $('#deviceEnabled' + row).prop('checked') ? 1 : 0,
-    allowSelfReporting = $('#deviceRequired' + row).prop('checked') ? 0 : 1,
-
-		devText = $('#devText' + row).val(),
-    activity = enableDeviceTracking ? trackingText2(devText, enableDeviceTracking) : trackingText1(devText, enableDeviceTracking) === '0' ? '' : trackingText1(devText, enableDeviceTracking),
-		deviceTrackingUnits = enableDeviceTracking ? trackingText1(devText, enableDeviceTracking) : '',
-
-    rewardType = $('#pointText' + row).prop('checked') ? 1 : 0,
-
-		isTeamChallenge = $('#soloTeam' + row).val() === 'Individual' ? 0 : 1;
+    const trackingType = $('#trackingType' + row).val();
+    const challengeType = tracking(trackingType);
+    const winStrategy = trackingType === 'Event' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget';
+    const target = $('#activityGoal' + row).val();
+    const isWeekly = $('#rewardOccurrence' + row).val() === 'Weekly' ? 1 : 0;
+    const enableDeviceTracking = $('#deviceEnabled' + row).prop('checked') ? 1 : 0;
+    const activity = $('#activityGoalText' + row).val();
+    const deviceTrackingUnits = enableDeviceTracking ? $('#deviceUnits' + row).val() : '';
+    const isTeamChallenge = $('#isTeam' + row).val() === 'Team' ? 1 : 0;
 
 		data.push([
       $(`#eid${employer}`).val(),
@@ -159,7 +119,7 @@ const createCSV = (employer) => {
       challengeType,
       isWeekly,
       winStrategy,
-      $('#required' + row).val() === '0' ? '1' : $('#required' + row).val(),
+      target,
       activity,
       '"' + $('#challengeTitle' + row).val() + '"',
       '', // DisplayPriority
@@ -169,16 +129,16 @@ const createCSV = (employer) => {
       sanitize($('#mi' + row).html()),
       $('#image' + row).attr('src'),
       '0', // ShowInProgram
-      rewardType,
+      '0', // RewardType
       $('#points' + row).val(),
       dimensionsARR(row) === '"undefined"' ? '' : dimensionsARR(row),
       '', // LeaderboardTag
       enableDeviceTracking,
-      allowSelfReporting,
+      '1', // AllowSelfReporting
       deviceTrackingUnits,
       isTeamChallenge,
-      isTeamChallenge ? $('#teamMin' + row).val() : '',
-      isTeamChallenge ? $('#teamMax' + row).val() : '',
+      isTeamChallenge ? 4 : '',
+      isTeamChallenge ? 12 : '',
       $(`#subgroup${row}`).val(),
       $(`#field-one${row}`).val(),
       $(`#field-one-value${row}`).val(),
