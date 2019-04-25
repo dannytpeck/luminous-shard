@@ -74,14 +74,15 @@ function drawTableRow(row, post, record) {
   // record: a record from Calendar Builder that an AM has modified
 
   // Remove years from Title
-  let title= post.fields['Title'].replace(/20\d\d: /, '');
+  let title = record.fields['Title'].replace(/20\d\d: /, '');
 
-  const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
-  const activityGoal = post.fields['Activity Goal'] ? post.fields['Activity Goal'] : '';
-  const activityGoalText = post.fields['Activity Goal Text'] ? post.fields['Activity Goal Text'] : '';
-  const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
+  const activityGoal = record.fields['Activity Goal'] ? record.fields['Activity Goal'] : '';
+  const activityGoalText = record.fields['Activity Goal Text'] ? record.fields['Activity Goal Text'] : '';
   const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
+
+  const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
+  const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
   $(`#challengeTitle${row}`).val(title);
