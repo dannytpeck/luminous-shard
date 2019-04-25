@@ -40,6 +40,15 @@ window.toggleDeviceUnits = (row) => {
   $('#deviceUnits' + row).toggle();
 };
 
+// Occurs when you change the tracking Type
+window.changeTrackingType = (row) => {
+  if ($('#trackingType' + row).val() === 'Event') {
+    $('#activityGoal' + row).hide();
+  } else {
+    $('#activityGoal' + row).show();
+  }
+};
+
 // Show targeting modal by row (used as onclick)
 window.showTargetingModal = (row) => {
   $(`#targetingModal${row}`).modal('show');
@@ -61,6 +70,8 @@ function addCommasToNumber(number) {
 
 // Populates one row of the table
 function drawTableRow(row, post, record) {
+  // post: a record from the Library, unedited
+  // record: a record from Calendar Builder that an AM has modified
 
   // Remove years from Title
   let title= post.fields['Title'].replace(/20\d\d: /, '');
@@ -97,8 +108,6 @@ function drawTableRow(row, post, record) {
     );
   }
 
-  const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
-
   $(`#trackingDetails${row}`).html(`
     <div class="form-group">
       <select class="form-control" id="soloTeam${row}">
@@ -108,11 +117,11 @@ function drawTableRow(row, post, record) {
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" id="devText${row}" value="${activityText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
+      <input type="text" class="form-control" id="devText${row}" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
     <div class="form-group" style="width: 52%; display: inline-block;">
-      <select class="form-control" id="trackingType${row}">
+      <select class="form-control" id="trackingType${row}" onchange="changeTrackingType(${row})">
         <option>Event</option>
         <option>Days</option>
         <option>Units</option>
@@ -120,9 +129,15 @@ function drawTableRow(row, post, record) {
     </div>
 
     <div class="form-group" style="width: 45%; display: inline-block;">
-      <input type="number" class="form-control" id="required${row}" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
+      <input type="number" class="form-control" id="activityGoal${row}" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);
+
+  // Select proper choice from the trackingType <select>
+  $('#trackingType' + row).val(record.fields['Activity Tracking Type']);
+  if ($('#trackingType' + row).val() === 'Event') {
+    $('#activityGoal' + row).hide();
+  }
 
   $(`#point-value${row}`).html(`
     <div class="form-group">
@@ -153,7 +168,7 @@ function drawTableRow(row, post, record) {
   `);
 
   // Select proper choice from the Device Units <select>
-  $('#deviceUnits' + row).val(record.fields['Device Units']);
+  $('#deviceUnits' + row).val(deviceUnits);
   if ($('#deviceEnabled' + row).prop('checked') === false) {
     $('#deviceUnits' + row).hide();
   }
