@@ -142,7 +142,7 @@ const createCSV = (employer) => {
     isWeekly = trackType.includes('Week') ? '1' : '0',
     winStrategy = trackType === 'One Time' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget',
 
-    enableDeviceTracking = $('#deviceCheck' + row).prop('checked') ? 1 : 0,
+    enableDeviceTracking = $('#deviceEnabled' + row).prop('checked') ? 1 : 0,
     allowSelfReporting = $('#deviceRequired' + row).prop('checked') ? 0 : 1,
 
 		devText = $('#devText' + row).val(),
@@ -161,7 +161,7 @@ const createCSV = (employer) => {
       winStrategy,
       $('#required' + row).val() === '0' ? '1' : $('#required' + row).val(),
       activity,
-      '"' + $('#chalTitle' + row).val() + '"',
+      '"' + $('#challengeTitle' + row).val() + '"',
       '', // DisplayPriority
 			$('#startDate' + row).val().replace(/-/g, '/'),
 			$('#endDate' + row).val().replace(/-/g, '/'),

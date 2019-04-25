@@ -35,6 +35,11 @@ window.modifyTrackingNumber = (row) => {
   $('#mi' + row + ' .trackingNO').html(addCommasToNumber(newValue));
 };
 
+// Toggles the device units select
+window.toggleDeviceUnits = (row) => {
+  $('#deviceUnits' + row).toggle();
+};
+
 // Show targeting modal by row (used as onclick)
 window.showTargetingModal = (row) => {
   $(`#targetingModal${row}`).modal('show');
@@ -54,46 +59,6 @@ function addCommasToNumber(number) {
 	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-// Makes proper selection on Team Challenge and Tracking Type selectors
-function remainingDefaults(post, rowNumber) {
-
-  // onChange handler for soloTeam selection
-  $(`#soloTeam${rowNumber}`).change(() => {
-    if ($(`#soloTeam${rowNumber}`).val() === 'Team') {
-      $(`#teamMin${rowNumber}`).show();
-      $(`#teamMax${rowNumber}`).show();
-    } else {
-      $(`#teamMin${rowNumber}`).hide();
-      $(`#teamMax${rowNumber}`).hide();
-    }
-  });
-
-  // Set team values based on defaults object
-  if (post.fields['Team Activity'] === 'yes') {
-    $(`#soloTeam${rowNumber}`).val('Team');
-    $(`#soloTeam${rowNumber}`).change();
-  }
-
-  let tracking = 'One Time';
-  const rewardOccurrence = post.fields['Reward Occurrence'];
-  const activityTrackingType = post.fields['Activity Tracking Type'];
-  if (activityTrackingType === 'Days') {
-    tracking = rewardOccurrence === 'Weekly' ? 'Days each Week' : 'Days - Challenge Period';
-  } else if (activityTrackingType === 'Units') {
-    tracking = rewardOccurrence === 'Weekly' ? 'Units each Week' : 'Units - Challenge Period';
-  }
-
-  let trackType = document.getElementById(`trackType${rowNumber}`);
-  for (let i = 0; i < trackType.options.length; i++) {
-    if (trackType.options[i].value === tracking) {
-      trackType.options[i].selected = true;
-    } else {
-      trackType.options[i].selected = false;
-    }
-  }
-
-}
-
 // Populates one row of the table
 function drawTableRow(row, post, record) {
 
@@ -108,57 +73,7 @@ function drawTableRow(row, post, record) {
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
 
-  $(`#chalTitle${row}`).val(title);
-
-  $(`#device-and-team${row}`).html(
-    `<p>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="deviceCheck${row}" ${checkChecked} />
-        <label class="form-check-label" for="deviceCheck${row}">Device Enabled</label>
-      </div>
-    </p>
-    <p>
-      <select class="form-control" id="soloTeam${row}">
-        <option value="Individual">Individual</option>
-        <option value="Team">Team</option>
-      </select>
-
-      <div class="form-row">
-        <div class="col">
-          <select class="form-control" id="teamMin${row}" style="display: none;">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option selected="selected">4</option>
-            <option>5</option>
-          </select>
-        </div>
-        <div class="col">
-          <select class="form-control" id="teamMax${row}" style="display: none;">
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-            <option>11</option>
-            <option selected="selected">12</option>
-            <option>13</option>
-            <option>14</option>
-            <option>15</option>
-            <option>16</option>
-            <option>17</option>
-            <option>18</option>
-            <option>19</option>
-            <option>20</option>
-          </select>
-        </div>
-      </div>
-    </p>`
-  );
+  $(`#challengeTitle${row}`).val(title);
 
   if (record) {
     $(`#start-end-date${row}`).html(
@@ -184,29 +99,64 @@ function drawTableRow(row, post, record) {
 
   const activityText = post.fields['Device Enabled'] === 'yes' ? `${deviceUnits} | ${activityGoalText}` : activityGoalText;
 
-  $(`#tracking-type${row}`).html(
-    `<div class="form-group">
-      <input type="text" class="form-control" id="devText${row}" value="${activityText}" placeholder="activity" onkeyup="this.removeAttribute('value')" />
+  $(`#trackingDetails${row}`).html(`
+    <div class="form-group">
+      <select class="form-control" id="soloTeam${row}">
+        <option value="Individual">Individual</option>
+        <option value="Team">Team</option>
+      </select>
     </div>
 
     <div class="form-group">
-      <input type="number" class="form-control" id="required${row}" value="${activityGoal}" placeholder="units" onkeyup="modifyTrackingNumber(${row})" />
+      <input type="text" class="form-control" id="devText${row}" value="${activityText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
-    <select class="form-control" id="trackType${row}">
-      <option value="One Time">One Time</option>
-      <option value="Units - Challenge Period">Units - Challenge Period</option>
-      <option value="Days - Challenge Period">Days - Challenge Period</option>
-      <option value="Units each Week">Units each Week</option>
-      <option value="Days each Week">Days each Week</option>
-    </select>`
-  );
+    <div class="form-group" style="width: 52%; display: inline-block;">
+      <select class="form-control" id="trackingType${row}">
+        <option>Event</option>
+        <option>Days</option>
+        <option>Units</option>
+      </select>
+    </div>
 
-  $(`#point-value${row}`).html(
-    `<div class="form-group">
+    <div class="form-group" style="width: 45%; display: inline-block;">
+      <input type="number" class="form-control" id="required${row}" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
+    </div>
+  `);
+
+  $(`#point-value${row}`).html(`
+    <div class="form-group">
       <input type="text" class="form-control" id="points${row}" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
-    </div>`
-  );
+    </div>
+    <div class="form-group">
+      <select class="form-control" id="rewardOccurrence${row}">
+        <option value="Once">One Time</option>
+        <option value="Weekly">Weekly</option>
+      </select>
+    </div>
+  `);
+
+  // Select proper choice from the rewardOccurrence <select>
+  $('#rewardOccurrence' + row).val(record.fields['Reward Occurrence']);
+
+  $(`#deviceSettings${row}`).html(`
+    <div class="form-check my-3">
+      <input class="form-check-input" type="checkbox" id="deviceEnabled${row}" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
+      <label class="form-check-label" for="deviceEnabled${row}">Device Enabled</label>
+    </div>
+    <div class="form-group">
+      <select class="form-control" id="deviceUnits${row}">
+        <option>steps</option>
+        <option>miles</option>
+      </select>
+    </div>
+  `);
+
+  // Select proper choice from the Device Units <select>
+  $('#deviceUnits' + row).val(record.fields['Device Units']);
+  if ($('#deviceEnabled' + row).prop('checked') === false) {
+    $('#deviceUnits' + row).hide();
+  }
 
   $(`#targeting${row}`).html(
     `<button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
@@ -402,8 +352,6 @@ function drawTableRow(row, post, record) {
     </div>`
   );
 
-  remainingDefaults(post, row);
-
 }
 
 // Makes an ajax request to a specific challenge page (by slug)
@@ -428,13 +376,13 @@ function getContent(ids) {
     const rowNumber = i;
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="challengeTitle${rowNumber}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
-    tableBody.rows[i].appendChild (document.createElement('TD')).id = `device-and-team${i}`;
     tableBody.rows[i].appendChild(document.createElement('TD')).id = `start-end-date${i}`;
-		tableBody.rows[i].appendChild(document.createElement('TD')).id = `tracking-type${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `trackingDetails${i}`;
+		tableBody.rows[i].appendChild(document.createElement('TD')).id = `deviceSettings${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `point-value${i}`;
 		tableBody.rows[i].appendChild(document.createElement('TD')).id = `targeting${i}`;
 
@@ -453,13 +401,13 @@ function getContentWithDates(records) {
     const challengeTitle = record.fields['Title'];
 
     // Create a new row for each challenge
-    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="chalTitle${rowNumber}" value="${challengeTitle}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
+    $('#challenge-list tbody').append(`<tr><td id="challenge-name${rowNumber}"><input type="text" class="form-control" id="challengeTitle${rowNumber}" value="${challengeTitle}" /><br/><button type="button" class="btn btn-outline-info btn-block" onclick="showContentModal(${rowNumber})">Content</button></td></tr>`);
 
 
     // Build out the rest of the table
-    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `device-and-team${rowNumber}`;
     tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `start-end-date${rowNumber}`;
-		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `tracking-type${rowNumber}`;
+		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `trackingDetails${rowNumber}`;
+    tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `deviceSettings${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `point-value${rowNumber}`;
 		tableBody.rows[rowNumber].appendChild(document.createElement('TD')).id = `targeting${rowNumber}`;
 
