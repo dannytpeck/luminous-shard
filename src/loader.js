@@ -356,7 +356,7 @@ function drawTableRow(row, post, record) {
               <h3>More Information (HTML)</h3>
               <textarea class="form-control" rows="12" onkeyup="editMoreInformation(this)">${moreInformationHtml}</textarea>
             </div>
-            <div class="codeDisplay" id="codeCompile${row}">
+            <div class="codeDisplay">
               <img class="image" src="${imageUrl}" width="100%" />
               <span class="short-description">${instructions}</span>
               <span class="more-information">${moreInformationHtml}</span>
@@ -434,11 +434,11 @@ function drawTableRow(row, post, record) {
                 <h5 class="selected-label">Selected</h5>
               </div>
 
-              <select multiple class="form-control select-before" id="selectBefore${row}" size="5">${dimensionElements.unselected}</select>
-              <button type="button" class="btn btn-primary add-dimensions" id="add${row}" onclick="addDimension(this)">
+              <select multiple class="form-control select-before" size="5">${dimensionElements.unselected}</select>
+              <button type="button" class="btn btn-primary add-dimensions" onclick="addDimension(this)">
                 -->
               </button>
-              <button type="button" class="btn btn-primary remove-dimensions" id="remove${row}" onclick="removeDimension(this)">
+              <button type="button" class="btn btn-primary remove-dimensions" onclick="removeDimension(this)">
                 <--
               </button>
               <select multiple class="form-control select-after" size="5">${dimensionElements.selected}</select>
@@ -478,7 +478,7 @@ function getContent(ids) {
     // Create a new row for each challenge
     $('#challenge-list tbody').append(`
       <tr id="row${rowNumber}">
-        <td id="challenge-name${rowNumber}">
+        <td>
           <input type="text" class="form-control challenge-title" />
           <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(this)">Content</button>
         </td>
@@ -509,7 +509,7 @@ function getContentWithDates(records) {
     // Create a new row for each challenge
     $('#challenge-list tbody').append(`
       <tr id="row${rowNumber}">
-        <td id="challenge-name${rowNumber}">
+        <td>
           <input type="text" class="form-control challenge-title" value="${record.fields['Title']}" />
           <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(this)">Content</button>
         </td>
