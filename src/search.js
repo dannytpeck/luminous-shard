@@ -285,7 +285,7 @@ export function findChallenges() {
 		if (text) {
 			let slug = row.cells[1].innerText;
 			let title = row.cells[2].innerText.toLowerCase();
-			if (slug.indexOf(text) > -1 || title.indexOf(text) > -1) {
+			if (slug.indexOf(text) > -1 || title.indexOf(text.toLowerCase()) > -1) {
 				row.style.display = 'table-row';
 			} else {
 				row.style.display = 'none';
