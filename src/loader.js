@@ -48,9 +48,27 @@ window.removeDimension = (element) => {
 	}
 };
 
-// Onkeyup function that replaces the code preview with the text area's contents
-window.edit = (a, b) => {
-	b.innerHTML = a.value;
+// Onkeyup functions that replace the code preview with the text area's contents
+window.editShortDescription = (element) => {
+  const rowElement = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const rowNumber = rowElement.id.substring(index);
+
+  const editor = document.querySelector(`#row${rowNumber} .code-edit textarea`);
+  const shortDescription = document.querySelector(`#row${rowNumber} .short-description`);
+
+  shortDescription.innerHTML = editor.value;
+};
+
+window.editMoreInformation = (element) => {
+  const rowElement = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const rowNumber = rowElement.id.substring(index);
+
+  const editor = document.querySelectorAll(`#row${rowNumber} .code-edit textarea`)[1];
+  const moreInformation = document.querySelector(`#row${rowNumber} .more-information`);
+
+  moreInformation.innerHTML = editor.value;
 };
 
 // Replace trackingNO value with the value manually entered
@@ -329,11 +347,11 @@ function drawTableRow(row, post, record) {
           </div>
           <div class="modal-body">
 
-            <div class="codeEdit">
+            <div class="code-edit">
               <h3>Short Description (HTML)</h3>
-              <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
+              <textarea class="form-control" rows="4" onkeyup="editShortDescription(this)">${instructions}</textarea>
               <h3>More Information (HTML)</h3>
-              <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
+              <textarea class="form-control" rows="12" onkeyup="editMoreInformation(this)">${moreInformationHtml}</textarea>
             </div>
             <div class="codeDisplay" id="codeCompile${row}">
               <img class="image" src="${imageUrl}" width="100%" />
