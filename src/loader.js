@@ -6,14 +6,39 @@ import Airtable from 'airtable';
 // Used to store clients for Select(s)
 window.clients = [];
 
-// Used to move dimensions from one box to the other
-window.move = (choose, drop) => {
-  const chooseSelect = document.getElementById(choose);
-  const dropSelect = document.getElementById(drop);
+// Used to add dimensions from left selector to right selector
+window.addDimension = (element) => {
+  const rowElement = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const rowNumber = rowElement.id.substring(index);
 
-	let d = '';
+  const chooseSelect = document.querySelector(`#row${rowNumber} .select-before`);
+  const dropSelect = document.querySelector(`#row${rowNumber} .select-after`);
 
-	for (let i = 0; i < chooseSelect.options.length; i++) {
+  let d = '';
+
+  for (let i = 0; i < chooseSelect.options.length; i++) {
+		if (chooseSelect.options[i].selected) {
+			d = dropSelect.appendChild(document.createElement('OPTION'));
+			d.value = chooseSelect.options[i].value;
+			d.innerHTML = d.value;
+			chooseSelect.removeChild(chooseSelect.options[i]);
+    }
+	}
+};
+
+// Used to remove dimensions
+window.removeDimension = (element) => {
+  const rowElement = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const rowNumber = rowElement.id.substring(index);
+
+  const chooseSelect = document.querySelector(`#row${rowNumber} .select-after`);
+  const dropSelect = document.querySelector(`#row${rowNumber} .select-before`);
+
+  let d = '';
+
+  for (let i = 0; i < chooseSelect.options.length; i++) {
 		if (chooseSelect.options[i].selected) {
 			d = dropSelect.appendChild(document.createElement('OPTION'));
 			d.value = chooseSelect.options[i].value;
@@ -31,8 +56,8 @@ window.edit = (a, b) => {
 // Replace trackingNO value with the value manually entered
 window.modifyTrackingNumber = (row) => {
   const newValue = $('#required' + row).val();
-  $('#sd' + row + ' .trackingNO').html(addCommasToNumber(newValue));
-  $('#mi' + row + ' .trackingNO').html(addCommasToNumber(newValue));
+  $(`#row${row} .short-description .trackingNO`).html(addCommasToNumber(newValue));
+  $(`#row${row} .more-information .trackingNO`).html(addCommasToNumber(newValue));
 };
 
 // Toggles the device units select
@@ -60,24 +85,36 @@ window.deleteRow = row => {
 // Occurs when you change the tracking Type
 window.changeTrackingType = row => {
   if ($(`#row${row} .tracking-type`).val() === 'Event') {
-    $('#activityGoal' + row).hide();
+    $(`#row${row} .activity-goal`).hide();
   } else {
-    $('#activityGoal' + row).show();
+    $(`#row${row} .activity-goal`).show();
   }
 };
 
+window.showContentModal = (element) => {
+  const rowElement = element.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const row = rowElement.id.substring(index);
+
+  $(`#row${row} .content-modal`).modal('show');
+};
+
 // Show targeting modal by row (used as onclick)
-window.showTargetingModal = (row) => {
-  $(`#targetingModal${row}`).modal('show');
+window.showTargetingModal = (element) => {
+  const rowElement = element.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const row = rowElement.id.substring(index);
+
+  $(`#row${row} .targeting-modal`).modal('show');
 };
 
 // Show dimensions modal by row (used as onclick)
-window.showDimensionsModal = (row) => {
-  $(`#dimensionsModal${row}`).modal('show');
-};
+window.showDimensionsModal = (element) => {
+  const rowElement = element.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const row = rowElement.id.substring(index);
 
-window.showContentModal = (row) => {
-  $(`#contentModal${row}`).modal('show');
+  $(`#row${row} .dimensions-modal`).modal('show');
 };
 
 // Adds commas to long numbers
@@ -128,14 +165,14 @@ function drawTableRow(row, post, record) {
 
   $(`#trackingDetails${row}`).html(`
     <div class="form-group">
-      <select class="form-control" id="isTeam${row}">
+      <select class="form-control is-team">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" id="activityGoalText${row}" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
+      <input type="text" class="form-control activity-goal-text" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
     <div class="form-group" style="width: 52%; display: inline-block;">
@@ -147,106 +184,61 @@ function drawTableRow(row, post, record) {
     </div>
 
     <div class="form-group" style="width: 45%; display: inline-block;">
-      <input type="number" class="form-control" id="activityGoal${row}" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
+      <input type="number" class="form-control activity-goal" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);
 
-  // Select proper choice from the team <select>
-  $('#isTeam' + row).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
-
-  // Select proper choice from the trackingType <select>
-  $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
-  if ($(`#row${row} .tracking-type`).val() === 'Event') {
-    $('#activityGoal' + row).hide();
-  }
-
   $(`#point-value${row}`).html(`
     <div class="form-group">
-      <input type="text" class="form-control" id="points${row}" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
+      <input type="text" class="form-control points" value="${record ? record.fields['Points'] : ''}" tabindex="${row + 1}" />
     </div>
     <div class="form-group">
-      <select class="form-control" id="rewardOccurrence${row}">
+      <select class="form-control reward-occurrence">
         <option value="Once">One Time</option>
         <option value="Weekly">Weekly</option>
       </select>
     </div>
   `);
 
-  // Select proper choice from the rewardOccurrence <select>
-  $('#rewardOccurrence' + row).val(record.fields['Reward Occurrence']);
-
   $(`#deviceSettings${row}`).html(`
     <div class="form-check my-3">
-      <input class="form-check-input" type="checkbox" id="deviceEnabled${row}" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
-      <label class="form-check-label" for="deviceEnabled${row}">Device Enabled</label>
+      <input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
+      <label class="form-check-label">Device Enabled</label>
     </div>
     <div class="form-group">
-      <select class="form-control" id="deviceUnits${row}">
+      <select class="form-control device-units">
         <option>steps</option>
         <option>miles</option>
       </select>
     </div>
   `);
 
-  // Select proper choice from the Device Units <select>
-  $('#deviceUnits' + row).val(deviceUnits);
-  if ($('#deviceEnabled' + row).prop('checked') === false) {
-    $('#deviceUnits' + row).hide();
-  }
-
   $(`#targeting${row}`).html(`
-    <button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(${row})">Targeting</button>
-    <button type="button" class="btn btn-outline-info btn-block" onclick="showDimensionsModal(${row})">Dimensions</button>
+    <button type="button" class="btn btn-outline-info btn-block" onclick="showTargetingModal(this)">Targeting</button>
+    <button type="button" class="btn btn-outline-info btn-block" onclick="showDimensionsModal(this)">Dimensions</button>
   `);
 
   $(`#row${row} > .delete-row`).html(`
     <i class="fas fa-times" onclick="deleteRow(${row})"></i>
   `);
 
+  // Select proper choice from the team <select>
+  $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
 
+  // Select proper choice from the trackingType <select>
+  $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
+  if ($(`#row${row} .tracking-type`).val() === 'Event') {
+    $(`#row${row} .activity-goal`).hide();
+  }
 
-  $('#targetingModalContainer').append(
-    `<div class="modal" tabindex="-1" role="dialog" id="targetingModal${row}">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Targeting</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" id="targetingModalBody${row}">
+  // Select proper choice from the rewardOccurrence <select>
+  $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
 
-            <div class="form-group">
-              <input type="text" class="form-control" id="subgroup${row}" placeholder="Subgroup">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-one${row}" placeholder="Field1">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-one-value${row}" placeholder="Field1Value">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-two${row}" placeholder="Field2">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-two-value${row}" placeholder="Field2Value">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-three${row}" placeholder="Field3">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="field-three-value${row}" placeholder="Field3Value">
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>`
-  );
+  // Select proper choice from the Device Units <select>
+  $(`#row${row} .device-units`).val(deviceUnits);
+  if ($(`#row${row} .device-enabled`).prop('checked') === false) {
+    $(`#row${row} .device-units`).hide();
+  }
 
   function getDefaultDimensions(dimensions) {
     const allDimensions = [
@@ -319,32 +311,78 @@ function drawTableRow(row, post, record) {
 
   const dimensionElements = getDefaultDimensions(limeadeDimensions);
 
-  $('#dimensionsModalContainer').append(
-    `<div class="modal" tabindex="-1" role="dialog" id="dimensionsModal${row}">
+  let imageUrl = post.fields['Limeade Image Url'];
+  if (imageUrl.includes('cfs-file')) {
+    imageUrl = `https://mywellmetrics.com${imageUrl}`;
+  }
+
+  // Append Content Modal
+  $(`#row${row}`).append(
+    `<div class="modal content-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content content-modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Dimensions</h5>
+            <h5 class="modal-title">Content</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body" id="dimensionsModalBody${row}">
+          <div class="modal-body">
 
-            <div class="dimensions-preview">
-              <div class="labels">
-                <h5>Unselected</h5>
-                <h5 class="selected-label">Selected</h5>
-              </div>
+            <div class="codeEdit">
+              <h3>Short Description (HTML)</h3>
+              <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
+              <h3>More Information (HTML)</h3>
+              <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
+            </div>
+            <div class="codeDisplay" id="codeCompile${row}">
+              <img class="image" src="${imageUrl}" width="100%" />
+              <span class="short-description">${instructions}</span>
+              <span class="more-information">${moreInformationHtml}</span>
+            </div>
 
-              <select multiple class="form-control select-before" id="selectBefore${row}" size="5">${dimensionElements.unselected}</select>
-              <button type="button" class="btn btn-primary add-dimensions" id="add${row}" onclick="move('selectBefore${row}', 'selectAfter${row}')">
-                -->
-              </button>
-              <button type="button" class="btn btn-primary remove-dimensions" id="remove${row}" onclick="move('selectAfter${row}', 'selectBefore${row}')">
-                <--
-              </button>
-              <select multiple class="form-control select-after" id="selectAfter${row}" size="5">${dimensionElements.selected}</select>
+          </div>
+          <div class="modal-footer content-modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>`
+  );
+
+  // Append Targeting Modal
+  $(`#row${row}`).append(
+    `<div class="modal targeting-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Targeting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="form-group">
+              <input type="text" class="form-control subgroup" placeholder="Subgroup">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-one" placeholder="Field1">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-one-value" placeholder="Field1Value">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-two" placeholder="Field2">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-two-value" placeholder="Field2Value">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-three" placeholder="Field3">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control field-three-value" placeholder="Field3Value">
             </div>
 
           </div>
@@ -356,37 +394,37 @@ function drawTableRow(row, post, record) {
     </div>`
   );
 
-  let imageUrl = post.fields['Limeade Image Url'];
-  if (imageUrl.includes('cfs-file')) {
-    imageUrl = `https://mywellmetrics.com${imageUrl}`;
-  }
-
-  $('#contentModalContainer').append(
-    `<div class="modal" tabindex="-1" role="dialog" id="contentModal${row}">
+  // Append Dimensions Modal
+  $(`#row${row}`).append(
+    `<div class="modal dimensions-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
-        <div class="modal-content content-modal-content">
+        <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Content</h5>
+            <h5 class="modal-title">Dimensions</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body" id="contentModalBody${row}">
+          <div class="modal-body">
 
-            <div class="codeEdit">
-              <h3>Short Description (HTML)</h3>
-              <textarea class="form-control" id="txtAreaS${row}" rows="4" onkeyup="edit(txtAreaS${row}, sd${row}.getElementsByTagName('SPAN')[0])">${instructions}</textarea>
-              <h3>More Information (HTML)</h3>
-              <textarea class="form-control" id="txtAreaM${row}" rows="12" onkeyup="edit(txtAreaM${row}, mi${row})">${moreInformationHtml}</textarea>
-            </div>
-            <div class="codeDisplay" id="codeCompile${row}">
-              <img id="image${row}" src="${imageUrl}" width="100%" />
-              <span id="sd${row}"><span style="font-size:14px; font-weight:bold">${instructions}</span></span>
-              <span id="mi${row}">${moreInformationHtml}</span>
+            <div class="dimensions-preview">
+              <div class="labels">
+                <h5>Unselected</h5>
+                <h5 class="selected-label">Selected</h5>
+              </div>
+
+              <select multiple class="form-control select-before" id="selectBefore${row}" size="5">${dimensionElements.unselected}</select>
+              <button type="button" class="btn btn-primary add-dimensions" id="add${row}" onclick="addDimension(this)">
+                -->
+              </button>
+              <button type="button" class="btn btn-primary remove-dimensions" id="remove${row}" onclick="removeDimension(this)">
+                <--
+              </button>
+              <select multiple class="form-control select-after" size="5">${dimensionElements.selected}</select>
             </div>
 
           </div>
-          <div class="modal-footer content-modal-footer">
+          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -421,7 +459,7 @@ function getContent(ids) {
       <tr id="row${rowNumber}">
         <td id="challenge-name${rowNumber}">
           <input type="text" class="form-control challenge-title" />
-          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(${rowNumber})">Content</button>
+          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(this)">Content</button>
         </td>
       </tr>
     `);
@@ -452,7 +490,7 @@ function getContentWithDates(records) {
       <tr id="row${rowNumber}">
         <td id="challenge-name${rowNumber}">
           <input type="text" class="form-control challenge-title" value="${record.fields['Title']}" />
-          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(${rowNumber})">Content</button>
+          <button type="button" class="btn btn-outline-info btn-block my-3" onclick="showContentModal(this)">Content</button>
         </td>
       </tr>
     `);

@@ -24,16 +24,16 @@ const sanitize = (code) => {
 
 // Creates a string from the dimensions in the select on the modal
 function dimensionsARR(row) {
-  var d = [];
-  var options = $('#selectAfter' + row + ' option');
-  var i;
-  for (i = 0; i < options.length; i++) {
-    if (options[i].value !== 'undefined') {
-      d.push(options[i].value);
+  let dimensions = [];
+  let options = $(`#row${row} .select-after option`);
+
+  options.each((i, option) => {
+    if (option.value !== 'undefined') {
+      dimensions.push(option.value);
     }
-  }
-  return '"' + d.toString() + '"';
-  // return '"' + d.join(',') + '"';
+  });
+
+  return '"' + dimensions.toString() + '"';
 }
 
 const tracking = (trackType) => {
@@ -101,17 +101,17 @@ const createCSV = (employer) => {
 
   for (var row = 0; row < $('#challenge-list tbody')[0].rows.length; row++) {
 
-    $('#remove-coaching').prop('checked') ? $(`#mi${row} .coachinginfo`).remove() : null;
+    $('#remove-coaching').prop('checked') ? $(`#row${row} .coachinginfo`).remove() : null;
 
     const trackingType = $(`#row${row} .tracking-type`).val();
     const challengeType = tracking(trackingType);
     const winStrategy = trackingType === 'Event' ? 'AccomplishOneTimeEvent' : 'MeetOrExceedTarget';
-    const target = $('#activityGoal' + row).val();
-    const isWeekly = $('#rewardOccurrence' + row).val() === 'Weekly' ? 1 : 0;
-    const enableDeviceTracking = $('#deviceEnabled' + row).prop('checked') ? 1 : 0;
-    const activity = $('#activityGoalText' + row).val();
-    const deviceTrackingUnits = enableDeviceTracking ? $('#deviceUnits' + row).val() : '';
-    const isTeamChallenge = $('#isTeam' + row).val() === 'Team' ? 1 : 0;
+    const target = $(`#row${row} .activity-goal`).val();
+    const isWeekly = $(`#row${row} .reward-occurrence`).val() === 'Weekly' ? 1 : 0;
+    const enableDeviceTracking = $(`#row${row} .device-enabled`).prop('checked') ? 1 : 0;
+    const activity = $(`#row${row} .activity-goal-text`).val();
+    const deviceTrackingUnits = enableDeviceTracking ? $(`#row${row} .device-units`).val() : '';
+    const isTeamChallenge = $(`#row${row} .is-team`).val() === 'Team' ? 1 : 0;
 
 		data.push([
       $(`#eid${employer}`).val(),
@@ -125,12 +125,12 @@ const createCSV = (employer) => {
       '', // DisplayPriority
 			$(`#row${row} .start-date`).val().replace(/-/g, '/'),
 			$(`#row${row} .end-date`).val().replace(/-/g, '/'),
-      sanitize($('#sd' + row).html()),
-      sanitize($('#mi' + row).html()),
-      $('#image' + row).attr('src'),
+      sanitize($(`#row${row} .short-description`).html()),
+      sanitize($(`#row${row} .more-information`).html()),
+      $(`#row${row} .image`).prop('src'),
       '0', // ShowInProgram
       '0', // RewardType
-      $('#points' + row).val(),
+      $(`#row${row} .points`).val(),
       dimensionsARR(row) === '"undefined"' ? '' : dimensionsARR(row),
       '', // LeaderboardTag
       enableDeviceTracking,
@@ -139,13 +139,13 @@ const createCSV = (employer) => {
       isTeamChallenge,
       isTeamChallenge ? 4 : '',
       isTeamChallenge ? 12 : '',
-      $(`#subgroup${row}`).val(),
-      $(`#field-one${row}`).val(),
-      $(`#field-one-value${row}`).val(),
-      $(`#field-two${row}`).val(),
-      $(`#field-two-value${row}`).val(),
-      $(`#field-three${row}`).val(),
-      $(`#field-three-value${row}`).val(),
+      $(`#row${row} .subgroup`).val(),
+      $(`#row${row} .field-one`).val(),
+      $(`#row${row} .field-one-value`).val(),
+      $(`#row${row} .field-two`).val(),
+      $(`#row${row} .field-two-value`).val(),
+      $(`#row${row} .field-three`).val(),
+      $(`#row${row} .field-three-value`).val(),
       'Default', // AppearanceInProgram
       '', // IntegrationPartnerId
       '', // ButtonText
