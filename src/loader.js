@@ -439,10 +439,10 @@ function drawTableRow(row, post, record) {
 
               <select multiple class="form-control select-before" size="5">${dimensionElements.unselected}</select>
               <button type="button" class="btn btn-primary add-dimensions" onclick="addDimension(this)">
-                -->
+                <i class="fas fa-arrow-right"></i>
               </button>
               <button type="button" class="btn btn-primary remove-dimensions" onclick="removeDimension(this)">
-                <--
+                <i class="fas fa-arrow-left"></i>
               </button>
               <select multiple class="form-control select-after" size="5">${dimensionElements.selected}</select>
             </div>
