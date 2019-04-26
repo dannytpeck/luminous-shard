@@ -62,7 +62,7 @@ window.modifyTrackingNumber = (row) => {
 
 // Toggles the device units select
 window.toggleDeviceUnits = row => {
-  $('#deviceUnits' + row).toggle();
+  $(`#row${row} .device-units`).toggle();
 };
 
 window.deleteRow = row => {
@@ -202,8 +202,8 @@ function drawTableRow(row, post, record) {
 
   $(`#deviceSettings${row}`).html(`
     <div class="form-check my-3">
-      <input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
-      <label class="form-check-label">Device Enabled</label>
+      <input class="form-check-input device-enabled" id="deviceEnabled${row}" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
+      <label class="form-check-label" for="deviceEnabled${row}">Device Enabled</label>
     </div>
     <div class="form-group">
       <select class="form-control device-units">
