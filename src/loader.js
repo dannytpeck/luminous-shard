@@ -71,16 +71,20 @@ window.editMoreInformation = (element) => {
   moreInformation.innerHTML = editor.value;
 };
 
+// Toggles the device units select
+window.toggleDeviceUnits = (element) => {
+  const rowElement = element.parentNode.parentNode.parentNode.parentNode;
+  const index = rowElement.id.search(/\d+/);
+  const rowNumber = rowElement.id.substring(index);
+
+  $(`#row${rowNumber} .device-units`).toggle();
+};
+
 // Replace trackingNO value with the value manually entered
 window.modifyTrackingNumber = (row) => {
   const newValue = $('#required' + row).val();
   $(`#row${row} .short-description .trackingNO`).html(addCommasToNumber(newValue));
   $(`#row${row} .more-information .trackingNO`).html(addCommasToNumber(newValue));
-};
-
-// Toggles the device units select
-window.toggleDeviceUnits = row => {
-  $(`#row${row} .device-units`).toggle();
 };
 
 window.deleteRow = row => {
@@ -220,8 +224,7 @@ function drawTableRow(row, post, record) {
 
   $(`#deviceSettings${row}`).html(`
     <div class="form-check my-3">
-      <input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
-      <label class="form-check-label">Device Enabled</label>
+      <label class="form-check-label"><input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(this)" /> Device Enabled</label>
     </div>
     <div class="form-group">
       <select class="form-control device-units">
