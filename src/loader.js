@@ -48,7 +48,7 @@ window.removeDimension = (element) => {
 	}
 };
 
-// Onkeyup functions that replace the code preview with the text area's contents
+// Onkeyup functions that replace the code preview with the textarea's contents
 window.editShortDescription = (element) => {
   const rowElement = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
   const index = rowElement.id.search(/\d+/);
@@ -220,8 +220,8 @@ function drawTableRow(row, post, record) {
 
   $(`#deviceSettings${row}`).html(`
     <div class="form-check my-3">
-      <input class="form-check-input device-enabled" id="deviceEnabled${row}" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
-      <label class="form-check-label" for="deviceEnabled${row}">Device Enabled</label>
+      <input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(${row})" />
+      <label class="form-check-label">Device Enabled</label>
     </div>
     <div class="form-group">
       <select class="form-control device-units">
