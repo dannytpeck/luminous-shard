@@ -150,10 +150,10 @@ function drawTableRow(row, post, record) {
   // record: a record from Calendar Builder that an AM has modified
 
   // Remove years from Title
-  let title = record.fields['Title'].replace(/20\d\d: /, '');
+  let title = record ? record.fields['Title'].replace(/20\d\d: /, '') : post.fields['Title'].replace(/20\d\d: /, '');
 
-  const activityGoal = record.fields['Activity Goal'] ? record.fields['Activity Goal'] : '';
-  const activityGoalText = record.fields['Activity Goal Text'] ? record.fields['Activity Goal Text'] : '';
+  const activityGoal = record ? record.fields['Activity Goal'] : post.fields['Activity Goal'];
+  const activityGoalText = record ? record.fields['Activity Goal Text'] : post.fields['Activity Goal Text'];
   const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
 
@@ -244,16 +244,19 @@ function drawTableRow(row, post, record) {
   `);
 
   // Select proper choice from the team <select>
-  $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+  if (record) {
+    $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
+    $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
+  } else {
+    $(`#row${row} .is-team`).val(post.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    $(`#row${row} .tracking-type`).val(post.fields['Activity Tracking Type']);
+    $(`#row${row} .reward-occurrence`).val(post.fields['Reward Occurrence']);
+  }
 
-  // Select proper choice from the trackingType <select>
-  $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
   if ($(`#row${row} .tracking-type`).val() === 'Event') {
     $(`#row${row} .activity-goal`).hide();
   }
-
-  // Select proper choice from the rewardOccurrence <select>
-  $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
 
   // Select proper choice from the Device Units <select>
   $(`#row${row} .device-units`).val(deviceUnits);
