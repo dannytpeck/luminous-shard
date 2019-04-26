@@ -159,7 +159,7 @@ function drawTableRow(row, post, record) {
 
   const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
   const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
-  const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
+  const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',').map(item => item.trim()) : [];
 
   $(`#row${row} .challenge-title`).val(title);
 
