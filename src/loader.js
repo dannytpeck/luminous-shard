@@ -71,6 +71,15 @@ window.editMoreInformation = (element) => {
   moreInformation.innerHTML = editor.value;
 };
 
+// Toggles the team size units selects
+window.toggleTeamSize = row => {
+  if ($(`#row${row} .is-team`).val() === 'Team') {
+    $(`#row${row} .team-size`).show();
+  } else {
+    $(`#row${row} .team-size`).hide();
+  }
+}
+
 // Toggles the device units select
 window.toggleDeviceUnits = (element) => {
   const rowElement = element.parentNode.parentNode.parentNode.parentNode;
@@ -150,16 +159,16 @@ function drawTableRow(row, post, record) {
   // record: a record from Calendar Builder that an AM has modified
 
   // Remove years from Title
-  let title = record.fields['Title'].replace(/20\d\d: /, '');
+  let title = record ? record.fields['Title'].replace(/20\d\d: /, '') : post.fields['Title'].replace(/20\d\d: /, '');
 
-  const activityGoal = record.fields['Activity Goal'] ? record.fields['Activity Goal'] : '';
-  const activityGoalText = record.fields['Activity Goal Text'] ? record.fields['Activity Goal Text'] : '';
+  const activityGoal = record ? record.fields['Activity Goal'] : post.fields['Activity Goal'];
+  const activityGoalText = record ? record.fields['Activity Goal Text'] : post.fields['Activity Goal Text'];
   const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
 
   const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
   const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
-  const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',') : [];
+  const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',').map(item => item.trim()) : [];
 
   $(`#row${row} .challenge-title`).val(title);
 
@@ -186,18 +195,50 @@ function drawTableRow(row, post, record) {
   }
 
   $(`#trackingDetails${row}`).html(`
-    <div class="form-group">
-      <select class="form-control is-team">
+    <div class="input-group team-selects">
+      <select class="form-control is-team col-md-5" onchange="toggleTeamSize(${row})">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
+      <div class="input-group team-size col-md-7">
+        <label class="my-1">Size</label>
+        <select name="Min" class="form-control team-min mx-1">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected="selected">4</option>
+          <option value="5">5</option>
+        </select>
+        <select name="Max" class="form-control team-max">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12" selected="selected">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group">
       <input type="text" class="form-control activity-goal-text" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
-    <div class="form-group" style="width: 52%; display: inline-block;">
+    <div class="form-group" style="width: 42%; display: inline-block;">
       <select class="form-control tracking-type" onchange="changeTrackingType(${row})">
         <option>Event</option>
         <option>Days</option>
@@ -205,7 +246,7 @@ function drawTableRow(row, post, record) {
       </select>
     </div>
 
-    <div class="form-group" style="width: 45%; display: inline-block;">
+    <div class="form-group" style="width: 56%; display: inline-block;">
       <input type="number" class="form-control activity-goal" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);
@@ -244,16 +285,25 @@ function drawTableRow(row, post, record) {
   `);
 
   // Select proper choice from the team <select>
-  $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+  if (record) {
+    $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    // TODO: add airtable team min and max columns/records and data-pulling
+    $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
+    $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
+  } else {
+    $(`#row${row} .is-team`).val(post.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    // TODO: add library/shiny stone page 1 team min and max columns/records and data-pulling
+    $(`#row${row} .tracking-type`).val(post.fields['Activity Tracking Type']);
+    $(`#row${row} .reward-occurrence`).val(post.fields['Reward Occurrence']);
+  }
 
-  // Select proper choice from the trackingType <select>
-  $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
+  if ($(`#row${row} .is-team`).val() === 'Individual') {
+    $(`#row${row} .team-size`).hide();
+  }
+
   if ($(`#row${row} .tracking-type`).val() === 'Event') {
     $(`#row${row} .activity-goal`).hide();
   }
-
-  // Select proper choice from the rewardOccurrence <select>
-  $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
 
   // Select proper choice from the Device Units <select>
   $(`#row${row} .device-units`).val(deviceUnits);
@@ -436,10 +486,10 @@ function drawTableRow(row, post, record) {
 
               <select multiple class="form-control select-before" size="5">${dimensionElements.unselected}</select>
               <button type="button" class="btn btn-primary add-dimensions" onclick="addDimension(this)">
-                -->
+                <i class="fas fa-arrow-right"></i>
               </button>
               <button type="button" class="btn btn-primary remove-dimensions" onclick="removeDimension(this)">
-                <--
+                <i class="fas fa-arrow-left"></i>
               </button>
               <select multiple class="form-control select-after" size="5">${dimensionElements.selected}</select>
             </div>
