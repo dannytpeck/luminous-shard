@@ -195,13 +195,14 @@ function drawTableRow(row, post, record) {
   }
 
   $(`#trackingDetails${row}`).html(`
-    <div class="form-group team-selects">
-      <select class="form-control is-team" onchange="toggleTeamSize(${row})">
+    <div class="input-group team-selects">
+      <select class="form-control is-team col-md-5" onchange="toggleTeamSize(${row})">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
-      <div class="team-size">
-        <select name="Min" class="form-control team-min">
+      <div class="input-group team-size col-md-7">
+        <label class="my-1">Size</label>
+        <select name="Min" class="form-control team-min mx-1">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -237,7 +238,7 @@ function drawTableRow(row, post, record) {
       <input type="text" class="form-control activity-goal-text" value="${activityGoalText}" placeholder="Activity Text" onkeyup="this.removeAttribute('value')" />
     </div>
 
-    <div class="form-group" style="width: 52%; display: inline-block;">
+    <div class="form-group" style="width: 42%; display: inline-block;">
       <select class="form-control tracking-type" onchange="changeTrackingType(${row})">
         <option>Event</option>
         <option>Days</option>
@@ -245,7 +246,7 @@ function drawTableRow(row, post, record) {
       </select>
     </div>
 
-    <div class="form-group" style="width: 45%; display: inline-block;">
+    <div class="form-group" style="width: 56%; display: inline-block;">
       <input type="number" class="form-control activity-goal" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);

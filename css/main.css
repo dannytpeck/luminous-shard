@@ -176,6 +176,12 @@ select.eid-select {
   display: inline-block;
   width: 40%; }
 
+.team-selects {
+  margin-bottom: 1em; }
+
+.team-size {
+  padding-right: 0; }
+
 span#progress {
   margin-left: 1em; }
 
