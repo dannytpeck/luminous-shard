@@ -71,6 +71,15 @@ window.editMoreInformation = (element) => {
   moreInformation.innerHTML = editor.value;
 };
 
+// Toggles the team size units selects
+window.toggleTeamSize = row => {
+  if ($(`#row${row} .is-team`).val() === 'Team') {
+    $(`#row${row} .team-size`).show();
+  } else {
+    $(`#row${row} .team-size`).hide();
+  }
+}
+
 // Toggles the device units select
 window.toggleDeviceUnits = (element) => {
   const rowElement = element.parentNode.parentNode.parentNode.parentNode;
@@ -186,11 +195,42 @@ function drawTableRow(row, post, record) {
   }
 
   $(`#trackingDetails${row}`).html(`
-    <div class="form-group">
-      <select class="form-control is-team">
+    <div class="form-group team-selects">
+      <select class="form-control is-team" onchange="toggleTeamSize(${row})">
         <option value="Individual">Individual</option>
         <option value="Team">Team</option>
       </select>
+      <div class="team-size">
+        <select name="Min" class="form-control team-min">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected="selected">4</option>
+          <option value="5">5</option>
+        </select>
+        <select name="Max" class="form-control team-max">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12" selected="selected">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group">
@@ -246,12 +286,18 @@ function drawTableRow(row, post, record) {
   // Select proper choice from the team <select>
   if (record) {
     $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    // TODO: add airtable team min and max columns/records and data-pulling
     $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
   } else {
     $(`#row${row} .is-team`).val(post.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
+    // TODO: add library/shiny stone page 1 team min and max columns/records and data-pulling
     $(`#row${row} .tracking-type`).val(post.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(post.fields['Reward Occurrence']);
+  }
+
+  if ($(`#row${row} .is-team`).val() === 'Individual') {
+    $(`#row${row} .team-size`).hide();
   }
 
   if ($(`#row${row} .tracking-type`).val() === 'Event') {

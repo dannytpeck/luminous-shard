@@ -137,8 +137,8 @@ const createCSV = (employer) => {
       '1', // AllowSelfReporting
       deviceTrackingUnits,
       isTeamChallenge,
-      isTeamChallenge ? 4 : '',
-      isTeamChallenge ? 12 : '',
+      isTeamChallenge ? $(`#row${row} .team-min`).val() : '',
+      isTeamChallenge ? $(`#row${row} .team-max`).val() : '',
       $(`#row${row} .subgroup`).val(),
       $(`#row${row} .field-one`).val(),
       $(`#row${row} .field-one-value`).val(),
