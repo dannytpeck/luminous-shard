@@ -112,6 +112,14 @@ const createCSV = (employer) => {
     const activity = $(`#row${row} .activity-goal-text`).val();
     const deviceTrackingUnits = enableDeviceTracking ? $(`#row${row} .device-units`).val() : '';
     const isTeamChallenge = $(`#row${row} .is-team`).val() === 'Team' ? 1 : 0;
+    
+    // partner varibles
+    const isPartner = false;
+    const allowSelfReporting = isPartner ? 0 : 1;
+    const integrationPartnerId = isPartner ? 1 : '';
+    const buttonText = isPartner ? 'CLOSE' : '';
+    const targetUrl = isPartner ? '/Home?sametab=true' : '';
+    const showExtendedDescription = isPartner ? 1 : '';
 
 		data.push([
       $(`#eid${employer}`).val(),
@@ -134,7 +142,7 @@ const createCSV = (employer) => {
       dimensionsARR(row) === '"undefined"' ? '' : dimensionsARR(row),
       '', // LeaderboardTag
       enableDeviceTracking,
-      '1', // AllowSelfReporting
+      allowSelfReporting,
       deviceTrackingUnits,
       isTeamChallenge,
       isTeamChallenge ? $(`#row${row} .team-min`).val() : '',
@@ -147,11 +155,11 @@ const createCSV = (employer) => {
       $(`#row${row} .field-three`).val(),
       $(`#row${row} .field-three-value`).val(),
       'Default', // AppearanceInProgram
-      '', // IntegrationPartnerId
-      '', // ButtonText
-      '', // TargetUrl
+      integrationPartnerId,
+      buttonText,
+      targetUrl,
       '', // EventCode
-      '', // ShowExtendedDescription
+      showExtendedDescription,
       '', // ActivityTemplateId
       '0', // IsFeatured
       '', // FeaturedDescription
