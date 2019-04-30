@@ -3,7 +3,6 @@
 /* This file is for making all the ajax requests to WP and populating the table's contents */
 
 import Airtable from 'airtable';
-import { addRemove, throwToArray } from './search';
 
 // Draws the table
 function drawTable(records) {
@@ -52,8 +51,53 @@ function drawTable(records) {
 
 	$('#table-body').append(tableHTML);
 
-	// Creates an array used for sorting functionality
-	throwToArray();
+}
+
+// Function for add/remove button
+function addRemove(event) {
+	const idList = document.getElementById('idList');
+	const prettyList = document.getElementById('pretty-list');
+	const count = event.target.parentNode.getElementsByTagName('input')[0];
+
+  const libraryID = event.target.parentNode.parentNode.children[1].innerHTML;
+  const idPlusComma = libraryID + ',';
+
+	const challengeName = event.target.parentNode.parentNode.children[2].innerText;
+	const listItemHtml = '<li>' + challengeName + '</li>';
+
+  if (idList.value.indexOf(libraryID) > -1) {
+		event.target.innerHTML = 'Add';
+
+    count.value = 1;
+		idList.value = idList.value.replace(new RegExp(idPlusComma, 'g'), '');
+		prettyList.innerHTML = prettyList.innerHTML.replace(new RegExp(listItemHtml, 'g'), '');
+  } else {
+    event.target.innerHTML = 'Remove';
+
+    for (let i = 0; i < count.value; i++) {
+      idList.value += idPlusComma;
+			prettyList.innerHTML += listItemHtml;
+    }
+  }
+}
+
+// Resets the page's buttons and fields
+export function resetPage() {
+  $('#dateError').hide();
+
+	// Change all buttons back to "Add"
+	$('.add-remove').html('Add');
+
+	// Change all count-box inputs back to "1"
+	$('.count-box').val(1);
+
+  // Clear the values on the page
+  $('#file-name').val(null);
+  $('#eid').val(null);
+  $('#date-begin').val(null);
+  $('#date-end').val(null);
+  $('#idList').val(null);
+	$('#pretty-list').html('');
 }
 
 // Loads table JSON file from api
