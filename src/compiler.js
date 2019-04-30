@@ -114,7 +114,7 @@ const createCSV = (employer) => {
     const isTeamChallenge = $(`#row${row} .is-team`).val() === 'Team' ? 1 : 0;
     
     // partner varibles
-    const isPartner = false;
+    const isPartner =  $(`#row${row} .is-partner`).prop('checked') ? true : false;
     const allowSelfReporting = isPartner ? 0 : 1;
     const integrationPartnerId = isPartner ? 1 : '';
     const buttonText = isPartner ? 'CLOSE' : '';

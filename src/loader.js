@@ -166,7 +166,8 @@ function drawTableRow(row, post, record) {
   const instructions = record ? record.fields['Instructions'] : post.fields['Instructions'];
   const moreInformationHtml = record ? record.fields['More Information Html'] : post.fields['More Information Html'];
 
-  const checkChecked = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
+  const checkDevice = post.fields['Device Enabled'] === 'yes' ? 'checked' : 'unchecked';
+  const checkPartner = post.fields['Verified'] === 'Verified' ? 'checked' : 'unchecked';
   const deviceUnits = post.fields['Device Units'] ? post.fields['Device Units'] : '';
   const limeadeDimensions = post.fields['Limeade Dimensions'] ? post.fields['Limeade Dimensions'].split(',').map(item => item.trim()) : [];
 
@@ -261,11 +262,14 @@ function drawTableRow(row, post, record) {
         <option value="Weekly">Weekly</option>
       </select>
     </div>
+    <div class="form-check my-3">
+      <label class="form-check-label"><input class="form-check-input is-partner" type="checkbox" ${checkPartner} /> Verified Challenge</label>
+    </div>
   `);
 
   $(`#deviceSettings${row}`).html(`
     <div class="form-check my-3">
-      <label class="form-check-label"><input class="form-check-input device-enabled" type="checkbox" ${checkChecked} onchange="toggleDeviceUnits(this)" /> Device Enabled</label>
+      <label class="form-check-label"><input class="form-check-input device-enabled" type="checkbox" ${checkDevice} onchange="toggleDeviceUnits(this)" /> Device Enabled</label>
     </div>
     <div class="form-group">
       <select class="form-control device-units">
@@ -284,19 +288,21 @@ function drawTableRow(row, post, record) {
     <i class="fas fa-times" onclick="deleteRow(${row})"></i>
   `);
 
-  // Select proper choice from the team <select>
+  // Select proper choice from airtable or shiny stone page 1
   if (record) {
     $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
     $(`#row${row} .team-min`).val(record.fields['Team Size Minimum'] ? record.fields['Team Size Minimum'] : 4);
     $(`#row${row} .team-max`).val(record.fields['Team Size Maximum'] ? record.fields['Team Size Maximum'] : 12);
     $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
+    $(`#row${row} .is-partner`).prop('checked', record.fields['Verified'] === 'Verified');
   } else {
     $(`#row${row} .is-team`).val(post.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
     $(`#row${row} .team-min`).val(post.fields['Team Size Minimum'] ? post.fields['Team Size Minimum'] : 4);
     $(`#row${row} .team-max`).val(post.fields['Team Size Maximum'] ? post.fields['Team Size Maximum'] : 12);
     $(`#row${row} .tracking-type`).val(post.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(post.fields['Reward Occurrence']);
+    $(`#row${row} .is-partner`).prop('checked', post.fields['Verified'] === 'Verified');
   }
 
   if ($(`#row${row} .is-team`).val() === 'Individual') {
