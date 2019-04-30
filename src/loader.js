@@ -78,7 +78,7 @@ window.toggleTeamSize = row => {
   } else {
     $(`#row${row} .team-size`).hide();
   }
-}
+};
 
 // Toggles the device units select
 window.toggleDeviceUnits = (element) => {
