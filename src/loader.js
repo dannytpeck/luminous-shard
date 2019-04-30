@@ -287,12 +287,14 @@ function drawTableRow(row, post, record) {
   // Select proper choice from the team <select>
   if (record) {
     $(`#row${row} .is-team`).val(record.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
-    // TODO: add airtable team min and max columns/records and data-pulling
+    $(`#row${row} .team-min`).val(record.fields['Team Size Minimum'] ? record.fields['Team Size Minimum'] : 4);
+    $(`#row${row} .team-max`).val(record.fields['Team Size Maximum'] ? record.fields['Team Size Maximum'] : 12);
     $(`#row${row} .tracking-type`).val(record.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(record.fields['Reward Occurrence']);
   } else {
     $(`#row${row} .is-team`).val(post.fields['Team Activity'] === 'yes' ? 'Team' : 'Individual');
-    // TODO: add library/shiny stone page 1 team min and max columns/records and data-pulling
+    $(`#row${row} .team-min`).val(post.fields['Team Size Minimum'] ? post.fields['Team Size Minimum'] : 4);
+    $(`#row${row} .team-max`).val(post.fields['Team Size Maximum'] ? post.fields['Team Size Maximum'] : 12);
     $(`#row${row} .tracking-type`).val(post.fields['Activity Tracking Type']);
     $(`#row${row} .reward-occurrence`).val(post.fields['Reward Occurrence']);
   }
