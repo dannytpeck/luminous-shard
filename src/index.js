@@ -1,8 +1,8 @@
 /* globals $ */
 import _ from 'lodash';
 
-import { loadTable, loadCompiler } from './challenges';
-import { findChallenges, resetPage } from './search';
+import { loadTable, loadCompiler, resetPage } from './challenges';
+import { findChallenges } from './search';
 import { getClientList, renderEmployerNames } from './loader';
 import { limeadeUpload, compileTransporter } from './compiler';
 
