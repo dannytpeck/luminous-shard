@@ -248,7 +248,7 @@ function drawTableRow(row, post, record) {
     </div>
 
     <div class="form-group" style="width: 56%; display: inline-block;">
-      <input type="number" class="form-control activity-goal" value="${activityGoal}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
+      <input type="number" class="form-control activity-goal" value="${activityGoal ? activityGoal : ''}" placeholder="Activity Goal" onkeyup="modifyTrackingNumber(${row})" />
     </div>
   `);
 
