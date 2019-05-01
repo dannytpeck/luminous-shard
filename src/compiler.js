@@ -112,7 +112,7 @@ const createCSV = (employer) => {
     const activity = $(`#row${row} .activity-goal-text`).val();
     const deviceTrackingUnits = enableDeviceTracking ? $(`#row${row} .device-units`).val() : '';
     const isTeamChallenge = $(`#row${row} .is-team`).val() === 'Team' ? 1 : 0;
-    
+
     // partner varibles
     const isPartner =  $(`#row${row} .is-partner`).prop('checked') ? true : false;
     const allowSelfReporting = isPartner ? 0 : 1;
@@ -238,26 +238,24 @@ export function limeadeUpload() {
 }
 
 export function compileTransporter() {
-  'use strict';
 
   // Download a CSV for each program
-  for (var program = 0; program < $('#loadNumber').val(); program++) {
-
-    var data = createCSV(program);
-    var csvContent = '';
-    data.forEach(function (infoArray, index) {
-      var dataString = infoArray.join(',');
+  for (let program = 0; program < $('#loadNumber').val(); program++) {
+    const data = createCSV(program);
+    let csvContent = '';
+    data.forEach((infoArray, index) => {
+      const dataString = infoArray.join();
       csvContent += index < (data.length - 1) ? dataString + '\n' : dataString;
     });
 
-    var file = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
-    var filename = $(`#eid${program}`).val() + '-' + 'Phase' + '-' + $('#fileName').val() + '-' + currentYear + '.csv';
+    const filename = $(`#eid${program}`).val() + '-' + 'Phase' + '-' + $('#fileName').val() + '-' + currentYear + '.csv';
+    const csvData = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(csvData);
 
-    var link = document.createElement('a');
+    let link = document.createElement('a');
     link.setAttribute('download', filename);
-    link.setAttribute('href', file);
+    link.setAttribute('href', url);
     link.click();
-
   }
 
 }
