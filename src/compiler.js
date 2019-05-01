@@ -113,6 +113,11 @@ const createCSV = (employer) => {
     const deviceTrackingUnits = enableDeviceTracking ? $(`#row${row} .device-units`).val() : '';
     const isTeamChallenge = $(`#row${row} .is-team`).val() === 'Team' ? 1 : 0;
 
+    let imageUrl = $(`#row${row} .image`).prop('src');
+    if (imageUrl.includes('mywellmetrics.com')) {
+      imageUrl = imageUrl.replace('https://mywellmetrics.com', '');
+    }
+
     // partner varibles
     const isPartner =  $(`#row${row} .is-partner`).prop('checked') ? true : false;
     const allowSelfReporting = isPartner ? 0 : 1;
@@ -135,7 +140,7 @@ const createCSV = (employer) => {
 			$(`#row${row} .end-date`).val().replace(/-/g, '/'),
       sanitize($(`#row${row} .short-description`).html()),
       sanitize($(`#row${row} .more-information`).html()),
-      $(`#row${row} .image`).prop('src'),
+      imageUrl,
       '0', // ShowInProgram
       '0', // RewardType
       $(`#row${row} .points`).val(),
